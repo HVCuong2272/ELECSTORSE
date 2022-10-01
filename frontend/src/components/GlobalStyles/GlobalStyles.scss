@@ -1,0 +1,75 @@
+@import 'normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('../grid.css');
+@import '~antd/dist/antd.css';
+@import url('../slider-animations.css');
+
+:root {
+    --primary-color: #ff324d;
+    --white-color: #fff;
+    --black-color: #333;
+    --header-height: 56px;
+    --subHeader-height: 90px;
+    --input-searchbox-width: 500px;
+    --banner-list-height: 300px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+}
+
+button,
+input,
+[tabindex] {
+    outline: none;
+    border: none;
+}
+
+body a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+// Remove css atnd
+a:hover {
+    color: unset;
+}
+
+.ant-btn-primary {
+    background-color: var(--primary-color);
+}
+
+.ant-btn-danger:hover,
+.ant-btn-danger:focus {
+    color: #fff !important;
+    border-color: #ff7875;
+    background: #ff7875;
+}
+
+.ant-dropdown {
+    width: 240px;
+}
+.ant-dropdown-menu-item {
+    padding: 12px 12px;
+    display: flex;
+    flex-direction: row-reverse;
+}
+.ant-dropdown-menu-item:hover {
+    color: var(--primary-color);
+}
+.ant-dropdown-menu-item-icon {
+    margin-right: 18px;
+}
