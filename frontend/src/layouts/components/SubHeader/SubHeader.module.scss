@@ -10,7 +10,13 @@
     justify-content: space-between;
 }
 
+.sub-header__category {
+    display: flex;
+    align-items: center;
+}
+
 .sub-header__category-btn button {
+    margin-left: 24px;
     height: 54px;
     width: 160px;
 }

@@ -1,5 +1,5 @@
 import { Button, Dropdown, Menu, message, Space } from 'antd';
-import { ShoppingCartOutlined, MenuOutlined, CaretRightOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, MenuOutlined, CaretRightOutlined, HomeOutlined } from '@ant-design/icons';
 import styles from './SubHeader.module.scss';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
@@ -66,6 +66,11 @@ function SubHeader() {
             <div className="grid wide" style={{ height: '100%' }}>
                 <div className={cx('sub-header__container')}>
                     <div className={cx('sub-header__category')}>
+                        <div>
+                            <Button type="danger" size="middle">
+                                <HomeOutlined />
+                            </Button>
+                        </div>
                         <div className={cx('sub-header__category-btn')}>
                             <Dropdown overlay={menu}>
                                 <Button type="danger">
