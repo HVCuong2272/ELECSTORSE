@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import Banner from './components/Banner';
 import Footer from '~/layouts/components/Footer';
 import { useEffect } from 'react';
+import Product from './components/Product';
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +21,7 @@ function Home() {
                     <h1 className={cx('product-list-header__titile')}>Feature Product</h1>
                     <p className={cx('product-list-header__sub-title')}>All Our New Product Are Here</p>
                 </div>
+                <Product/>
             </div>
             {/* Product Banner Image */}
             <div className={cx('grid wide')}>
