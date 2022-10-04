@@ -66,11 +66,11 @@ function SubHeader() {
             <div className="grid wide" style={{ height: '100%' }}>
                 <div className={cx('sub-header__container')}>
                     <div className={cx('sub-header__category')}>
-                        <div>
+                        <Link to="/">
                             <Button type="danger" size="middle">
                                 <HomeOutlined />
                             </Button>
-                        </div>
+                        </Link>
                         <div className={cx('sub-header__category-btn')}>
                             <Dropdown overlay={menu}>
                                 <Button type="danger">
@@ -93,11 +93,13 @@ function SubHeader() {
                     </div>
                     <SearchBox />
                     <div className={cx('sub-header__actions')}>
-                        <div className={cx('sub-header__actions-cart')}>
+                        <Link to="/cart" className={cx('sub-header__actions-cart')}>
                             <ShoppingCartOutlined />
                             <span className={cx('sub-header__actions-cart-notify')}>6</span>
-                        </div>
-                        <div className={cx('sub-header__actions-signin')}>Sign In</div>
+                        </Link>
+                        <Link to="/signin" className={cx('sub-header__actions-signin')}>
+                            Sign In
+                        </Link>
                     </div>
                 </div>
             </div>

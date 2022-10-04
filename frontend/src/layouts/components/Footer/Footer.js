@@ -69,7 +69,7 @@ function Footer() {
                     </div>
                     <div className={cx('col l-2-4 m-4 c-6')}>
                         <h3 className={cx('footer__heading')}>THEO DÕI</h3>
-                        <ul className={cx('footer-list footer-list-mobile')}>
+                        <ul className={cx('footer-list', 'footer-list-mobile')}>
                             <li className={cx('footer-item')}>
                                 <a href="/" className={cx('footer-item__link')}>
                                     <div className={cx('footer-item__icon')}>

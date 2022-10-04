@@ -12,6 +12,8 @@
     --subHeader-height: 90px;
     --input-searchbox-width: 500px;
     --banner-list-height: 300px;
+    --breadcrumb-background: #f7f8fb;
+    --product-text-color: #687188;
 }
 
 * {
@@ -41,6 +43,7 @@ input,
 body a {
     color: var(--text-color);
     text-decoration: none;
+    // transition: none;
 }
 
 // Remove css atnd
@@ -72,4 +75,12 @@ a:hover {
 }
 .ant-dropdown-menu-item-icon {
     margin-right: 18px;
+}
+
+// Alert
+.success {
+    color: #20a020;
+}
+.danger {
+    color: #a02020;
 }

@@ -57,3 +57,15 @@
 .header__container .header__actions-icon:hover {
     color: var(--primary-color);
 }
+
+@media (min-width: 740px) and (max-width: 1023px) {
+    .header__actions-title {
+        display: none;
+    }
+}
+
+@media (max-width: 739px) {
+    .header__actions-title {
+        display: none;
+    }
+}

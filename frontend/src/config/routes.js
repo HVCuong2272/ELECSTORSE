@@ -1,9 +1,7 @@
-const routes = {
+const publicRoutes = {
     home: '/',
-    following: '/following',
-    profile: '/@:nickname',
-    upload: '/upload',
-    search: '/search',
+    productWId: '/product/:id',
 };
+const privateRoutes = {};
 
-export default routes;
+export { publicRoutes, privateRoutes };

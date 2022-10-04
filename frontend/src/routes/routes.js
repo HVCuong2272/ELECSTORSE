@@ -1,24 +1,21 @@
 import config from '~/config';
 
 // Layouts
-import { HeaderOnly } from '~/layouts';
+import { SubHeaderOnly } from '~/layouts';
 
 // Pages
 import Home from '~/pages/Home';
-
-import Following from '~/pages/Following';
-import Profile from '~/pages/Profile';
-import Upload from '~/pages/Upload';
-import Search from '~/pages/Search';
+import Product from '~/pages/Product';
 
 // Public routes
 const publicRoutes = [
-    { path: config.routes.home, component: Home },
+    { path: config.publicRoutes.home, component: Home },
+    { path: config.publicRoutes.productWId, component: Product, layout: SubHeaderOnly },
 
-    { path: config.routes.following, component: Following },
-    { path: config.routes.profile, component: Profile },
-    { path: config.routes.upload, component: Upload, layout: HeaderOnly },
-    { path: config.routes.search, component: Search, layout: null },
+    // { path: config.publicRoutes.following, component: Following },
+    // { path: config.publicRoutes.profile, component: Profile },
+    // { path: config.publicRoutes.upload, component: Upload, layout: HeaderOnly },
+    // { path: config.publicRoutes.search, component: Search, layout: null },
 ];
 
 const privateRoutes = [];
