@@ -1,15 +1,33 @@
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
-import { Rate } from 'antd';
+import { Rate, Spin, Alert } from 'antd';
 import styles from './ProductList.module.scss';
 import classNames from 'classnames/bind';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import data from '~/data';
 import ProductItem from '../ProductItem';
+import axios from 'axios';
 const cx = classNames.bind(styles);
 
 const Product = () => {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
     const productRef = useRef();
+    //console.log(products);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const { data } = await axios.get('/api/products');
+                setLoading(false);
+                setProducts(data);
+            } catch (error) {
+                setError(error.message);
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
 
     useEffect(() => {
         // console.log(productRef.current);
@@ -77,15 +95,27 @@ const Product = () => {
                             <RightOutlined className={cx('button-control-product-list')} />
                         </div>
                     </header>
-                    <section>
-                        {data.products.map((product) => (
-                            <ProductItem key={product._id} product={product} ref={productRef}></ProductItem>
-                        ))}
-                    </section>
-
-                    <Link to="/" className={cx('view-more-btn')}>
-                        View More
-                    </Link>
+                    {loading ? (
+                        <Spin size="large" />
+                    ) : error ? (
+                        <Alert
+                            message="Error"
+                            description={error}
+                            type="error"
+                            showIcon
+                        />
+                    ) : (
+                        <>
+                            <section>
+                                {products.map((product) => (
+                                    <ProductItem key={product._id} product={product} ref={productRef}></ProductItem>
+                                ))}
+                            </section>
+                            <Link to="/" className={cx('view-more-btn')}>
+                                View More
+                            </Link>
+                        </>
+                    )}
                 </main>
             </div>
         </div>
