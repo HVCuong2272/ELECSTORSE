@@ -1,2 +1,18 @@
 .cart-product-list {
+
+}
+.cart-product-list__space-remove-header{
+    size: middle;
+    display: flex;
+    justify-content: center;
+}
+.cart-product-list__space-remove-content{
+    color: orangered;
+}
+.cart-product-list__actions-selectQty select {
+    border: 0.1rem solid var(--product-text-color);
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+    padding: 1rem;
+    cursor: pointer;
 }
