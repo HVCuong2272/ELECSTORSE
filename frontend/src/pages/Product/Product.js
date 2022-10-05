@@ -6,33 +6,55 @@ import data from '~/data';
 import ProductBreadcrumb from './components/ProductBreadcrumb';
 import ProductSlider from './components/ProductSlider';
 import ProductDetail from './components/ProductDetail';
+import { useDispatch, useSelector } from 'react-redux';
+import { Alert, Spin } from 'antd';
+import { useEffect } from 'react';
+import { detailsProduct } from '~/redux/actions/productActions';
 
 const cx = classNames.bind(styles);
 
 function Product() {
+    console.log('init');
     const params = useParams();
     const { id: productId } = params;
-    const product = data.products.find((x) => x._id === productId);
     // console.log(productId);
 
-    if (!product) {
-        return <div>Product Not Found</div>;
-    }
+    const dispatch = useDispatch();
+    const productDetails = useSelector((state) => state.productDetails);
+    const { loading, error, product } = productDetails;
+
+    useEffect(() => {
+        console.log('dis1');
+        dispatch(detailsProduct(productId));
+        console.log('dis2');
+    }, [dispatch, productId]);
+    // if (!product) {
+    //     return <div>Product Not Found</div>;
+    // }
 
     return (
-        <div className={cx('product')}>
-            <ProductBreadcrumb product={product} />
-            <div className={cx('grid wide')} style={{ marginTop: '100px' }}>
-                <div className={cx('row')}>
-                    <div className={cx('col l-5 c-12')} style={{ overflow: 'hidden' }}>
-                        <ProductSlider product={product} />
-                    </div>
-                    <div className={cx('col l-7 c-12')}>
-                        <ProductDetail product={product} />
+        <>
+            {console.log('bind-product')}
+            {loading ? (
+                <Spin size="large" />
+            ) : error ? (
+                <Alert message="Error" description={error} type="error" showIcon />
+            ) : (
+                <div className={cx('product')}>
+                    <ProductBreadcrumb product={product} />
+                    <div className={cx('grid wide')} style={{ marginTop: '100px' }}>
+                        <div className={cx('row')}>
+                            <div className={cx('col l-5 c-12')} style={{ overflow: 'hidden' }}>
+                                <ProductSlider product={product} />
+                            </div>
+                            <div className={cx('col l-7 c-12')}>
+                                <ProductDetail product={product} />
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            )}
+        </>
     );
 }
 

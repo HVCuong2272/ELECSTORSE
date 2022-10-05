@@ -5,31 +5,21 @@ import classNames from 'classnames/bind';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProductItem from '../ProductItem';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { listProducts } from '~/redux/actions/productActions';
 const cx = classNames.bind(styles);
 
 const Product = () => {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
+    console.log('render');
+    const dispatch = useDispatch();
+    const productList = useSelector((state) => state.productList);
+    const { loading, error, products } = productList;
+    console.log(loading);
+
     const productRef = useRef();
-    //console.log(products);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const { data } = await axios.get('/api/products');
-                setLoading(false);
-                setProducts(data);
-            } catch (error) {
-                setError(error.message);
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
 
     useEffect(() => {
+        console.log('ef2');
         // console.log(productRef.current);
         let span = document.querySelectorAll('.button-control-product-list svg');
         let product = document.querySelectorAll(`.${productRef.current}`);
@@ -78,10 +68,18 @@ const Product = () => {
         span[0].onclick = () => {
             left_move();
         };
+        console.log('ef2-2');
     }, []);
+
+    useEffect(() => {
+        console.log('ef1');
+        dispatch(listProducts());
+        console.log('ef1-1');
+    }, [dispatch]);
 
     return (
         <div className={cx('grid wide')}>
+            {console.log('bind')}
             <div className={cx('product-list')}>
                 <div className={cx('product-list-header')}>
                     <h1 className={cx('product-list-header__titile')}>Feature Product</h1>
@@ -98,12 +96,7 @@ const Product = () => {
                     {loading ? (
                         <Spin size="large" />
                     ) : error ? (
-                        <Alert
-                            message="Error"
-                            description={error}
-                            type="error"
-                            showIcon
-                        />
+                        <Alert message="Error" description={error} type="error" showIcon />
                     ) : (
                         <>
                             <section>

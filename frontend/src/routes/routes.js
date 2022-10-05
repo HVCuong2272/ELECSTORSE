@@ -4,6 +4,7 @@ import config from '~/config';
 import { SubHeaderOnly } from '~/layouts';
 
 // Pages
+import Cart from '~/pages/Cart';
 import Home from '~/pages/Home';
 import Product from '~/pages/Product';
 
@@ -11,6 +12,8 @@ import Product from '~/pages/Product';
 const publicRoutes = [
     { path: config.publicRoutes.home, component: Home },
     { path: config.publicRoutes.productWId, component: Product, layout: SubHeaderOnly },
+    { path: config.publicRoutes.cartpage, component: Cart, layout: SubHeaderOnly },
+    { path: config.publicRoutes.cartpageWId, component: Cart, layout: SubHeaderOnly },
 
     // { path: config.publicRoutes.following, component: Following },
     // { path: config.publicRoutes.profile, component: Profile },
