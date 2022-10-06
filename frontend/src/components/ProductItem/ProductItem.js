@@ -1,7 +1,7 @@
 import { Rate } from 'antd';
 import styles from './ProductItem.module.scss';
 import classNames from 'classnames/bind';
-import { useEffect, forwardRef } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
@@ -44,4 +44,4 @@ function ProductItem(props) {
     );
 }
 
-export default forwardRef(ProductItem);
+export default ProductItem;

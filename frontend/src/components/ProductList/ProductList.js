@@ -27,7 +27,7 @@ const Product = () => {
         // console.log(productRef.current);
         let span = document.querySelectorAll('.button-control-product-list svg');
         let product = document.querySelectorAll(`.product-item-container`);
-        console.log(product);
+        // console.log(product);
         let product_page = Math.ceil(product.length / 3);
         let l = 0;
         let movePer = 101;
