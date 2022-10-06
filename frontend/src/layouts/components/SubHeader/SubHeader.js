@@ -16,7 +16,8 @@ function SubHeader() {
     const SubHeaderElement = useRef();
     useEffect(() => {
         const handleScroll = () => {
-            // console.log(window.scrollY);
+            console.log(window.scrollY);
+            // if(window.innerWidth)
             if (window.scrollY >= 56) {
                 Object.assign(SubHeaderElement.current.style, {
                     position: 'fixed',
