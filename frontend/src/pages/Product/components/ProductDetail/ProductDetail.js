@@ -106,8 +106,8 @@ function ProductDetail(props) {
                             ))}
                         </select>
                     </div>
-                    <div className={cx('product-detail__actions-addToCart')}>
-                        <div onClick={addToCartHandler}>
+                    <div className={cx('product-detail__actions-addToCart')} onClick={addToCartHandler}>
+                        <div>
                             <ShoppingCartOutlined />
                             <span>Add to Cart</span>
                         </div>
