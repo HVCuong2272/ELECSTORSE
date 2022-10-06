@@ -1,18 +1,15 @@
 import { Rate } from 'antd';
 import styles from './ProductItem.module.scss';
 import classNames from 'classnames/bind';
-import { useEffect, forwardRef, useRef, useImperativeHandle } from 'react';
+import { useEffect, forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
-function ProductItem(props, ref) {
+function ProductItem(props) {
     const { product } = props;
 
-    const productItemRef = useRef();
-    useImperativeHandle(ref, () => productItemRef.current.className);
-
     return (
-        <div className={cx('product')} ref={productItemRef}>
+        <div className={cx('product', 'product-item-container')}>
             <Link to={`/product/${product._id}`} className={cx('picture-product')}>
                 <img src={product.image1} alt={product.name} />
             </Link>

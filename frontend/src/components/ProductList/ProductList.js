@@ -16,13 +16,18 @@ const Product = () => {
     const { loading, error, products } = productList;
     console.log(loading);
 
-    const productRef = useRef();
+    useEffect(() => {
+        console.log('ef1');
+        dispatch(listProducts());
+        console.log('ef1-1');
+    }, [dispatch]);
 
     useEffect(() => {
         console.log('ef2');
         // console.log(productRef.current);
         let span = document.querySelectorAll('.button-control-product-list svg');
-        let product = document.querySelectorAll(`.${productRef.current}`);
+        let product = document.querySelectorAll(`.product-item-container`);
+        console.log(product);
         let product_page = Math.ceil(product.length / 3);
         let l = 0;
         let movePer = 101;
@@ -69,13 +74,7 @@ const Product = () => {
             left_move();
         };
         console.log('ef2-2');
-    }, []);
-
-    useEffect(() => {
-        console.log('ef1');
-        dispatch(listProducts());
-        console.log('ef1-1');
-    }, [dispatch]);
+    }, [products]);
 
     return (
         <div className={cx('grid wide')}>
@@ -101,7 +100,7 @@ const Product = () => {
                         <>
                             <section>
                                 {products.map((product) => (
-                                    <ProductItem key={product._id} product={product} ref={productRef}></ProductItem>
+                                    <ProductItem key={product._id} product={product}></ProductItem>
                                 ))}
                             </section>
                             <Link to="/" className={cx('view-more-btn')}>
