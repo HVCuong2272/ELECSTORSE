@@ -5,11 +5,12 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Manipulation } from 'swiper';
 import { useDispatch } from 'react-redux';
-import { addToCart } from '~/redux/constants/cartActions';
+import { addToCart } from '~/redux/actions/cartActions';
 
 const cx = classNames.bind(styles);
 
 function CartSummary() {
+    console.log('init summary');
     const navigate = useNavigate();
   const params = useParams();
   const { id: productId } = params;
@@ -19,16 +20,18 @@ function CartSummary() {
 
     const dispatch = useDispatch();
     useEffect(()=>{
+    console.log('init effect summary');
         if (productId){
+            console.log('init effect summary1');
             dispatch(addToCart(productId, qty));
+            console.log('end effect summary');
         }
+        console.log('end effect summary1');
     }, [dispatch, productId, qty]);
 
     return (
         <div className={cx('cart-summary')}>
-            <p>
-                ADD TO CART : ProductID: {productId} Qty: {qty}
-            </p>
+            {console.log('bind summary')}
             <div className={cx('cart-summary__container')}>
                 <h4 className={cx('cart-summary__header')}>Cart Totals</h4>
                 <div className={cx('cart-summary__body')}>
