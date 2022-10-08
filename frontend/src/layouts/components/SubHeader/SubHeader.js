@@ -5,9 +5,13 @@ import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import SearchBox from '../SearchBox';
 import { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles);
 function SubHeader() {
+    const cart = useSelector(state => state.cart);
+    const {cartItems} = cart;
+
     const handleMenuClick = (e) => {
         message.info('Click on menu item.');
         console.log('click', e);
@@ -96,7 +100,7 @@ function SubHeader() {
                     <div className={cx('sub-header__actions')}>
                         <Link to="/cart" className={cx('sub-header__actions-cart')}>
                             <ShoppingCartOutlined />
-                            <span className={cx('sub-header__actions-cart-notify')}>6</span>
+                            {cartItems.length > 0 && <span className={cx('sub-header__actions-cart-notify')}> {cartItems.length}</span>}
                         </Link>
                         <Link to="/signin" className={cx('sub-header__actions-signin')}>
                             Sign In
