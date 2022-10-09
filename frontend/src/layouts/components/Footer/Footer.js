@@ -8,11 +8,11 @@ function Footer() {
             <div className={cx('grid wide footer__content')}>
                 <div className={cx('row')}>
                     <div className={cx('col l-2-4 m-4 c-6')}>
-                        <h3 className={cx('footer__heading')}>CHĂM SÓC KHÁCH HÀNG</h3>
+                        <h3 className={cx('footer__heading')}>CUSTOMER SUPPORT</h3>
                         <ul className={cx('footer-list')}>
                             <li className={cx('footer-item')}>
                                 <a href="/" className={cx('footer-item__link')}>
-                                    Trung Tâm Trợ Giúp
+                                    Support Center
                                 </a>
                             </li>
                             <li className={cx('footer-item')}>
@@ -22,53 +22,53 @@ function Footer() {
                             </li>
                             <li className={cx('footer-item')}>
                                 <a href="/" className={cx('footer-item__link')}>
-                                    Hướng dẫn mua hàng
+                                    Shopping Guide
                                 </a>
                             </li>
                         </ul>
                     </div>
                     <div className={cx('col l-2-4 m-4 c-6')}>
-                        <h3 className={cx('footer__heading')}>GIỚI THIỆU</h3>
+                        <h3 className={cx('footer__heading')}>INTRODUCTION</h3>
                         <ul className={cx('footer-list')}>
                             <li className={cx('footer-item')}>
                                 <a href="/" className={cx('footer-item__link')}>
-                                    Giới thiệu
+                                    Introduction
                                 </a>
                             </li>
                             <li className={cx('footer-item')}>
                                 <a href="/" className={cx('footer-item__link')}>
-                                    Tuyển dụng
+                                    Recruitment
                                 </a>
                             </li>
                             <li className={cx('footer-item')}>
                                 <a href="/" className={cx('footer-item__link')}>
-                                    Điều khoản
+                                    Policy
                                 </a>
                             </li>
                         </ul>
                     </div>
                     <div className={cx('col l-2-4 m-4 c-6')}>
-                        <h3 className={cx('footer__heading')}>DANH MỤC</h3>
+                        <h3 className={cx('footer__heading')}>CATEGORY</h3>
                         <ul className={cx('footer-list')}>
                             <li className={cx('footer-item')}>
                                 <a href="/" className={cx('footer-item__link')}>
-                                    Trang điểm mặt
+                                    Laptop
                                 </a>
                             </li>
                             <li className={cx('footer-item')}>
                                 <a href="/" className={cx('footer-item__link')}>
-                                    Trang điểm môi
+                                    PC
                                 </a>
                             </li>
                             <li className={cx('footer-item')}>
                                 <a href="/" className={cx('footer-item__link')}>
-                                    Trang điểm mắt
+                                    Mobile
                                 </a>
                             </li>
                         </ul>
                     </div>
                     <div className={cx('col l-2-4 m-4 c-6')}>
-                        <h3 className={cx('footer__heading')}>THEO DÕI</h3>
+                        <h3 className={cx('footer__heading')}>FOLLOW US</h3>
                         <ul className={cx('footer-list', 'footer-list-mobile')}>
                             <li className={cx('footer-item')}>
                                 <a href="/" className={cx('footer-item__link')}>
@@ -97,7 +97,7 @@ function Footer() {
                         </ul>
                     </div>
                     <div className={cx('col l-2-4 m-8 c-12')}>
-                        <h3 className={cx('footer__heading')}>VÀO CỬA HÀNG TRÊN ỨNG DỤNG</h3>
+                        <h3 className={cx('footer__heading')}>WE ARE ON APP TOO</h3>
                         <div className={cx('footer__download')}>
                             <img
                                 src="/assets/images/footer/qr_code.png"
@@ -127,7 +127,7 @@ function Footer() {
 
             <div className={cx('footer__bottom')}>
                 <div className={cx('grid wide')}>
-                    <p className={cx('footer__text')}>© 2022 - Bản quyền thuộc về Ecommerce Group</p>
+                    <p className={cx('footer__text')}>© 2022 - Copyright by Ecommerce Group All rights reserved</p>
                 </div>
             </div>
         </div>

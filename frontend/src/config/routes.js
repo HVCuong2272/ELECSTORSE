@@ -3,6 +3,7 @@ const publicRoutes = {
     productWId: '/product/:id',
     cartpage: '/cart',
     cartpageWId: '/cart/:id',
+    signin: '/signin',
 };
 const privateRoutes = {};
 

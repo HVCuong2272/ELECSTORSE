@@ -1,3 +1,4 @@
+import Footer from '../components/Footer';
 import SubHeader from '../components/SubHeader';
 
 function SubHeaderOnly({ children }) {
@@ -7,6 +8,7 @@ function SubHeaderOnly({ children }) {
             <div className="container">
                 <div className="content">{children}</div>
             </div>
+            <Footer/>
         </div>
     );
 }

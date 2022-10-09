@@ -9,6 +9,7 @@ import ProductList from '../../components/ProductList';
 import ProductOutroImage from './components/ProductOutroImage';
 import Header from '~/layouts/components/Header';
 import SubHeader from '~/layouts/components/SubHeader';
+import Footer from '~/layouts/components/Footer';
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +22,7 @@ function Home() {
             <Banner />
             <ProductList />
             <ProductOutroImage />
+            <Footer/>
         </div>
     );
 }
