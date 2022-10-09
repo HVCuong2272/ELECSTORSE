@@ -13,6 +13,8 @@ import styles from './ProductDetail.module.scss';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Rate } from 'antd';
 import { useState } from 'react';
+import { CART_RESET_ITEM } from '~/redux/constants/cartConstants';
+import { useDispatch } from 'react-redux';
 
 const cx = classNames.bind(styles);
 
@@ -22,7 +24,9 @@ function ProductDetail(props) {
     const [qty, setQty] = useState(1);
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const addToCartHandler = () => {
+        dispatch({type: CART_RESET_ITEM});
         navigate(`/cart/${product._id}?qty=${qty}`);
     };
 

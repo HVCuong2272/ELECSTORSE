@@ -1,43 +1,30 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './CartSummary.module.scss';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
-import { Manipulation } from 'swiper';
-import { useDispatch } from 'react-redux';
-import { addToCart } from '~/redux/actions/cartActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function CartSummary() {
-    console.log('init summary');
     const navigate = useNavigate();
-  const params = useParams();
-  const { id: productId } = params;
-  const { search } = useLocation();
-  const qtyInUrl = new URLSearchParams(search).get('qty');
-  const qty = qtyInUrl ? Number(qtyInUrl) : 1;
-
     const dispatch = useDispatch();
-    useEffect(()=>{
-    console.log('init effect summary');
-        if (productId){
-            console.log('init effect summary1');
-            dispatch(addToCart(productId, qty));
-            console.log('end effect summary');
-        }
-        console.log('end effect summary1');
-    }, [dispatch, productId, qty]);
+    const cart = useSelector((state) => state.cart);
+    const { cartItems } = cart;
 
+    const checkoutHandler = () => {
+        navigate('/signin?redirect=/shipping');
+    }
     return (
         <div className={cx('cart-summary')}>
-            {console.log('bind summary')}
             <div className={cx('cart-summary__container')}>
                 <h4 className={cx('cart-summary__header')}>Cart Totals</h4>
                 <div className={cx('cart-summary__body')}>
                     <div className={cx('cart-summary__body-subtotal')}>
                         <div className={cx('cart-summary__body-subtotal-title')}>Cart Subtotal</div>
-                        <div className={cx('cart-summary__body-subtotal-price')}>$15.30</div>
+                        <div className={cx('cart-summary__body-subtotal-price')}>
+                        {cartItems.reduce((totalPrice, currentItem) => totalPrice + (currentItem.price * currentItem.qty), 0)}$ ({cartItems.reduce((totalBuyQuantity, currentItem) => totalBuyQuantity + currentItem.qty, 0)} items) 
+                        </div>
                     </div>
                     <div className={cx('cart-summary__body-shipping')}>
                         <div className={cx('cart-summary__body-shipping-title')}>Shipping</div>
@@ -49,7 +36,7 @@ function CartSummary() {
                     </div>
                 </div>
                 <div className={cx('cart-summary__btn-container')}>
-                    <div className={cx('cart-summary__btn')}>Proceed To Checkout</div>
+                    <button className={cx('cart-summary__btn')} onClick={checkoutHandler} disabled={cartItems.length === 0}>Proceed To Checkout</button>
                 </div>
             </div>
         </div>

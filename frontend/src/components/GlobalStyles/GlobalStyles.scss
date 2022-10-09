@@ -82,6 +82,18 @@ a:hover {
     margin-right: 18px;
 }
 
+.ant-alert-description a:hover {
+    color: var(--primary-color);
+}
+
+.ant-table-thead > tr > th {
+    text-align: center;
+}
+
+.ant-table-tbody > tr > td {
+    text-align: center;
+}
+
 // Alert
 .success {
     color: #20a020;

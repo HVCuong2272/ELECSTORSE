@@ -5,10 +5,11 @@ import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import SearchBox from '../SearchBox';
 import { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { CART_RESET_ITEM } from '~/redux/constants/cartConstants';
 
 const cx = classNames.bind(styles);
-function SubHeader() {
+function SubHeader({isHomePage}) {
     const cart = useSelector(state => state.cart);
     const {cartItems} = cart;
 
@@ -17,6 +18,7 @@ function SubHeader() {
         console.log('click', e);
     };
 
+    const dispatch = useDispatch();
     const SubHeaderElement = useRef();
     useEffect(() => {
         const handleScroll = () => {
@@ -37,11 +39,15 @@ function SubHeader() {
                 });
             }
         };
-        window.addEventListener('scroll', handleScroll);
+        if(isHomePage){
+            window.addEventListener('scroll', handleScroll);
+        }
 
         return () => {
             // console.log('Unmounting...');
+            if(isHomePage){
             window.removeEventListener('scroll', handleScroll);
+            }
         };
     }, []);
     const menu = (
@@ -98,7 +104,7 @@ function SubHeader() {
                     </div>
                     <SearchBox />
                     <div className={cx('sub-header__actions')}>
-                        <Link to="/cart" className={cx('sub-header__actions-cart')}>
+                        <Link to="/cart" className={cx('sub-header__actions-cart')} onClick={()=>{dispatch({type: CART_RESET_ITEM})}}>
                             <ShoppingCartOutlined />
                             {cartItems.length > 0 && <span className={cx('sub-header__actions-cart-notify')}> {cartItems.length}</span>}
                         </Link>

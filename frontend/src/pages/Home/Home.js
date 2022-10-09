@@ -7,12 +7,16 @@ import Banner from './components/Banner';
 import { useEffect } from 'react';
 import ProductList from '../../components/ProductList';
 import ProductOutroImage from './components/ProductOutroImage';
+import Header from '~/layouts/components/Header';
+import SubHeader from '~/layouts/components/SubHeader';
 
 const cx = classNames.bind(styles);
 
 function Home() {
     return (
         <div className={cx('home')}>
+            <Header />
+            <SubHeader isHomePage/>
             <Carousel />
             <Banner />
             <ProductList />
