@@ -7,8 +7,8 @@ const publicRoutes = {
     register: '/register',
     activateEmail: '/user/activate/:activation_token',
     forgetPass: '/forgot_password',
-    resetPass: '/user/reset/:token'
-
+    resetPass: '/user/reset/:token',
+    shipping: '/shipping'
 };
 const privateRoutes = {};
 
