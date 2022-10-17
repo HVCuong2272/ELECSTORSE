@@ -1,7 +1,29 @@
+const bcrypt = require('bcrypt');
 const data = {
+    users: [
+        {
+            name: "Thangadmin",
+            email: "admin@example.com",
+            password: bcrypt.hash("123456", 8),
+            isAdmin: true,
+            // isSeller: true,
+            // seller: {
+            //     name: "Puma",
+            //     logo: "/images/logo1.png",
+            //     description: "best seller",
+            //     rating: 4.5,
+            //     numReviews: 120,
+            // },
+        },
+        {
+            name: "Thanguser",
+            email: "user@example.com",
+            password: bcrypt.hash("123456", 8),
+            isAdmin: false,
+        },
+    ],
     products: [
         {
-            _id: '1',
             name: 'Nike Slim Shirt',
             category: 'Shirts',
             image1: '/assets/images/productImage/p1.jpg',
@@ -15,7 +37,6 @@ const data = {
             description: 'high quality product',
         },
         {
-            _id: '2',
             name: 'Adidas Fit Shirt',
             category: 'Shirts',
             image1: '/assets/images/productImage/p2.jpg',
@@ -29,7 +50,6 @@ const data = {
             description: 'high quality product',
         },
         {
-            _id: '3',
             name: 'Lacoste Free Shirt',
             category: 'Shirts',
             image1: '/assets/images/productImage/p3.jpg',
@@ -43,7 +63,6 @@ const data = {
             description: 'high quality product',
         },
         {
-            _id: '4',
             name: 'Nike Slim Pant',
             category: 'Pants',
             image1: '/assets/images/productImage/p4.jpg',
@@ -57,7 +76,6 @@ const data = {
             description: 'high quality product',
         },
         {
-            _id: '5',
             name: 'Puma Slim Pant',
             category: 'Pants',
             image1: '/assets/images/productImage/p5.jpg',
@@ -71,7 +89,6 @@ const data = {
             description: 'high quality product',
         },
         {
-            _id: '6',
             name: 'Adidas Fit Pant6',
             category: 'Pants',
             image1: '/assets/images/productImage/p6.jpg',
@@ -85,7 +102,6 @@ const data = {
             description: 'high quality product',
         },
         {
-            _id: '7',
             name: 'Adidas Fit Pant1',
             category: 'Pants',
             image1: '/assets/images/productImage/p6.jpg',
@@ -99,7 +115,6 @@ const data = {
             description: 'high quality product',
         },
         {
-            _id: '8',
             name: 'Adidas Fit Pant2',
             category: 'Pants',
             image1: '/assets/images/productImage/p6.jpg',
@@ -113,7 +128,6 @@ const data = {
             description: 'high quality product',
         },
         {
-            _id: '9',
             name: 'Adidas Fit Pant3',
             category: 'Pants',
             image1: '/assets/images/productImage/p6.jpg',
@@ -128,4 +142,6 @@ const data = {
         },
     ],
 };
-export default data;
+module.exports = {
+    data
+}

@@ -36,7 +36,9 @@ function Product() {
         <>
             {console.log('bind-product')}
             {loading ? (
-                <Spin size="large" />
+                <div style={{ marginTop: '100px' }}>
+                    <Spin size="large" />
+                </div>
             ) : error ? (
                 <Alert message="Error" description={error} type="error" showIcon />
             ) : (

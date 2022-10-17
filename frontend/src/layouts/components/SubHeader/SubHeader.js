@@ -1,4 +1,5 @@
 import { Button, Dropdown, Menu, message, Space } from 'antd';
+import { DownOutlined, SmileOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined, MenuOutlined, CaretRightOutlined, HomeOutlined } from '@ant-design/icons';
 import styles from './SubHeader.module.scss';
 import classNames from 'classnames/bind';
@@ -7,16 +8,16 @@ import SearchBox from '../SearchBox';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CART_RESET_ITEM } from '~/redux/constants/cartConstants';
+import { signout } from '~/redux/actions/userActions';
 
 const cx = classNames.bind(styles);
-function SubHeader({isHomePage}) {
+function SubHeader({ isHomePage }) {
+    console.log('init subheder');
     const cart = useSelector(state => state.cart);
-    const {cartItems} = cart;
-
-    const handleMenuClick = (e) => {
-        message.info('Click on menu item.');
-        console.log('click', e);
-    };
+    const { cartItems } = cart;
+    const userSignin = useSelector(state => state.userSignin)
+    const { userInfo } = userSignin
+    // console.log(userInfo);
 
     const dispatch = useDispatch();
     const SubHeaderElement = useRef();
@@ -31,7 +32,7 @@ function SubHeader({isHomePage}) {
                     left: 0,
                     right: 0,
                     backgroundColor: 'white',
-                    zIndex: 999999,
+                    zIndex: 2,
                 });
             } else {
                 Object.assign(SubHeaderElement.current.style, {
@@ -39,17 +40,23 @@ function SubHeader({isHomePage}) {
                 });
             }
         };
-        if(isHomePage){
+        if (isHomePage) {
             window.addEventListener('scroll', handleScroll);
         }
 
         return () => {
             // console.log('Unmounting...');
-            if(isHomePage){
-            window.removeEventListener('scroll', handleScroll);
+            if (isHomePage) {
+                window.removeEventListener('scroll', handleScroll);
             }
         };
     }, []);
+
+    const handleMenuClick = (e) => {
+        message.info('Click on menu item.');
+        console.log('click', e);
+    };
+
     const menu = (
         <Menu
             onClick={handleMenuClick}
@@ -68,6 +75,35 @@ function SubHeader({isHomePage}) {
                     label: '3rd menu item',
                     key: '3',
                     icon: <CaretRightOutlined />,
+                },
+            ]}
+        />
+    );
+
+    const handleClickUserMenuProfile = ({ key }) => {
+        // message.info(`Click on item ${key}`);
+        if (key === '3') {
+            dispatch(signout());
+        }
+    };
+    const menuProfile = (
+        <Menu
+            onClick={handleClickUserMenuProfile}
+            items={[
+                {
+                    label: 'Profile',
+                    key: '1',
+                },
+                {
+                    label: '2nd menu item',
+                    key: '2',
+                },
+                {
+                    type: 'divider',
+                },
+                {
+                    label: 'Logout',
+                    key: '3',
                 },
             ]}
         />
@@ -104,13 +140,30 @@ function SubHeader({isHomePage}) {
                     </div>
                     <SearchBox />
                     <div className={cx('sub-header__actions')}>
-                        <Link to="/cart" className={cx('sub-header__actions-cart')} onClick={()=>{dispatch({type: CART_RESET_ITEM})}}>
+                        <Link to="/cart" className={cx('sub-header__actions-cart')} onClick={() => { dispatch({ type: CART_RESET_ITEM }) }}>
                             <ShoppingCartOutlined />
                             {cartItems.length > 0 && <span className={cx('sub-header__actions-cart-notify')}> {cartItems.length}</span>}
                         </Link>
-                        <Link to="/signin" className={cx('sub-header__actions-signin')}>
-                            Sign In
-                        </Link>
+                        {
+                            userInfo ? (
+                                <div className={cx('sub-header__info-container')}>
+                                    <Dropdown overlay={menuProfile} placement="bottomRight" arrow>
+                                        <a href="/" onClick={(e) => e.preventDefault()} className={cx('sub-header__info-user-name')}>
+                                            <img
+                                                src={userInfo.avatar}
+                                                alt=""
+                                                className={cx('sub-header__info-user-img')}
+                                            />
+                                            {userInfo.name}
+                                        </a>
+                                    </Dropdown>
+                                </div>
+                            ) : (
+                                <Link to="/signin" className={cx('sub-header__actions-signin')}>
+                                    Sign In
+                                </Link>
+                            )
+                        }
                     </div>
                 </div>
             </div>

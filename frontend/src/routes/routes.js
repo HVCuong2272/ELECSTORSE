@@ -7,7 +7,12 @@ import { SubHeaderOnly } from '~/layouts';
 import Cart from '~/pages/Cart';
 import Home from '~/pages/Home';
 import Product from '~/pages/Product';
+import Register from '~/pages/Register';
 import SigninScreen from '~/pages/SignIn';
+import ActivationEmail from '~/pages/activationEmail'
+import ForgetPassword from '~/pages/ForgetPassword';
+import ResetPassword from '~/pages/ResetPassword';
+
 
 // Public routes
 const publicRoutes = [
@@ -15,7 +20,11 @@ const publicRoutes = [
     { path: config.publicRoutes.productWId, component: Product, layout: SubHeaderOnly },
     { path: config.publicRoutes.cartpage, component: Cart, layout: SubHeaderOnly },
     { path: config.publicRoutes.cartpageWId, component: Cart, layout: SubHeaderOnly },
-    { path: config.publicRoutes.signin, component: SigninScreen},
+    { path: config.publicRoutes.signin, component: SigninScreen },
+    { path: config.publicRoutes.register, component: Register },
+    { path: config.publicRoutes.activateEmail, component: ActivationEmail },
+    { path: config.publicRoutes.forgetPass, component: ForgetPassword },
+    { path: config.publicRoutes.resetPass, component: ResetPassword },
 
     // { path: config.publicRoutes.following, component: Following },
     // { path: config.publicRoutes.profile, component: Profile },
