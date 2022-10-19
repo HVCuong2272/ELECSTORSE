@@ -94,6 +94,18 @@ a:hover {
     text-align: center;
 }
 
+.ant-radio-checked .ant-radio-inner{
+    border-color: var(--primary-color) !important ;
+  }
+  
+  .ant-radio-checked .ant-radio-inner:after{
+    background-color: var(--primary-color);
+  }
+  
+  .ant-radio:hover .ant-radio-inner {
+    border-color: var(--primary-color) ;
+  }
+
 .login-form {
     max-width: 100%;
 }
