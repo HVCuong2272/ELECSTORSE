@@ -126,3 +126,7 @@ a:hover {
 .danger {
     color: #a02020;
 }
+textarea:focus, input:focus {
+    outline: none; 
+    border: 1px solid #000;
+  }

@@ -56,7 +56,7 @@ function ShippingAddress() {
             <div className={cx('row')}>
               <div className={cx('col l-6 m-12 c-12')}>
                 <div className={cx('shipping-header')}>
-                  <div className={cx('heading-s1 space-mb--20')}>
+                  <div className={cx('heading-s1 space-mb--20')} >
                     <h4>Billing Details</h4>
                   </div>
                   <form>
@@ -170,7 +170,8 @@ function ShippingAddress() {
                       className={cx('form-control')} 
                       name="note"
                       placeholder="Order notes"
-                      style={{height:"150px"}}
+                      style={{height:"120px",resize:'none'}}
+      
                       value={note}
                       onChange={(e) => setnote(e.target.value)}
                       ></textarea>
@@ -183,7 +184,7 @@ function ShippingAddress() {
                   <div className={cx('heading-s1')}>
                     <h4>Your Orders</h4>
                   </div>
-                  <div className={cx('table-responsive order_table')}>
+                  <div className={cx('table-responsive', 'order_table')}>
                     <table className={cx('table')}>
                       <thead>
                         <tr>
@@ -289,7 +290,7 @@ function ShippingAddress() {
                     </Radio.Group>
                     </div>
                   </div>
-                  <button className={cx('btn btn-fill-out btn-block')} onClick={submitHandler}>
+                  <button className={cx('btn-fill-out','btn','btn-block')} onClick={submitHandler}>
                     Place Order
                   </button>
                 </div>
