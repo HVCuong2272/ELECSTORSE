@@ -14,26 +14,26 @@ function CheckoutStep(props) {
     const onChange = (value) => {
         console.log('onChange:', value);
         setCurrent(value);
-    }
-        return (
-            <div className="grid wide" style={{ marginTop: '60px', height: '100%' }}>
-                <div className={cx('checkout-steps')}>
-                    {/* <Steps>
+    };
+    return (
+        <div className="grid wide" style={{ marginTop: '60px', height: '100%', backgroundColor: 'white'}}>
+            <div className={cx('checkout-steps')}>
+                {/* <Steps>
                     <Step status="finish" title="Login" icon={<UserOutlined />} />
                     <Step status="finish" title="Verification" icon={<SolutionOutlined />} />
                     <Step status="process" title="Pay" icon={<LoadingOutlined />} />
                     <Step status="wait" title="Done" icon={<SmileOutlined />} />
                 </Steps> */}
 
-                    <Steps type="navigation" current={current} onChange={onChange} className="site-navigation-steps">
-                        <Step status="finish" title="Login" disabled />
-                        <Step status="process" title="Shipping" icon={<SmileOutlined />}/>
-                        <Step status="wait" title="Payment" />
-                        <Step status="wait" title="Place Order" />
-                    </Steps>
-                </div>
+                <Steps type="navigation" current={current} onChange={onChange} className="site-navigation-steps">
+                    <Step status="finish" title="Login" disabled />
+                    <Step status="process" title="Shipping" icon={<SmileOutlined />} />
+                    <Step status="wait" title="Payment" />
+                    <Step status="wait" title="Place Order" />
+                </Steps>
             </div>
-        );
-    };
+        </div>
+    );
+}
 
 export default CheckoutStep;

@@ -57,7 +57,7 @@ function ShippingAddress() {
               <div className={cx('col l-6 m-12 c-12')}>
                 <div className={cx('shipping-header')}>
                   <div className={cx('heading-s1 space-mb--20')} >
-                    <h4>Billing Details</h4>
+                    <h4 style={{fontSize:'28px', marginTop:'15px', marginBottom:'15px'}}>Billing Details</h4>
                   </div>
                   <form>
                     <div className={cx('form-group')}>
@@ -84,7 +84,7 @@ function ShippingAddress() {
                     </div>
                     <div className={cx('form-group')}>
                       <div className={cx('custom_select')}>
-                        <select className={cx('form-control')}>
+                        <select className={cx('form-control')} style={{height:'50px'}}>
                           <option value="">Select an option...</option>
                           <option value="AX">Aland Islands</option>
                           <option value="AF">Afghanistan</option>
@@ -161,7 +161,7 @@ function ShippingAddress() {
                       onChange={(e) => setemail(e.target.value)}
                       ></input>
                     </div>
-                    <div className={cx('heading-s1')}>
+                    <div className={cx('heading-s1 space-mb--20')} style={{fontSize:'22px'}}>
                       <h4>Additional information</h4>
                     </div>
                     <div className={cx('form-group') }>
@@ -171,7 +171,6 @@ function ShippingAddress() {
                       name="note"
                       placeholder="Order notes"
                       style={{height:"120px",resize:'none'}}
-      
                       value={note}
                       onChange={(e) => setnote(e.target.value)}
                       ></textarea>
@@ -181,8 +180,8 @@ function ShippingAddress() {
               </div>
               <div className={cx('col l-6 m-12 c-12')}>
                 <div className={cx('order-review')}>
-                  <div className={cx('heading-s1')}>
-                    <h4>Your Orders</h4>
+                  <div className={cx('heading-s1 space-mb--20')}>
+                    <h4 style={{fontSize:'28px'}}>Your Orders</h4>
                   </div>
                   <div className={cx('table-responsive', 'order_table')}>
                     <table className={cx('table')}>
@@ -216,7 +215,7 @@ function ShippingAddress() {
                     </table>
                   </div>
                   <div className={cx('payment-method')}>
-                    <div className={cx('heading-s1 space-mb--20')}>
+                    <div className={cx('heading-s1 space-mb--20')} style={{fontSize:'28px'}}>
                       <h4>Payment</h4>
                     </div>
                     <div className={cx('payment-option')}>
@@ -290,7 +289,7 @@ function ShippingAddress() {
                     </Radio.Group>
                     </div>
                   </div>
-                  <button className={cx('btn-fill-out','btn','btn-block')} onClick={submitHandler}>
+                  <button className={cx('btn','btn-fill-out','btn-block')} style={{width:'100%', height:'50%'}} onClick={submitHandler}>
                     Place Order
                   </button>
                 </div>
