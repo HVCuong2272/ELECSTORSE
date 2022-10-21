@@ -13,13 +13,6 @@ function ShippingAddress() {
 
   const navigate = useNavigate();
 
-  const userSignin = useSelector(state => state.userSignin);
-  const {userInfo} = userSignin;
-
-  if(!userInfo){
-    window.location.href = '/signin';
-  }
-
   const [fname, setfname] = useState('');
   const [lname, setlname] = useState('');
   const [billing_address, setbilling_address] = useState('');
@@ -32,7 +25,7 @@ function ShippingAddress() {
   const dispatch = useDispatch();
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(saveShippingAddress({fname, lname, billing_address,billing_address2,city,zipcode,phone,email,note}));
+    dispatch(saveShippingAddress({ fname, lname, billing_address, billing_address2, city, zipcode, phone, email, note }));
     //TODO: dispatch save shipping address action
     navigate('/payment')
   }
@@ -47,9 +40,9 @@ function ShippingAddress() {
 
   return (
     <div>
-        
-        <CheckoutStep currentStep="2"/>
-        <div className={cx('grid wide')}>
+
+      <CheckoutStep currentStep="2" />
+      <div className={cx('grid wide')}>
 
         <div className={cx('checkout-content')}>
           <div className={cx('container')}>
@@ -61,25 +54,25 @@ function ShippingAddress() {
                   </div>
                   <form>
                     <div className={cx('form-group')}>
-                      <input 
-                      type="text" 
-                      required="" 
-                      className={cx('form-control')} 
-                      name="fname" 
-                      placeholder="First name *"
-                      value={fname}
-                      onChange={(e) => setfname(e.target.value)}
+                      <input
+                        type="text"
+                        required=""
+                        className={cx('form-control')}
+                        name="fname"
+                        placeholder="First name *"
+                        value={fname}
+                        onChange={(e) => setfname(e.target.value)}
                       ></input>
                     </div>
                     <div className={cx('form-group')}>
-                      <input 
-                      type="text" 
-                      required="" 
-                      className={cx('form-control')} 
-                      name="lname" 
-                      placeholder="Last name *"
-                      value={lname}
-                      onChange={(e) => setlname(e.target.value)}
+                      <input
+                        type="text"
+                        required=""
+                        className={cx('form-control')}
+                        name="lname"
+                        placeholder="Last name *"
+                        value={lname}
+                        onChange={(e) => setlname(e.target.value)}
                       ></input>
                     </div>
                     <div className={cx('form-group')}>
@@ -98,81 +91,81 @@ function ShippingAddress() {
                       </div>
                     </div>
                     <div className={cx('form-group')}>
-                      <input 
-                      type="text" 
-                      className={cx('form-control')} 
-                      name="billing_address" 
-                      placeholder="Address *"
-                      value={billing_address}
-                      onChange={(e) => setbilling_address(e.target.value)}
+                      <input
+                        type="text"
+                        className={cx('form-control')}
+                        name="billing_address"
+                        placeholder="Address *"
+                        value={billing_address}
+                        onChange={(e) => setbilling_address(e.target.value)}
                       ></input>
                     </div>
                     <div className={cx('form-group')}>
-                      <input 
-                      type="text" 
-                      className={cx('form-control')} 
-                      name="billing_address2" 
-                      placeholder="Address line2"
-                      value={billing_address2}
-                      onChange={(e) => setbilling_address2(e.target.value)}
+                      <input
+                        type="text"
+                        className={cx('form-control')}
+                        name="billing_address2"
+                        placeholder="Address line2"
+                        value={billing_address2}
+                        onChange={(e) => setbilling_address2(e.target.value)}
                       ></input>
                     </div>
                     <div className={cx('form-group')}>
-                      <input 
-                      className={cx('form-control')} 
-                      required="" 
-                      type="text" 
-                      name="city" 
-                      placeholder="City / Town *"
-                      value={city}
-                      onChange={(e) => setcity(e.target.value)}
+                      <input
+                        className={cx('form-control')}
+                        required=""
+                        type="text"
+                        name="city"
+                        placeholder="City / Town *"
+                        value={city}
+                        onChange={(e) => setcity(e.target.value)}
                       ></input>
                     </div>
                     <div className={cx('form-group')}>
-                      <input 
-                      className={cx('form-control')} 
-                      required="" 
-                      type="text" 
-                      name="zipcode" 
-                      placeholder="Postcode / ZIP *"
-                      value={zipcode}
-                      onChange={(e) => setzipcode(e.target.value)}
+                      <input
+                        className={cx('form-control')}
+                        required=""
+                        type="text"
+                        name="zipcode"
+                        placeholder="Postcode / ZIP *"
+                        value={zipcode}
+                        onChange={(e) => setzipcode(e.target.value)}
                       ></input>
                     </div>
                     <div className={cx('form-group')}>
-                      <input 
-                      className={cx('form-control')} 
-                      required="" 
-                      type="text" 
-                      name="phone" 
-                      placeholder="Phone *"
-                      value={phone}
-                      onChange={(e) => setphone(e.target.value)}
+                      <input
+                        className={cx('form-control')}
+                        required=""
+                        type="text"
+                        name="phone"
+                        placeholder="Phone *"
+                        value={phone}
+                        onChange={(e) => setphone(e.target.value)}
                       ></input>
                     </div>
                     <div className={cx('form-group')}>
-                      <input 
-                      className={cx('form-control')} 
-                      required="" 
-                      type="text" 
-                      name="email" 
-                      placeholder="Email address *"
-                      value={email}
-                      onChange={(e) => setemail(e.target.value)}
+                      <input
+                        className={cx('form-control')}
+                        required=""
+                        type="text"
+                        name="email"
+                        placeholder="Email address *"
+                        value={email}
+                        onChange={(e) => setemail(e.target.value)}
                       ></input>
                     </div>
                     <div className={cx('heading-s1')}>
                       <h4>Additional information</h4>
                     </div>
-                    <div className={cx('form-group') }>
-                      <textarea 
-                      rows="10" 
-                      className={cx('form-control')} 
-                      name="note"
-                      placeholder="Order notes"
-                      style={{height:"150px"}}
-                      value={note}
-                      onChange={(e) => setnote(e.target.value)}
+                    <div className={cx('form-group')}>
+                      <textarea
+                        rows="10"
+                        className={cx('form-control')}
+                        name="note"
+                        placeholder="Order notes"
+                        style={{ height: "150px" }}
+                        value={note}
+                        onChange={(e) => setnote(e.target.value)}
                       ></textarea>
                     </div>
                   </form>
@@ -273,20 +266,20 @@ function ShippingAddress() {
                         </p>
                       </div> */}
                       <Radio.Group onChange={onChange} value={value}>
-                      <Space direction="vertical">
-                        <Radio value={1}>
-                          <h3>Direct Bank Transfer</h3>
-                          <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration.</p></Radio>
-                        <Radio value={2}>
-                          <h3>Check Payment</h3>
-                          <p>Please send your cheque to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
-                        </Radio>
-                        <Radio value={3}>
-                          <h3>Paypal</h3>
-                          <p>Pay via PayPal; you can pay with your credit card if you don't have a PayPal account.</p>
-                        </Radio>
-                      </Space>
-                    </Radio.Group>
+                        <Space direction="vertical">
+                          <Radio value={1}>
+                            <h3>Direct Bank Transfer</h3>
+                            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration.</p></Radio>
+                          <Radio value={2}>
+                            <h3>Check Payment</h3>
+                            <p>Please send your cheque to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+                          </Radio>
+                          <Radio value={3}>
+                            <h3>Paypal</h3>
+                            <p>Pay via PayPal; you can pay with your credit card if you don't have a PayPal account.</p>
+                          </Radio>
+                        </Space>
+                      </Radio.Group>
                     </div>
                   </div>
                   <button className={cx('btn btn-fill-out btn-block')} onClick={submitHandler}>
@@ -298,7 +291,7 @@ function ShippingAddress() {
           </div>
         </div>
 
-        </div>
+      </div>
 
     </div>
 
