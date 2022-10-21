@@ -24,7 +24,9 @@ function Cart() {
     const { cartItems } = cart;
 
     const dispatch = useDispatch();
-
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
     useEffect(() => {
         console.log('init effect summary');
         if (productId) {

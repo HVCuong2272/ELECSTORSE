@@ -31,7 +31,9 @@ function Product() {
     // if (!product) {
     //     return <div>Product Not Found</div>;
     // }
-
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
     return (
         <>
             {console.log('bind-product')}
