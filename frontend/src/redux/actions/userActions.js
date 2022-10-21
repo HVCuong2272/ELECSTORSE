@@ -36,7 +36,8 @@ export const signout = () => async (dispatch) => {
     await Axios.get('/api/users/logout')
     localStorage.removeItem("firstLogin");
     localStorage.removeItem("cartItems");
-    // localStorage.removeItem("shippingAddress");
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("shippingAddress");
 
     dispatch({ type: USER_SIGNOUT });
     // Tự làm test thử => Cứ chỗ nào dispatch làm thay đổi state của store nào mà chỗ kia dùng useSelector store đó thì thg function component đó sẽ bị render lại

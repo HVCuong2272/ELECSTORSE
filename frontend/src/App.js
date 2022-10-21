@@ -1,6 +1,6 @@
 import { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { publicRoutes } from '~/routes';
+import { publicRoutes, privateRoutes } from '~/routes';
 import DefaultLayout from '~/layouts';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
@@ -28,6 +28,7 @@ function App() {
             const getUser = () => {
                 return fetchUser(token).then(res => {
                     dispatch({ type: USER_SIGNIN_SUCCESS, payload: { userInfo: res.data, isLogged: true } })
+                    localStorage.setItem("userInfo", JSON.stringify(res.data));
                 })
             }
             getUser()
@@ -56,6 +57,32 @@ function App() {
                                     <Layout>
                                         <Page />
                                     </Layout>
+                                }
+                            />
+                        );
+                    })}
+                    {privateRoutes.map((route, index) => {
+                        const Page = route.component;
+
+                        let Layout = DefaultLayout;
+
+                        if (route.layout) {
+                            Layout = route.layout;
+                        } else if (route.layout === null) {
+                            Layout = Fragment;
+                        }
+
+                        let ProtectRoute = route.isPrivate || route.isAdminPrivate || route.isSellerPrivate;
+                        return (
+                            <Route
+                                key={index}
+                                path={route.path}
+                                element={
+                                    <ProtectRoute>
+                                        <Layout>
+                                            <Page />
+                                        </Layout>
+                                    </ProtectRoute>
                                 }
                             />
                         );

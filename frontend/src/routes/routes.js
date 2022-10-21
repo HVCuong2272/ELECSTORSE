@@ -13,6 +13,7 @@ import ActivationEmail from '~/pages/activationEmail'
 import ForgetPassword from '~/pages/ForgetPassword';
 import ResetPassword from '~/pages/ResetPassword';
 import ShippingAddress from '~/pages/ShippingAddress';
+import PrivateRoute from '~/components/PrivateRoute';
 
 
 // Public routes
@@ -26,7 +27,6 @@ const publicRoutes = [
     { path: config.publicRoutes.activateEmail, component: ActivationEmail },
     { path: config.publicRoutes.forgetPass, component: ForgetPassword },
     { path: config.publicRoutes.resetPass, component: ResetPassword },
-    { path: config.publicRoutes.shipping, component:  ShippingAddress},
 
     // { path: config.publicRoutes.following, component: Following },
     // { path: config.publicRoutes.profile, component: Profile },
@@ -34,6 +34,8 @@ const publicRoutes = [
     // { path: config.publicRoutes.search, component: Search, layout: null },
 ];
 
-const privateRoutes = [];
+const privateRoutes = [
+    { path: config.privateRoutes.shipping, component: ShippingAddress, isPrivate: PrivateRoute },
+];
 
 export { publicRoutes, privateRoutes };

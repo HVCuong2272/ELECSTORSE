@@ -8,8 +8,9 @@ const publicRoutes = {
     activateEmail: '/user/activate/:activation_token',
     forgetPass: '/forgot_password',
     resetPass: '/user/reset/:token',
+};
+const privateRoutes = {
     shipping: '/shipping'
 };
-const privateRoutes = {};
 
 export { publicRoutes, privateRoutes };
