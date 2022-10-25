@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { CART_EMPTY } from '../constants/cartConstants';
 import { USER_SIGNIN_FAIL, USER_SIGNIN_FIRSTLOGIN, USER_SIGNIN_REQUEST, USER_SIGNOUT } from "../constants/userConstants";
 
 export const fetchUser = async (token) => {
@@ -41,8 +42,7 @@ export const signout = () => async (dispatch) => {
 
     dispatch({ type: USER_SIGNOUT });
     // Tự làm test thử => Cứ chỗ nào dispatch làm thay đổi state của store nào mà chỗ kia dùng useSelector store đó thì thg function component đó sẽ bị render lại
-    // dispatch({ type: CART_EMPTY });
-    // dispatch({ type: USER_REGISTER_SIGNOUT });
+    dispatch({ type: CART_EMPTY });
     // dispatch({ type: USER_DETAILS_RESET });
-    window.location.href = "/";
+    // window.location.href = "/";
 };

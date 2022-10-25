@@ -13,6 +13,9 @@ function CartSummary() {
     const { cartItems } = cart;
 
     const checkoutHandler = () => {
+        if(localStorage.getItem("userInfo")) {
+            return navigate('/shipping');
+        }
         navigate('/signin?redirect=/shipping');
     }
     return (

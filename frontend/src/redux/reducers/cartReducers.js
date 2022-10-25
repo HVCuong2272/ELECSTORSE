@@ -1,4 +1,4 @@
-import { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_RESET_ITEM, CART_SAVE_SHIPPING_ADDRESS } from '../constants/cartConstants';
+import { CART_ADD_ITEM, CART_EMPTY, CART_REMOVE_ITEM, CART_RESET_ITEM, CART_SAVE_PAYMENT_METHOD, CART_SAVE_SHIPPING_ADDRESS } from '../constants/cartConstants';
 
 export const cartReducer = (state = { cartItems: [] }, action) => {
     console.log('reducer summary');
@@ -22,9 +22,28 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
         case CART_RESET_ITEM:
             return {
                 cartItems: localStorage.getItem('cartItems')? JSON.parse(localStorage.getItem('cartItems')):[],
+                shippingAddress: localStorage.getItem('shippingAddress')
+                ? JSON.parse(localStorage.getItem('shippingAddress')) 
+                : {},
+                paymentMethod: JSON.parse(localStorage.getItem('cartSavePaymentMethod')),
             }
         case CART_SAVE_SHIPPING_ADDRESS:
             return {...state, shippingAddress: action.payload}
+        
+        case CART_EMPTY:
+            return {
+                ...state,
+                error: '',
+                cartItems: [],
+            }
+
+        case CART_SAVE_PAYMENT_METHOD:
+            return {
+                ...state,
+                paymentMethod: action.payload,
+            }
+        
+
         default:
             console.log('reducer summary3');
             return state;

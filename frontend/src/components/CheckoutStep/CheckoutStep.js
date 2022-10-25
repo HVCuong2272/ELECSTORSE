@@ -27,8 +27,8 @@ function CheckoutStep(props) {
 
                 <Steps type="navigation" current={current} onChange={onChange} className="site-navigation-steps">
                     <Step status="finish" title="Login" disabled />
-                    <Step status="process" title="Shipping" icon={<SmileOutlined />} />
-                    <Step status="wait" title="Payment" />
+                    <Step status="process" title="Shipping & Payment" icon={<SmileOutlined />} />
+                    {/* <Step status="wait" title="Payment" /> */}
                     <Step status="wait" title="Place Order" />
                 </Steps>
             </div>
