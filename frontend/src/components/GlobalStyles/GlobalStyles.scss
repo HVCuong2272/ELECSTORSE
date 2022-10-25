@@ -163,3 +163,6 @@ textarea:focus, input:focus {
 .ant-steps-navigation .ant-steps-item::before {
     background-color: var(--primary-color);
 }
+.ant-form-item{
+    max-width: 200px;
+}

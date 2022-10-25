@@ -43,7 +43,9 @@ const SigninScreen = () => {
 
         gapi.load('client:auth2', start);
     }, []);
-
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
     const submitHandler = (values) => {
         // console.log('Received values of form: ', values);
         dispatch(signin(values.email, values.password))

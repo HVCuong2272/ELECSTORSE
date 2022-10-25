@@ -10,10 +10,16 @@ import ProductOutroImage from './components/ProductOutroImage';
 import Header from '~/layouts/components/Header';
 import SubHeader from '~/layouts/components/SubHeader';
 import Footer from '~/layouts/components/Footer';
+import GoToTop from '~/components/GoToTop';
+import ChatBot from '~/components/ChatBot';
+
 
 const cx = classNames.bind(styles);
 
 function Home() {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
     return (
         <div className={cx('home')}>
             <Header />
@@ -22,6 +28,8 @@ function Home() {
             <Banner />
             <ProductList />
             <ProductOutroImage />
+            <ChatBot/>
+            <GoToTop/>
             <Footer/>
         </div>
     );
