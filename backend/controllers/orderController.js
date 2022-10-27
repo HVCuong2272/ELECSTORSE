@@ -26,6 +26,17 @@ const createOrder = expressAsyncHandler(async (req, res) => {
     }
 })
 
+
+const getOrderByID =  expressAsyncHandler(async(req, res) => {
+    const order = await Order.findById(req.params.id);
+    if(order){
+        res.send(order);
+    } else {
+        res.status(404).send({message: 'Order Not Found'});
+    }
+})
+
 module.exports = {
-    createOrder
+    createOrder,
+    getOrderByID
 };

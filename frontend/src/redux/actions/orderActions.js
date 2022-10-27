@@ -9,7 +9,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
             token
         } = getState();
         console.log(token);
-        const { data } = await Axios.post("/api/orders", order, {
+        const { data } = await Axios.post("/api/orders/", order, {
             headers: {
                 Authorization: `${token}`,
             },
