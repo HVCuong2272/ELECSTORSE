@@ -10,19 +10,22 @@ import {
     from './reducers/productReducers';
 import { userSigninReducer } from './reducers/userReducers';
 import tokenReducer from './reducers/tokenReducers';
+import { orderCreateReducer } from './reducers/orderReducers';
 
 const initialState = {
     cart: {
-        
-        cartItems: localStorage.getItem('cartItems') 
-        ? JSON.parse(localStorage.getItem('cartItems')) 
-        : [],
-        
+
+        cartItems: localStorage.getItem('cartItems')
+            ? JSON.parse(localStorage.getItem('cartItems'))
+            : [],
+
         shippingAddress: localStorage.getItem('shippingAddress')
-        ? JSON.parse(localStorage.getItem('shippingAddress')) 
-        : {},
-        
-        paymentMethod: 'Card',
+            ? JSON.parse(localStorage.getItem('shippingAddress'))
+            : {},
+
+        paymentMethod: localStorage.getItem('cartSavePaymentMethod')
+            ? JSON.parse(localStorage.getItem('cartSavePaymentMethod'))
+            : "Card",
     }
 };
 
@@ -31,7 +34,8 @@ const reducer = combineReducers({
     productDetails: productDeatailsReducer,
     cart: cartReducer,
     userSignin: userSigninReducer,
-    token: tokenReducer
+    token: tokenReducer,
+    orderCreate: orderCreateReducer
 });
 // const reducer = (state, action) => {
 //     console.log('reducer123');

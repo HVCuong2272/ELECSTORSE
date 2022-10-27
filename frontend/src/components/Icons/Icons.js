@@ -31,7 +31,7 @@ export const MasterCardIcon = ({ width = '3.2rem', height = '3.2rem', className 
     <svg
         xmlns="http://www.w3.org/2000/svg"
         id="Laag_1"
-        dataName="Laag 1"
+        dataname="Laag 1"
         viewBox="0 0 2000 1556"
         width={width}
         height={height}

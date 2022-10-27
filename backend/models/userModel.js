@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
             type: String, default:
                 "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png", required: true
         },
+        phone: { type: String },
         isAdmin: { type: Boolean, default: false, required: true },
         // isSeller: { type: Boolean, default: false, required: true },
         // seller: {

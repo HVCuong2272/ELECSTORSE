@@ -4,7 +4,8 @@ const data = {
         {
             name: "Thangadmin",
             email: "admin@example.com",
-            password: bcrypt.hash("123456", 8),
+            // password: bcrypt.hash("123456", 12),
+            password: "$2b$12$43Fvr7FTIh30x7naBikq3u/ZOh9Cz43sweuEQcJoMjNThjNbfb0Wi",
             isAdmin: true,
             // isSeller: true,
             // seller: {
@@ -18,7 +19,8 @@ const data = {
         {
             name: "Thanguser",
             email: "user@example.com",
-            password: bcrypt.hash("123456", 8),
+            // password: bcrypt.hash("123456", 12),
+            password: "$2b$12$43Fvr7FTIh30x7naBikq3u/ZOh9Cz43sweuEQcJoMjNThjNbfb0Wi",
             isAdmin: false,
         },
     ],
