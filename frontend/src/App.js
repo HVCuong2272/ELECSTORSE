@@ -13,15 +13,17 @@ function App() {
     const userSignin = useSelector(state => state.userSignin)
 
     useEffect(() => {
-        const firstLogin = localStorage.getItem('firstLogin')
-        if (firstLogin) {
+        // console.log('thangadvldf');
+        // const firstLogin = localStorage.getItem('firstLogin')
+        // if (firstLogin) {
+        if (!userSignin.userInfo) {
             const getToken = async () => {
-                const res = await axios.post('api/users/refresh_token', null)
+                const res = await axios.post('/api/users/refresh_token', null)
                 dispatch({ type: 'GET_TOKEN', payload: res.data.access_token })
             }
             getToken()
         }
-    }, [userSignin.isLogged, dispatch])
+    }, [userSignin.isLogged, dispatch, token, userSignin.userInfo])
 
     useEffect(() => {
         if (token) {

@@ -25,7 +25,7 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
                 shippingAddress: localStorage.getItem('shippingAddress')
                 ? JSON.parse(localStorage.getItem('shippingAddress')) 
                 : {},
-                paymentMethod: JSON.parse(localStorage.getItem('cartSavePaymentMethod')),
+                paymentMethod: localStorage.getItem('cartSavePaymentMethod') ? JSON.parse(localStorage.getItem('cartSavePaymentMethod')) : 'Card',
             }
         case CART_SAVE_SHIPPING_ADDRESS:
             return {...state, shippingAddress: action.payload}

@@ -273,6 +273,7 @@ function ShippingAddress() {
 
   const orderCreate = useSelector((state) => state.orderCreate);
   const { loading, success, error, order } = orderCreate;
+  // console.log('orderCr',orderCreate);
   const cart = useSelector(state => state.cart)
   const { shippingAddress, paymentMethod: paymentMethodInStore } = cart;
 
@@ -292,7 +293,19 @@ function ShippingAddress() {
     e.preventDefault();
     //TODO: dispatch save shipping address action
     dispatch(saveShippingAddress({ firstName: fname, lastName: lname, country, address1: billing_address, address2: billing_address2, city, postalCode: zipcode, phone, email, note }));
-    dispatch(createOrder({ ...cart, orderItems: cart.cartItems }));
+    dispatch(createOrder({ ...cart, orderItems: cart.cartItems, shippingAddress: {
+      firstName: fname,
+      lastName: lname,
+      address1: billing_address,
+      address2: billing_address2,
+      city: city,
+      country:country,
+      postalCode: zipcode,
+      phone: phone,
+      email: email,
+      note: note
+    }
+    }));
     // navigate('/payment') 
   }
 
@@ -317,6 +330,7 @@ function ShippingAddress() {
 
   useEffect(() => {
     if (success) {
+      console.log('success',success);
       navigate(`/order/${order._id}`);
       dispatch({ type: ORDER_CREATE_RESET });
     }
@@ -325,7 +339,7 @@ function ShippingAddress() {
   return (
     <div>
 
-      <CheckoutStep currentStep="2" />
+      <CheckoutStep currentStep={1} disableStep3 />
       <div className={cx('grid wide')}>
 
         <div className={cx('checkout-content')}>

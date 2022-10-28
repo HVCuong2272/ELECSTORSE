@@ -1,7 +1,7 @@
 import { USER_SIGNIN_FAIL, USER_SIGNIN_FIRSTLOGIN, USER_SIGNIN_REQUEST, USER_SIGNIN_RESET, USER_SIGNIN_SUCCESS, USER_SIGNOUT } from "../constants/userConstants";
 
 
-export const userSigninReducer = (state = { userInfo: null, isLogged: false }, action) => {
+export const userSigninReducer = (state = { userInfo: null, isLogged: false, loading: true }, action) => {
     switch (action.type) {
         case USER_SIGNIN_REQUEST:
             return { loading: true };

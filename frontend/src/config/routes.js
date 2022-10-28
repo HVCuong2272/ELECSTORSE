@@ -10,7 +10,8 @@ const publicRoutes = {
     resetPass: '/user/reset/:token',
 };
 const privateRoutes = {
-    shipping: '/shipping'
+    shipping: '/shipping',
+    orderWId: '/order/:id'
 };
 
 export { publicRoutes, privateRoutes };
