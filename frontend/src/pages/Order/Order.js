@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { savePaymentMethod, saveOrder } from '~/redux/actions/cartActions';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { VisaIcon, MasterCardIcon, MomoIcon, PaypalIcon } from '~/components/Icons';
-import { createOrder, detailsOrder } from '~/redux/actions/orderActions';
-import { ORDER_CREATE_RESET } from '~/redux/constants/orderConstants';
+import { createOrder, detailsOrder, payOrder } from '~/redux/actions/orderActions';
+import { ORDER_CREATE_RESET, ORDER_PAY_RESET } from '~/redux/constants/orderConstants';
 import Axios from 'axios';
 import { PayPalButton } from 'react-paypal-button-v2';
 
@@ -300,6 +300,8 @@ function Order() {
     const orderDetails = useSelector((state) => state.orderDetails);
     const { order, loading, error } = orderDetails;
     console.log('dsadasd', order);
+    const orderPay = useSelector((state) => state.orderPay);
+    const {loading: loadingPay, error: errorPay, success: successPay } = orderPay;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -315,7 +317,8 @@ function Order() {
                 };
                 document.body.appendChild(script);
             };
-            if (!order) {
+            if (!order || successPay || (order && order._id !== orderId)) {
+                dispatch({type: ORDER_PAY_RESET});
                 dispatch(detailsOrder(orderId));
             } else {
                 if (!order.isPaid) {
@@ -327,10 +330,10 @@ function Order() {
                 }
             }
         }
-    }, [dispatch, orderId, userSignin, order, sdkReady]);
+    }, [dispatch, orderId, userSignin, order, sdkReady, successPay]);
 
-    const successPaymentHandler = () => {
-        //TODO: dispatch pay order
+    const successPaymentHandler = (paymentResult) => {
+        dispatch(payOrder(order, paymentResult));
     };
 
     return (
@@ -369,7 +372,9 @@ function Order() {
                                                                 color: '#ff4d4f',
                                                             }}
                                                         >
-                                                            <p style={{fontWeight:'bold'}}>Your Delivery Information</p>
+                                                            <p style={{ fontWeight: 'bold' }}>
+                                                                Your Delivery Information
+                                                            </p>
                                                         </tr>
                                                         <tr>
                                                             <th style={{ border: 'none' }}></th>
@@ -460,7 +465,7 @@ function Order() {
                                                                 color: '#ff4d4f',
                                                             }}
                                                         >
-                                                            <b style={{fontWeight:'bold'}}>Your Cart Detail</b>
+                                                            <b style={{ fontWeight: 'bold' }}>Your Cart Detail</b>
                                                         </tr>
                                                         <tr>
                                                             <th style={{ border: 'none' }}></th>
@@ -544,22 +549,22 @@ function Order() {
                                                         </tr>
                                                     </tfoot>
                                                 </table>
-                                                <h4 style={{ color: '#ff4d4f', marginTop: '47px', fontSize:'28px' }}>
-                                                        Your Order Delivery Status
-                                                    </h4>
-                                                    {order.isDelivered ? (
-                                                        <Alert
-                                                            message="Success"
-                                                            description={`Delivered at ${order.deliveredAt}`}
-                                                            type="success"
-                                                        />
-                                                    ) : (
-                                                        <Alert
-                                                            message="Order Delivery Status"
-                                                            description="Your order haven't been delivered yet."
-                                                            type="warning"
-                                                        />
-                                                    )}
+                                                <h4 style={{ color: '#ff4d4f', marginTop: '47px', fontSize: '28px' }}>
+                                                    Your Order Delivery Status
+                                                </h4>
+                                                {order.isDelivered ? (
+                                                    <Alert
+                                                        message="Success"
+                                                        description={`Delivered at ${order.deliveredAt}`}
+                                                        type="success"
+                                                    />
+                                                ) : (
+                                                    <Alert
+                                                        message="Order Delivery Status"
+                                                        description="Your order haven't been delivered yet."
+                                                        type="warning"
+                                                    />
+                                                )}
                                             </div>
                                             <div className={cx('payment-method')}>
                                                 <div
@@ -577,14 +582,27 @@ function Order() {
                                                                     <Spin size="large" />
                                                                 </div>
                                                             ) : (
-                                                             <div>
-                                                                  <div className={cx('paypal-button')}>
-                                                                        <PayPalButton
-                                                                            amount={order.totalPrice}
-                                                                            onSuccess={successPaymentHandler}
-                                                                        ></PayPalButton>
-                                                                  </div>
-                                                             </div>
+                                                                <div>
+                                                                    <div className={cx('paypal-button')}>
+                                                                        <>
+                                                                            {errorPay && (
+                                                                                <Alert message="Error" description={errorPay} type="error" showIcon />
+                                                                            )}
+                                                                            {loadingPay && 
+                                                                                
+                                                                                (
+                                                                                        <div style={{ marginTop: '200px' }}>
+                                                                                            <Spin size="large" />
+                                                                                        </div>
+                                                                                )
+                                                                                }
+                                                                            <PayPalButton
+                                                                                amount={order.totalPrice}
+                                                                                onSuccess={successPaymentHandler}
+                                                                            ></PayPalButton>
+                                                                        </>
+                                                                    </div>
+                                                                </div>
                                                             )}
                                                         </li>
                                                     )}
@@ -604,7 +622,6 @@ function Order() {
                                                             type="warning"
                                                         />
                                                     )}
-                                                    
                                                 </div>
                                             </div>
                                         </div>

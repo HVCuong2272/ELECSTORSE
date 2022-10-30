@@ -10,7 +10,7 @@ import {
     from './reducers/productReducers';
 import { userSigninReducer } from './reducers/userReducers';
 import tokenReducer from './reducers/tokenReducers';
-import { orderCreateReducer, orderDetailsReducer } from './reducers/orderReducers';
+import { orderCreateReducer, orderDetailsReducer, orderPayReducer } from './reducers/orderReducers';
 
 const initialState = {
     cart: {
@@ -37,6 +37,7 @@ const reducer = combineReducers({
     token: tokenReducer,
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
+    orderPay: orderPayReducer,
 });
 // const reducer = (state, action) => {
 //     console.log('reducer123');
