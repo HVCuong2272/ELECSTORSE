@@ -14,7 +14,7 @@ export const userSigninReducer = (state = { userInfo: null, isLogged: false, loa
         case USER_SIGNOUT:
             return { userInfo: null, isLogged: false };
         case USER_SIGNIN_RESET:
-            return { ...state, error: '' }
+            return { ...state, error: '', loading:false };
         default:
             return state;
     }

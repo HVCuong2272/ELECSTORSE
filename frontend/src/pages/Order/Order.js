@@ -9,9 +9,262 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { VisaIcon, MasterCardIcon, MomoIcon, PaypalIcon } from '~/components/Icons';
 import { createOrder, detailsOrder } from '~/redux/actions/orderActions';
 import { ORDER_CREATE_RESET } from '~/redux/constants/orderConstants';
+import Axios from 'axios';
+import { PayPalButton } from 'react-paypal-button-v2';
 
 const cx = classNames.bind(styles);
-
+const countryList = {
+    '': 'Select your country...',
+    AF: 'Afghanistan',
+    AL: 'Albania',
+    DZ: 'Algeria',
+    AS: 'American Samoa',
+    AD: 'Andorra',
+    AO: 'Angola',
+    AI: 'Anguilla',
+    AQ: 'Antarctica',
+    AG: 'Antigua and Barbuda',
+    AR: 'Argentina',
+    AM: 'Armenia',
+    AW: 'Aruba',
+    AU: 'Australia',
+    AT: 'Austria',
+    AZ: 'Azerbaijan',
+    BS: 'Bahamas (the)',
+    BH: 'Bahrain',
+    BD: 'Bangladesh',
+    BB: 'Barbados',
+    BY: 'Belarus',
+    BE: 'Belgium',
+    BZ: 'Belize',
+    BJ: 'Benin',
+    BM: 'Bermuda',
+    BT: 'Bhutan',
+    BO: 'Bolivia (Plurinational State of)',
+    BQ: 'Bonaire, Sint Eustatius and Saba',
+    BA: 'Bosnia and Herzegovina',
+    BW: 'Botswana',
+    BV: 'Bouvet Island',
+    BR: 'Brazil',
+    IO: 'British Indian Ocean Territory (the)',
+    BN: 'Brunei Darussalam',
+    BG: 'Bulgaria',
+    BF: 'Burkina Faso',
+    BI: 'Burundi',
+    CV: 'Cabo Verde',
+    KH: 'Cambodia',
+    CM: 'Cameroon',
+    CA: 'Canada',
+    KY: 'Cayman Islands (the)',
+    CF: 'Central African Republic (the)',
+    TD: 'Chad',
+    CL: 'Chile',
+    CN: 'China',
+    CX: 'Christmas Island',
+    CC: 'Cocos (Keeling) Islands (the)',
+    CO: 'Colombia',
+    KM: 'Comoros (the)',
+    CD: 'Congo (the Democratic Republic of the)',
+    CG: 'Congo (the)',
+    CK: 'Cook Islands (the)',
+    CR: 'Costa Rica',
+    HR: 'Croatia',
+    CU: 'Cuba',
+    CW: 'Curaçao',
+    CY: 'Cyprus',
+    CZ: 'Czechia',
+    CI: "Côte d'Ivoire",
+    DK: 'Denmark',
+    DJ: 'Djibouti',
+    DM: 'Dominica',
+    DO: 'Dominican Republic (the)',
+    EC: 'Ecuador',
+    EG: 'Egypt',
+    SV: 'El Salvador',
+    GQ: 'Equatorial Guinea',
+    ER: 'Eritrea',
+    EE: 'Estonia',
+    SZ: 'Eswatini',
+    ET: 'Ethiopia',
+    FK: 'Falkland Islands (the) [Malvinas]',
+    FO: 'Faroe Islands (the)',
+    FJ: 'Fiji',
+    FI: 'Finland',
+    FR: 'France',
+    GF: 'French Guiana',
+    PF: 'French Polynesia',
+    TF: 'French Southern Territories (the)',
+    GA: 'Gabon',
+    GM: 'Gambia (the)',
+    GE: 'Georgia',
+    DE: 'Germany',
+    GH: 'Ghana',
+    GI: 'Gibraltar',
+    GR: 'Greece',
+    GL: 'Greenland',
+    GD: 'Grenada',
+    GP: 'Guadeloupe',
+    GU: 'Guam',
+    GT: 'Guatemala',
+    GG: 'Guernsey',
+    GN: 'Guinea',
+    GW: 'Guinea-Bissau',
+    GY: 'Guyana',
+    HT: 'Haiti',
+    HM: 'Heard Island and McDonald Islands',
+    VA: 'Holy See (the)',
+    HN: 'Honduras',
+    HK: 'Hong Kong',
+    HU: 'Hungary',
+    IS: 'Iceland',
+    IN: 'India',
+    ID: 'Indonesia',
+    IR: 'Iran (Islamic Republic of)',
+    IQ: 'Iraq',
+    IE: 'Ireland',
+    IM: 'Isle of Man',
+    IL: 'Israel',
+    IT: 'Italy',
+    JM: 'Jamaica',
+    JP: 'Japan',
+    JE: 'Jersey',
+    JO: 'Jordan',
+    KZ: 'Kazakhstan',
+    KE: 'Kenya',
+    KI: 'Kiribati',
+    KP: "Korea (the Democratic People's Republic of)",
+    KR: 'Korea (the Republic of)',
+    KW: 'Kuwait',
+    KG: 'Kyrgyzstan',
+    LA: "Lao People's Democratic Republic (the)",
+    LV: 'Latvia',
+    LB: 'Lebanon',
+    LS: 'Lesotho',
+    LR: 'Liberia',
+    LY: 'Libya',
+    LI: 'Liechtenstein',
+    LT: 'Lithuania',
+    LU: 'Luxembourg',
+    MO: 'Macao',
+    MG: 'Madagascar',
+    MW: 'Malawi',
+    MY: 'Malaysia',
+    MV: 'Maldives',
+    ML: 'Mali',
+    MT: 'Malta',
+    MH: 'Marshall Islands (the)',
+    MQ: 'Martinique',
+    MR: 'Mauritania',
+    MU: 'Mauritius',
+    YT: 'Mayotte',
+    MX: 'Mexico',
+    FM: 'Micronesia (Federated States of)',
+    MD: 'Moldova (the Republic of)',
+    MC: 'Monaco',
+    MN: 'Mongolia',
+    ME: 'Montenegro',
+    MS: 'Montserrat',
+    MA: 'Morocco',
+    MZ: 'Mozambique',
+    MM: 'Myanmar',
+    NA: 'Namibia',
+    NR: 'Nauru',
+    NP: 'Nepal',
+    NL: 'Netherlands (the)',
+    NC: 'New Caledonia',
+    NZ: 'New Zealand',
+    NI: 'Nicaragua',
+    NE: 'Niger (the)',
+    NG: 'Nigeria',
+    NU: 'Niue',
+    NF: 'Norfolk Island',
+    MP: 'Northern Mariana Islands (the)',
+    NO: 'Norway',
+    OM: 'Oman',
+    PK: 'Pakistan',
+    PW: 'Palau',
+    PS: 'Palestine, State of',
+    PA: 'Panama',
+    PG: 'Papua New Guinea',
+    PY: 'Paraguay',
+    PE: 'Peru',
+    PH: 'Philippines (the)',
+    PN: 'Pitcairn',
+    PL: 'Poland',
+    PT: 'Portugal',
+    PR: 'Puerto Rico',
+    QA: 'Qatar',
+    MK: 'Republic of North Macedonia',
+    RO: 'Romania',
+    RU: 'Russian Federation (the)',
+    RW: 'Rwanda',
+    RE: 'Réunion',
+    BL: 'Saint Barthélemy',
+    SH: 'Saint Helena, Ascension and Tristan da Cunha',
+    KN: 'Saint Kitts and Nevis',
+    LC: 'Saint Lucia',
+    MF: 'Saint Martin (French part)',
+    PM: 'Saint Pierre and Miquelon',
+    VC: 'Saint Vincent and the Grenadines',
+    WS: 'Samoa',
+    SM: 'San Marino',
+    ST: 'Sao Tome and Principe',
+    SA: 'Saudi Arabia',
+    SN: 'Senegal',
+    RS: 'Serbia',
+    SC: 'Seychelles',
+    SL: 'Sierra Leone',
+    SG: 'Singapore',
+    SX: 'Sint Maarten (Dutch part)',
+    SK: 'Slovakia',
+    SI: 'Slovenia',
+    SB: 'Solomon Islands',
+    SO: 'Somalia',
+    ZA: 'South Africa',
+    GS: 'South Georgia and the South Sandwich Islands',
+    SS: 'South Sudan',
+    ES: 'Spain',
+    LK: 'Sri Lanka',
+    SD: 'Sudan (the)',
+    SR: 'Suriname',
+    SJ: 'Svalbard and Jan Mayen',
+    SE: 'Sweden',
+    CH: 'Switzerland',
+    SY: 'Syrian Arab Republic',
+    TW: 'Taiwan',
+    TJ: 'Tajikistan',
+    TZ: 'Tanzania, United Republic of',
+    TH: 'Thailand',
+    TL: 'Timor-Leste',
+    TG: 'Togo',
+    TK: 'Tokelau',
+    TO: 'Tonga',
+    TT: 'Trinidad and Tobago',
+    TN: 'Tunisia',
+    TR: 'Turkey',
+    TM: 'Turkmenistan',
+    TC: 'Turks and Caicos Islands (the)',
+    TV: 'Tuvalu',
+    UG: 'Uganda',
+    UA: 'Ukraine',
+    AE: 'United Arab Emirates (the)',
+    GB: 'United Kingdom of Great Britain and Northern Ireland (the)',
+    UM: 'United States Minor Outlying Islands (the)',
+    US: 'United States of America (the)',
+    UY: 'Uruguay',
+    UZ: 'Uzbekistan',
+    VU: 'Vanuatu',
+    VE: 'Venezuela (Bolivarian Republic of)',
+    VN: 'Viet Nam',
+    VG: 'Virgin Islands (British)',
+    VI: 'Virgin Islands (U.S.)',
+    WF: 'Wallis and Futuna',
+    EH: 'Western Sahara',
+    YE: 'Yemen',
+    ZM: 'Zambia',
+    ZW: 'Zimbabwe',
+    AX: 'Åland Islands',
+};
 function Order() {
     //   const navigate = useNavigate();
     //   const orderCreate = useSelector((state) => state.orderCreate);
@@ -39,20 +292,46 @@ function Order() {
     //     dispatch(savePaymentMethod(e.target.value));
     //   };
 
+    const [sdkReady, setSdkReady] = useState(false);
     const token = useSelector((state) => state.token);
     const userSignin = useSelector((state) => state.userSignin);
     const params = useParams();
     const { id: orderId } = params;
     const orderDetails = useSelector((state) => state.orderDetails);
     const { order, loading, error } = orderDetails;
-    // console.log('dsadasd', order);
+    console.log('dsadasd', order);
     const dispatch = useDispatch();
 
     useEffect(() => {
         if (userSignin.userInfo) {
-            dispatch(detailsOrder(orderId));
+            const addPayPalScript = async () => {
+                const { data } = await Axios.get('/api/config/paypal');
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = `https://www.paypal.com/sdk/js?client-id=${data}`;
+                script.async = true;
+                script.onload = () => {
+                    setSdkReady(true);
+                };
+                document.body.appendChild(script);
+            };
+            if (!order) {
+                dispatch(detailsOrder(orderId));
+            } else {
+                if (!order.isPaid) {
+                    if (!window.paypal) {
+                        addPayPalScript();
+                    } else {
+                        setSdkReady(true);
+                    }
+                }
+            }
         }
-    }, [dispatch, orderId, userSignin]);
+    }, [dispatch, orderId, userSignin, order, sdkReady]);
+
+    const successPaymentHandler = () => {
+        //TODO: dispatch pay order
+    };
 
     return (
         <>
@@ -71,13 +350,124 @@ function Order() {
                                 <div className={cx('row')}>
                                     <div className={cx('col l-12 m-12 c-12')}>
                                         <div className={cx('order-review')}>
-                                            <div className={cx('heading-s1 space-mb--20')}>
-                                                <h4 style={{ fontSize: '28px' }}>Your Orders</h4>
+                                            <div
+                                                className={cx('heading-s1 space-mb--20')}
+                                                style={{ textAlign: 'center' }}
+                                            >
+                                                <h4 style={{ fontSize: '33px', textDecoration: '', color: '#ff4d4f' }}>
+                                                    Your Orders Sumary
+                                                </h4>
                                             </div>
                                             <div className={cx('table-responsive', 'order_table')}>
-                                                <table className={cx('table')}>
+                                                <table className={cx('table1')}>
                                                     <thead>
+                                                        <tr
+                                                            style={{
+                                                                textAlign: 'center',
+                                                                fontSize: '22px',
+                                                                textDecoration: 'underline',
+                                                                color: '#ff4d4f',
+                                                            }}
+                                                        >
+                                                            <p style={{fontWeight:'bold'}}>Your Delivery Information</p>
+                                                        </tr>
                                                         <tr>
+                                                            <th style={{ border: 'none' }}></th>
+                                                            <th style={{ border: 'none' }}></th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th style={{ borderTop: 'none' }}>First Name</th>
+                                                            <td
+                                                                className={cx('product-subtotal')}
+                                                                style={{ border: 'none' }}
+                                                            >
+                                                                {order.shippingAddress.firstName}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Last Name</th>
+                                                            <td className={cx('product-subtotal')}>
+                                                                {order.shippingAddress.lastName}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Address 01</th>
+                                                            <td className={cx('product-subtotal')}>
+                                                                {order.shippingAddress.address1}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Address 02</th>
+                                                            <td className={cx('product-subtotal')}>
+                                                                {order.shippingAddress.address2}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>City</th>
+                                                            <td className={cx('product-subtotal')}>
+                                                                {order.shippingAddress.city}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Country</th>
+                                                            <td className={cx('product-subtotal')}>
+                                                                {countryList[order.shippingAddress.country]}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Postal Code</th>
+                                                            <td className={cx('product-subtotal')}>
+                                                                {order.shippingAddress.postalCode}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Phone Number</th>
+                                                            <td className={cx('product-subtotal')}>
+                                                                {order.shippingAddress.phone}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Email</th>
+                                                            <td className={cx('product-subtotal')}>
+                                                                {order.shippingAddress.email}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Additional Note</th>
+                                                            <td className={cx('product-subtotal')}>
+                                                                {order.shippingAddress.note}
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+
+                                                <table className={cx('table3')}>
+                                                    <thead>
+                                                        <tr></tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr></tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <table className={cx('table2')}>
+                                                    <thead>
+                                                        <tr
+                                                            style={{
+                                                                textAlign: 'center',
+                                                                fontSize: '22px',
+                                                                textDecoration: 'underline',
+                                                                color: '#ff4d4f',
+                                                            }}
+                                                        >
+                                                            <b style={{fontWeight:'bold'}}>Your Cart Detail</b>
+                                                        </tr>
+                                                        <tr>
+                                                            <th style={{ border: 'none' }}></th>
+                                                            <th style={{ border: 'none' }}></th>
+                                                        </tr>
+
+                                                        <tr style={{ border: 'none' }}>
                                                             <th>Product</th>
                                                             <th>Total</th>
                                                         </tr>
@@ -91,18 +481,37 @@ function Order() {
                                                                             to={`/product/${item.product}`}
                                                                             className={cx('product-name')}
                                                                         >
-                                                                            <img
-                                                                                src={item.image1}
-                                                                                alt="productImage"
-                                                                                className={cx('cart-image-product')}
-                                                                            ></img>
-                                                                            {item.name}{' '}
+                                                                            <div
+                                                                                style={{
+                                                                                    display: 'flex',
+                                                                                    justifyContent: 'center',
+                                                                                }}
+                                                                            >
+                                                                                <div>
+                                                                                    <img
+                                                                                        src={item.image1}
+                                                                                        alt="productImage"
+                                                                                        className={cx(
+                                                                                            'cart-image-product',
+                                                                                        )}
+                                                                                    ></img>
+                                                                                </div>
+                                                                                <div
+                                                                                    style={{
+                                                                                        marginTop: 'auto',
+                                                                                        marginBottom: 'auto',
+                                                                                    }}
+                                                                                >
+                                                                                    <span className={cx('item-name')}>
+                                                                                        {item.name}
+                                                                                    </span>
+                                                                                    <div className={cx('product-qty')}>
+                                                                                        x {item.qty}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
                                                                         </Link>
-                                                                        <span className={cx('product-qty')}>
-                                                                            x {item.qty}
-                                                                        </span>
                                                                     </td>
-
                                                                     <td>${item.price}</td>
                                                                 </tr>
                                                             );
@@ -135,14 +544,9 @@ function Order() {
                                                         </tr>
                                                     </tfoot>
                                                 </table>
-                                            </div>
-                                            <div className={cx('payment-method')}>
-                                                <div
-                                                    className={cx('heading-s1 space-mb--20')}
-                                                    style={{ fontSize: '28px' }}
-                                                >
-                                                    <h4>Payment</h4>
-
+                                                <h4 style={{ color: '#ff4d4f', marginTop: '47px', fontSize:'28px' }}>
+                                                        Your Order Delivery Status
+                                                    </h4>
                                                     {order.isDelivered ? (
                                                         <Alert
                                                             message="Success"
@@ -151,24 +555,56 @@ function Order() {
                                                         />
                                                     ) : (
                                                         <Alert
-                                                            message="Warning"
-                                                            description="Not Delivered"
+                                                            message="Order Delivery Status"
+                                                            description="Your order haven't been delivered yet."
                                                             type="warning"
                                                         />
                                                     )}
+                                            </div>
+                                            <div className={cx('payment-method')}>
+                                                <div
+                                                    className={cx('heading-s1 space-mb--20')}
+                                                    style={{ fontSize: '28px' }}
+                                                >
+                                                    <h4 style={{ color: '#ff4d4f', marginTop: '80px' }}>
+                                                        Your Payment Process
+                                                    </h4>
+
+                                                    {!order.isPaid && (
+                                                        <li>
+                                                            {!sdkReady ? (
+                                                                <div style={{ marginTop: '200px' }}>
+                                                                    <Spin size="large" />
+                                                                </div>
+                                                            ) : (
+                                                             <div>
+                                                                  <div className={cx('paypal-button')}>
+                                                                        <PayPalButton
+                                                                            amount={order.totalPrice}
+                                                                            onSuccess={successPaymentHandler}
+                                                                        ></PayPalButton>
+                                                                  </div>
+                                                             </div>
+                                                            )}
+                                                        </li>
+                                                    )}
+
                                                     {order.isPaid ? (
-                                                        <Alert
-                                                            message="Success"
-                                                            description={`Paid at ${order.paidAt}`}
-                                                            type="success"
-                                                        />
+                                                        <div className={cx('alert')}>
+                                                            <Alert
+                                                                message="Success"
+                                                                description={`Paid at ${order.paidAt}`}
+                                                                type="success"
+                                                            />
+                                                        </div>
                                                     ) : (
                                                         <Alert
-                                                            message="Warning"
-                                                            description="Not Paid"
+                                                            message="Your Payment Status"
+                                                            description="You haven't paid this order yet."
                                                             type="warning"
                                                         />
                                                     )}
+                                                    
                                                 </div>
                                             </div>
                                         </div>

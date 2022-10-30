@@ -51,6 +51,10 @@ body a {
     // transition: none;
 }
 
+li{
+    list-style-type: none;
+}
+
 // Remove css atnd
 a:hover {
     color: unset;
@@ -129,6 +133,7 @@ a:hover {
 textarea:focus, input:focus {
     outline: none; 
     border: 1px solid rgb(36, 36, 36);
+    border-radius: 20px;
   }
 
 
@@ -165,4 +170,7 @@ textarea:focus, input:focus {
 // }
 .ant-form-item{
     max-width: 200px;
+}
+.alert {
+    border-radius: 15px 50px
 }
