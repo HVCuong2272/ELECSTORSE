@@ -303,7 +303,10 @@ function Order() {
     const orderPay = useSelector((state) => state.orderPay);
     const {loading: loadingPay, error: errorPay, success: successPay } = orderPay;
     const dispatch = useDispatch();
-
+    
+    const [errorVNPay, setErrorVNPay] = useState('');
+    const [successVNPay, setSuccessVNPay] = useState('');
+    const [loadingVNPay, setLoadingVNPay] = useState(false)
     useEffect(() => {
         if (userSignin.userInfo) {
             const addPayPalScript = async () => {
@@ -335,17 +338,76 @@ function Order() {
     const successPaymentHandler = (paymentResult) => {
         dispatch(payOrder(order, paymentResult));
     };
+    useEffect(() => {
+        if (order && order.paymentMethod === 'Momo') {
+            const submitHandler = async (value) => {
+                console.log('Received values of form: ', order);
+                setLoadingVNPay(true);
+                try {
+                    const res = await Axios.post('/paymentvnp/checkout', {
+                        firstname: order.shippingAddress.firstName,
+                        astname: order.shippingAddress.lastName,
+                        billingStreet: order.shippingAddress.address1,
+                        billingCity: '01',
+                        billingStateProvince: order.shippingAddress.city,
+                        billingCountry: order.shippingAddress.country,
+                        billingPostCode: order.shippingAddress.postCode,
+                        email: order.shippingAddress.email,
+                        phoneNumber: order.shippingAddress.phone,
+                        // amount: '900000',
+                        amount: order.totalPrice,
+                        paymentMethod: 'vnPay',
+                        orderId: order._id,
+                    },
+                    // {
+                    //     header: {
+                    //         'Content-Type': 'application/json',
+                    //         'Access-Control-Allow-Origin': '*'
+                    //     },
+                    // }
+                    );
+                    // window.open(res.data,'NewWindow','resizable = yes');
+                    // console.log(res.data.forwardLink)
+                    if (res.data.status === 301) {
+                        window.location = res.data.forwardLink;
+                        setSuccessVNPay(res.data.msg);
+                        setLoadingVNPay(false)
+                      } else {
+                        setErrorVNPay(true)
+                        setLoadingVNPay(false)
+                      }
+                    // window.location = res.data
 
+                    // window.opener=null;
+                    // window.open('','_self');
+                    // window.close();
+                    // setErrorVNPay('');
+                    // setSuccessVNPay(res.data.msg);
+                } catch (err) {
+                    setSuccessVNPay('');
+                    err.response.data.msg &&
+                        setErrorVNPay(err.response.data.msg)
+                }
+            };
+            submitHandler();
+        }
+    }, [order]);
     return (
         <>
-            {loading ? (
-                <div style={{ marginTop: '200px' }}>
-                    <Spin size="large" />
-                </div>
-            ) : error ? (
-                <Alert message="Error" description={error} type="error" showIcon />
-            ) : (
-                <div>
+        {(order && !order.isPaid && order.paymentMethod === 'Momo') ? (
+                    <div style={{ marginTop: '200px' }}>
+                        <Spin size="large" />
+                    </div>
+                ):
+           (<>
+                {loading ? (
+                    <div style={{ marginTop: '200px' }}>
+                        <Spin size="large" />
+                    </div>
+                ) : error ? (
+                    <Alert message="Error" description={error} type="error" showIcon />
+                ) : (
+                    <div>
                     <CheckoutStep currentStep={2} disableStep2 />
                     <div className={cx('grid wide')}>
                         <div className={cx('checkout-content')}>
@@ -631,7 +693,9 @@ function Order() {
                         </div>
                     </div>
                 </div>
-            )}
+                )}
+            </>)
+}
         </>
     );
 }
