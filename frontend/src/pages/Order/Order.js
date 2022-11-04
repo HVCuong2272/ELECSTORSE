@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CheckoutStep from '~/components/CheckoutStep';
 import styles from './Order.module.scss';
 import { Alert, Radio, Space, Spin } from 'antd';
@@ -11,6 +11,7 @@ import { createOrder, detailsOrder, payOrder } from '~/redux/actions/orderAction
 import { ORDER_CREATE_RESET, ORDER_PAY_RESET } from '~/redux/constants/orderConstants';
 import Axios from 'axios';
 import { PayPalButton } from 'react-paypal-button-v2';
+import { CART_EMPTY } from '~/redux/constants/cartConstants';
 
 const cx = classNames.bind(styles);
 const countryList = {
@@ -307,6 +308,7 @@ function Order() {
     const [errorVNPay, setErrorVNPay] = useState('');
     const [successVNPay, setSuccessVNPay] = useState('');
     const [loadingVNPay, setLoadingVNPay] = useState(false)
+
     useEffect(() => {
         if (userSignin.userInfo) {
             const addPayPalScript = async () => {
@@ -331,11 +333,16 @@ function Order() {
                         setSdkReady(true);
                     }
                 }
+                else {
+                    dispatch({ type: CART_EMPTY });
+                    localStorage.removeItem("cartItems");
+                }
             }
         }
     }, [dispatch, orderId, userSignin, order, sdkReady, successPay]);
 
     const successPaymentHandler = (paymentResult) => {
+        console.log('paymentResult: ',paymentResult);
         dispatch(payOrder(order, paymentResult));
     };
     useEffect(() => {
@@ -368,9 +375,10 @@ function Order() {
                     );
                     // window.open(res.data,'NewWindow','resizable = yes');
                     // console.log(res.data.forwardLink)
-                    if (res.data.status === 301) {
+                    if (order && !order.isPaid) {
                         window.location = res.data.forwardLink;
                         setSuccessVNPay(res.data.msg);
+                        console.log("SUCCESS PAY",res);
                         setLoadingVNPay(false)
                       } else {
                         setErrorVNPay(true)

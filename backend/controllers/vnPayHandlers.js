@@ -1,5 +1,5 @@
 const { VNPay } = require('vn-payments');
-
+const Order = require("../models/orderModel");
 /* eslint-disable no-param-reassign */
 const TEST_CONFIG = VNPay.TEST_CONFIG;
 const vnpay = new VNPay({
@@ -22,7 +22,26 @@ function checkoutVNPay(req, res) {
 	});
 }
 
+const updatedOrder = async (req,res,par) =>{
+	// console.log("CHECK UPDATE",par);
+	const order = await Order.findById(par.transactionId);
+    if(order && par &&par.isSuccess===true){
+        order.isPaid=true;
+        order.paidAt=Date.now();
+        order.paymentResult = {
+            id:order._id, 
+            status: true,
+            update_time:Date.now(),
+            email_address:req.email,
+        };
+        const updatedOrder=await order.save();
+        // res.send({message:'Order Paid',order:updatedOrder});
+    } 
+	// console.log("LOG ORDER: ", order);
+}
+
 function callbackVNPay(req, res) {
+	if(req){
 	const query = req.query;
 
 	return vnpay.verifyReturnUrl(query).then(results => {
@@ -32,9 +51,11 @@ function callbackVNPay(req, res) {
 			res.locals.price = results.amount;
 			res.locals.isSucceed = results.isSuccess;
 			res.locals.message = results.message;
+			updatedOrder(req,res,results)
 		} else {
 			res.locals.isSucceed = false;
 		}
-	});
+		// console.log("CALL BACK BLA BLA: ",results);
+	});}
 }
 module.exports = {checkoutVNPay, callbackVNPay};

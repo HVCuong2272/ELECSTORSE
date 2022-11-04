@@ -44,6 +44,13 @@ app.get("/", (req, res) => {
 // Routes
 initRouter(app);
 
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
+	const err = new Error('Not Found');
+	err.status = 404;
+	next(err);
+});
+
 
 //express-async-handler npm package (when expressAsyncHandler catch error will go to this middleware )
 app.use((err, req, res, next) => {

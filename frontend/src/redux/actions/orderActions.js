@@ -66,8 +66,8 @@ export const payOrder=(order,paymentResult)=>async(
                 },
             });
             dispatch({type: ORDER_PAY_SUCCESS, payload: data});
-            dispatch({ type: CART_EMPTY });
-        localStorage.removeItem("cartItems")
+        //     dispatch({ type: CART_EMPTY });
+        // localStorage.removeItem("cartItems")
         } catch(error){
             const message = 
             error.response && error.response.data.message
