@@ -1,5 +1,5 @@
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { Alert, Button, Checkbox, Form, Input, Spin } from 'antd';
+import { Alert, Button, Checkbox, Form, Input, Spin, message } from 'antd';
 import React, { useEffect } from 'react';
 
 import PropTypes from 'prop-types';
@@ -12,6 +12,7 @@ import { USER_SIGNIN_FIRSTLOGIN, USER_SIGNIN_RESET } from '~/redux/constants/use
 import { GoogleLogin } from 'react-google-login';
 import { gapi } from "gapi-script";
 import axios from 'axios'
+import { successLoading } from '~/utils/loadingService';
 
 const cx = classNames.bind(styles);
 
@@ -45,8 +46,9 @@ const SigninScreen = () => {
     }, []);
     useEffect(() => {
         window.scrollTo(0, 0)
-      }, [])
+    }, [])
     const submitHandler = (values) => {
+        successLoading();
         // console.log('Received values of form: ', values);
         dispatch(signin(values.email, values.password))
     };
@@ -54,10 +56,10 @@ const SigninScreen = () => {
     const responseGoogle = async (response) => {
         // console.log(response);
         try {
+            successLoading();
             const res = await axios.post('/api/users/google_login', { tokenId: response.tokenId })
             // console.log(res);
             localStorage.setItem('firstLogin', true)
-
             dispatch({ type: USER_SIGNIN_FIRSTLOGIN, payload: { isLogged: true } });
         } catch (err) {
             // err.response.data.msg &&
@@ -67,9 +69,12 @@ const SigninScreen = () => {
 
     return (
         <>
+
             {loading && (
-                <div style={{ marginTop: '100px' }}>
-                    <Spin size="large" />
+                <div style={{ display: 'flex' }}>
+                    <div style={{ margin: '100px auto 0' }}>
+                        <Spin size="large" />
+                    </div>
                 </div>
             )}
             {error && (
