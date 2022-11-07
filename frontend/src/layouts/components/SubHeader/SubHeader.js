@@ -3,7 +3,7 @@ import { DownOutlined, SmileOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined, MenuOutlined, CaretRightOutlined, HomeOutlined } from '@ant-design/icons';
 import styles from './SubHeader.module.scss';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchBox from '../SearchBox';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import { signout } from '~/redux/actions/userActions';
 const cx = classNames.bind(styles);
 function SubHeader({ isHomePage }) {
     console.log('init subheder');
+    const navigate = useNavigate();
     const cart = useSelector(state => state.cart);
     const { cartItems } = cart;
     const userSignin = useSelector(state => state.userSignin)
@@ -85,6 +86,12 @@ function SubHeader({ isHomePage }) {
         if (key === '3') {
             dispatch(signout());
         }
+        else if (key === '2'){
+            navigate('/orderhistory');
+        }
+        else if (key === '1'){
+            navigate('/profile')
+        }
     };
     const menuProfile = (
         <Menu
@@ -95,7 +102,7 @@ function SubHeader({ isHomePage }) {
                     key: '1',
                 },
                 {
-                    label: '2nd menu item',
+                    label: 'Order History',
                     key: '2',
                 },
                 {

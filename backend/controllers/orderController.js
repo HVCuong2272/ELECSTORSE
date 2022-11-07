@@ -53,8 +53,15 @@ const updateOrderByID =  expressAsyncHandler(async(req, res) => {
         res.status(404).send({message:'Order Not Found'});
     }
 })
+const getOrderHistory = expressAsyncHandler(async(req, res) => {
+   const orders = await Order.find({user: req.user.id, isPaid:true});
+   res.send(orders);
+})
+
+
 module.exports = {
     createOrder,
     getOrderByID,
     updateOrderByID,
+    getOrderHistory
 };

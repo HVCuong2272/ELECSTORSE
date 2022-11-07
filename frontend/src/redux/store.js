@@ -8,9 +8,9 @@ import {
     productListReducer
 }
     from './reducers/productReducers';
-import { userSigninReducer } from './reducers/userReducers';
+import { userDetailsReducer, userSigninReducer } from './reducers/userReducers';
 import tokenReducer from './reducers/tokenReducers';
-import { orderCreateReducer, orderDetailsReducer, orderPayReducer } from './reducers/orderReducers';
+import { orderCreateReducer, orderDetailsReducer, orderMineListReducer, orderPayReducer } from './reducers/orderReducers';
 
 const initialState = {
     cart: {
@@ -38,6 +38,8 @@ const reducer = combineReducers({
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
     orderPay: orderPayReducer,
+    orderMineList: orderMineListReducer,
+    userDetails: userDetailsReducer,
 });
 // const reducer = (state, action) => {
 //     console.log('reducer123');

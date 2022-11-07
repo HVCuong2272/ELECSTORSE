@@ -15,6 +15,8 @@ import ResetPassword from '~/pages/ResetPassword';
 import ShippingAddress from '~/pages/ShippingAddress';
 import PrivateRoute from '~/components/PrivateRoute';
 import Order from '~/pages/Order';
+import OrderHistory from '~/pages/OrderHistory/OrderHistory';
+import UserProfile from '~/pages/UserProfile';
 
 
 // Public routes
@@ -38,6 +40,8 @@ const publicRoutes = [
 const privateRoutes = [
     { path: config.privateRoutes.shipping, component: ShippingAddress, isPrivate: PrivateRoute },
     { path: config.privateRoutes.orderWId, component: Order, isPrivate: PrivateRoute },
+    { path: config.privateRoutes.orderHistory, component: OrderHistory, isPrivate: PrivateRoute },
+    { path: config.privateRoutes.userProfile, component: UserProfile, isPrivate: PrivateRoute },
 ];
 
 export { publicRoutes, privateRoutes };

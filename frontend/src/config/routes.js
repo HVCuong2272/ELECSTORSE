@@ -11,7 +11,9 @@ const publicRoutes = {
 };
 const privateRoutes = {
     shipping: '/shipping',
-    orderWId: '/order/:id'
+    orderWId: '/order/:id',
+    orderHistory: '/orderhistory',
+    userProfile: '/profile',
 };
 
 export { publicRoutes, privateRoutes };
