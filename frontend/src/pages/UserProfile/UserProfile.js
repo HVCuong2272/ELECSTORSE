@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { detailsUser } from '~/redux/actions/userActions';
+import { detailsUser, updateUserProfile } from '~/redux/actions/userActions';
 import { Alert, Radio, Space, Spin, Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import styles from './UserProfile.module.scss';
 import classNames from 'classnames/bind';
+import { USER_DETAILS_RESET, USER_UPDATE_PROFILE_RESET } from '~/redux/constants/userConstants';
+import { showErrorMessage, showSuccessMessage } from '~/utils/notifyService';
 
 const cx = classNames.bind(styles);
 export default function UserProfile() {
@@ -12,14 +14,32 @@ export default function UserProfile() {
     const { userInfo } = userSignin;
     const userDetails = useSelector((state) => state.userDetails);
     const { loading, error, user } = userDetails;
+
+    // console.log('buggggggggggggggggggggggg', user);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+    const { success: successUpdate, error: errorUpdate, loading: loadingUpdate } = userUpdateProfile;
     const dispatch = useDispatch();
     const [avatar, setAvatar] = useState();
+    // console.log('bug vai ca noi', name, email, avatar);
 
     useEffect(() => {
         if (userSignin.userInfo) {
+            dispatch({ type: USER_UPDATE_PROFILE_RESET });
             dispatch(detailsUser(userInfo._id));
         }
     }, [dispatch, userInfo, userSignin.userInfo]);
+
+    useEffect(() => {
+        if (user) {
+            setName(user.name);
+            setEmail(user.email);
+        }
+    }, [user]);
 
     useEffect(() => {
         return () => {
@@ -36,6 +56,12 @@ export default function UserProfile() {
     const submitHandler = (e) => {
         e.preventDefault();
         // dispatch update profile
+        if (password !== confirmPassword) {
+            // alert('Password and Confirm Pasword are not matched');
+            showErrorMessage('Password and Confirm Pasword are not matched')
+        } else {
+            dispatch(updateUserProfile({ userId: user._id, name, email, password, avatar }));
+        }
     };
     return (
         <div>
@@ -51,10 +77,24 @@ export default function UserProfile() {
                     <Alert message="Error" description={error} type="error" showIcon />
                 ) : (
                     <>
+                        {loadingUpdate && (
+                            <div style={{ marginTop: '200px' }}>
+                                <Spin size="large" />
+                            </div>
+                        )}
+                        {errorUpdate && <Alert message="Error" description={error} type="error" showIcon />}{' '}
+                        {/* {successUpdate && (
+                            <Alert
+                                message="Success"
+                                description="Profile Updated Successfully"
+                                type="success"
+                                showIcon
+                            />
+                        )} */}
                         <div>
                             <div className={cx('user-avatar')}>
                                 {/* <Avatar size={64} icon={<UserOutlined />} /> */}
-                                <label for="image">
+                                <label htmlFor="image">
                                     <input
                                         type="file"
                                         name="image"
@@ -82,7 +122,8 @@ export default function UserProfile() {
                                 id="name"
                                 type="text"
                                 placeholder="Enter name"
-                                value={user.name}
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
                             ></input>
                         </div>
                         <div>
@@ -92,7 +133,8 @@ export default function UserProfile() {
                                 id="email"
                                 type="email"
                                 placeholder="Enter email"
-                                value={user.email}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             ></input>
                         </div>
                         <div>
@@ -102,6 +144,7 @@ export default function UserProfile() {
                                 id="password"
                                 type="password"
                                 placeholder="Enter password"
+                                onChange={(e) => setPassword(e.target.value)}
                             ></input>
                         </div>
                         <div>
@@ -111,6 +154,7 @@ export default function UserProfile() {
                                 id="confirmPassword"
                                 type="password"
                                 placeholder="Enter confirm password"
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                             ></input>
                         </div>
                         <div>
