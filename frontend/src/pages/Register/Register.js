@@ -13,13 +13,16 @@ const cx = classNames.bind(styles);
 
 const Register = () => {
     const userSignin = useSelector((state) => state.userSignin);
+
     // const { isLogged } = userSignin;
-    const [error, setError] = useState('')
-    const [success, setSuccess] = useState('')
+
+    const [error, setError] = useState('');
+
+    const [success, setSuccess] = useState('');
 
     const [searchParams] = useSearchParams();
-    const redirectInUrl = searchParams.get("redirect");
-    const redirect = redirectInUrl ? redirectInUrl : "/";
+    const redirectInUrl = searchParams.get('redirect');
+    const redirect = redirectInUrl ? redirectInUrl : '/';
 
     const submitHandler = async (values) => {
         // console.log('Received values of form: ', values);
@@ -28,14 +31,13 @@ const Register = () => {
                 name: values.name,
                 email: values.email,
                 password: values.password,
-                confirmPassword: values.cf_password
-            })
+                confirmPassword: values.cf_password,
+            });
             setError('');
             setSuccess(res.data.msg);
         } catch (err) {
             setSuccess('');
-            err.response.data.msg &&
-                setError(err.response.data.msg)
+            err.response.data.msg && setError(err.response.data.msg);
         }
     };
 
@@ -84,7 +86,10 @@ const Register = () => {
                                 },
                             ]}
                         >
-                            <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Enter Email" />
+                            <Input
+                                prefix={<MailOutlined className="site-form-item-icon" />}
+                                placeholder="Enter Email"
+                            />
                         </Form.Item>
                         <Form.Item
                             name="password"
@@ -93,7 +98,7 @@ const Register = () => {
                                     required: true,
                                     message: 'Please input your Password!',
                                 },
-                                { min: 6, message: 'Password must be minimum 6 characters.' }
+                                { min: 6, message: 'Password must be minimum 6 characters.' },
                             ]}
                         >
                             <Input
@@ -109,7 +114,7 @@ const Register = () => {
                                     required: true,
                                     message: 'Please input your Confirm Password!',
                                 },
-                                { min: 6, message: 'Confirm Password must be minimum 6 characters.' }
+                                { min: 6, message: 'Confirm Password must be minimum 6 characters.' },
                             ]}
                         >
                             <Input
@@ -122,7 +127,12 @@ const Register = () => {
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 Register
                             </Button>
-                            <p>Already have an account? <Link to={`/signin?redirect=${redirect}`} className={cx('text__hover')}>Sign-In</Link></p>
+                            <p>
+                                Already have an account?{' '}
+                                <Link to={`/signin?redirect=${redirect}`} className={cx('text__hover')}>
+                                    Sign-In
+                                </Link>
+                            </p>
                         </Form.Item>
                     </Form>
                 </div>
