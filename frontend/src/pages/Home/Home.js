@@ -19,18 +19,18 @@ const cx = classNames.bind(styles);
 function Home() {
     useEffect(() => {
         window.scrollTo(0, 0)
-      }, [])
+    }, [])
     return (
         <div className={cx('home')}>
             <Header />
-            <SubHeader isHomePage/>
+            <SubHeader isHomePage />
             <Carousel />
             <Banner />
             <ProductList />
             <ProductOutroImage />
-            <ChatBot/>
-            <GoToTop/>
-            <Footer/>
+            <ChatBot />
+            <GoToTop />
+            <Footer />
         </div>
     );
 }

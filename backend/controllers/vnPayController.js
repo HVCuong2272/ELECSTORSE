@@ -131,10 +131,10 @@ const callbackPaymentVNP = (req, res) => {
         //   });
         console.log("RESPONSE:", res.locals.isSucceed);
 
-        if(res.locals.isSucceed){
-        	res.redirect(`http://localhost:3000/order/${res.locals.orderId}`); return;
+        if (res.locals.isSucceed) {
+          res.redirect(`http://localhost:3000/order/${res.locals.orderId}`); return;
         }
-        else res.redirect('http://localhost:3000/cart'); return;
+        else res.redirect('http://localhost:3000/shipping'); return;
       })
       .catch((err) => {
         res.send(err.message);

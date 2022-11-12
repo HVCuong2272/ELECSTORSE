@@ -1,37 +1,45 @@
 const nodemailer = require("nodemailer");
-const { google } = require("googleapis");
-const { OAuth2 } = google.auth;
-const OAUTH_PLAYGROUND = "https://developers.google.com/oauthplayground";
+// const { google } = require("googleapis");
+// const { OAuth2 } = google.auth;
+// const OAUTH_PLAYGROUND = "https://developers.google.com/oauthplayground";
 
 const {
-  MAILING_SERVICE_CLIENT_ID,
-  MAILING_SERVICE_CLIENT_SECRET,
-  MAILING_SERVICE_REFRESH_TOKEN,
+  // MAILING_SERVICE_CLIENT_ID,
+  // MAILING_SERVICE_CLIENT_SECRET,
+  // MAILING_SERVICE_REFRESH_TOKEN,
   SENDER_EMAIL_ADDRESS,
 } = process.env;
 
-const oauth2Client = new OAuth2(
-  MAILING_SERVICE_CLIENT_ID,
-  MAILING_SERVICE_CLIENT_SECRET,
-  MAILING_SERVICE_REFRESH_TOKEN,
-  OAUTH_PLAYGROUND
-);
+// const oauth2Client = new OAuth2(
+//   MAILING_SERVICE_CLIENT_ID,
+//   MAILING_SERVICE_CLIENT_SECRET,
+//   MAILING_SERVICE_REFRESH_TOKEN,
+//   OAUTH_PLAYGROUND
+// );
 
 const sendEmail = (to, url, txt) => {
-  oauth2Client.setCredentials({
-    refresh_token: MAILING_SERVICE_REFRESH_TOKEN,
-  });
+  // oauth2Client.setCredentials({
+  //   refresh_token: MAILING_SERVICE_REFRESH_TOKEN,
+  // });
 
-  const accessToken = oauth2Client.getAccessToken();
+  // const accessToken = oauth2Client.getAccessToken();
+  // const smtpTransport = nodemailer.createTransport({
+  //   service: "gmail",
+  //   auth: {
+  //     type: "OAuth2",
+  //     user: SENDER_EMAIL_ADDRESS,
+  //     clientId: MAILING_SERVICE_CLIENT_ID,
+  //     clientSecret: MAILING_SERVICE_CLIENT_SECRET,
+  //     refreshToken: MAILING_SERVICE_REFRESH_TOKEN,
+  //     accessToken,
+  //   },
+  // });
+
   const smtpTransport = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      type: "OAuth2",
-      user: SENDER_EMAIL_ADDRESS,
-      clientId: MAILING_SERVICE_CLIENT_ID,
-      clientSecret: MAILING_SERVICE_CLIENT_SECRET,
-      refreshToken: MAILING_SERVICE_REFRESH_TOKEN,
-      accessToken,
+      user: "techtechlms@gmail.com",
+      pass: "rbzgfbylpeevqbmr",
     },
   });
 
@@ -57,8 +65,9 @@ const sendEmail = (to, url, txt) => {
 
   smtpTransport.sendMail(mailOptions, (err, infor) => {
     if (err) return err;
+    // console.log('sww', infor);
     return infor;
   });
 };
 
-module.exports = sendEmail;
+module.exports = { sendEmail };

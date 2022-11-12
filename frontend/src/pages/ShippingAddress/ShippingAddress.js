@@ -2,11 +2,12 @@ import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import CheckoutStep from '~/components/CheckoutStep';
 import styles from './ShippingAddress.module.scss';
-import { Radio, Space } from 'antd';
+import { Modal, Radio, Space } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { savePaymentMethod, saveShippingAddress } from '~/redux/actions/cartActions';
 import { Link, useNavigate } from 'react-router-dom';
-import { VisaIcon, MasterCardIcon, MomoIcon, PaypalIcon } from '~/components/Icons';
+import { VisaIcon, MasterCardIcon, MomoIcon, PaypalIcon, VnPayIcon } from '~/components/Icons';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { createOrder } from '~/redux/actions/orderActions';
 import { ORDER_CREATE_RESET } from '~/redux/constants/orderConstants';
 
@@ -289,23 +290,61 @@ function ShippingAddress() {
   const [note, setnote] = useState(shippingAddress ? shippingAddress.note : "");
 
   const dispatch = useDispatch();
+
+  const { confirm } = Modal;
+  const directBuyConfirm = () => {
+    confirm({
+      title: 'Confirm',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Are you sure to pay the order directly ?',
+      okText: 'Yes',
+      // cancelText: '取消',
+      onOk() {
+        // console.log('OK');
+        dispatch(createOrder({
+          ...cart, orderItems: cart.cartItems, shippingAddress: {
+            firstName: fname,
+            lastName: lname,
+            address1: billing_address,
+            address2: billing_address2,
+            city: city,
+            country: country,
+            postalCode: zipcode,
+            phone: phone,
+            email: email,
+            note: note
+          }
+        }));
+      },
+      onCancel() {
+        // console.log('Cancel');
+      },
+    });
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
     //TODO: dispatch save shipping address action
     dispatch(saveShippingAddress({ firstName: fname, lastName: lname, country, address1: billing_address, address2: billing_address2, city, postalCode: zipcode, phone, email, note }));
-    dispatch(createOrder({ ...cart, orderItems: cart.cartItems, shippingAddress: {
-      firstName: fname,
-      lastName: lname,
-      address1: billing_address,
-      address2: billing_address2,
-      city: city,
-      country:country,
-      postalCode: zipcode,
-      phone: phone,
-      email: email,
-      note: note
+    if (paymentMethodInStore === 'Card') {
+      directBuyConfirm()
     }
-    }));
+    else {
+      dispatch(createOrder({
+        ...cart, orderItems: cart.cartItems, shippingAddress: {
+          firstName: fname,
+          lastName: lname,
+          address1: billing_address,
+          address2: billing_address2,
+          city: city,
+          country: country,
+          postalCode: zipcode,
+          phone: phone,
+          email: email,
+          note: note
+        }
+      }));
+    }
     // navigate('/payment') 
   }
 
@@ -330,7 +369,7 @@ function ShippingAddress() {
 
   useEffect(() => {
     if (success) {
-      console.log('success',success);
+      console.log('success', success);
       navigate(`/order/${order._id}`);
       dispatch({ type: ORDER_CREATE_RESET });
     }
@@ -533,13 +572,13 @@ function ShippingAddress() {
                                 </h3>
                                 <p>We accepts major credit and debit cards.</p>
                               </Radio>
-                              <Radio value={'Momo'}>
-                                <h3> <span><MomoIcon /></span> Momo</h3>
-                                <p>We also accepts payment using momo</p>
+                              <Radio value={'VNPay'}>
+                                <h3> <span><VnPayIcon /></span> VNPay</h3>
+                                <p>We also accepts payment using VNPay</p>
                               </Radio>
                               <Radio value={'Paypal'}>
                                 <h3> <span><PaypalIcon /></span>Paypal</h3>
-                                <p>Pay via PayPal; you can pay with your credit card/momo if you don't have a PayPal account.</p>
+                                <p>Pay via PayPal; you can pay with your credit card/VNPay if you don't have a PayPal account.</p>
                               </Radio>
                             </Space>
                           </Radio.Group>

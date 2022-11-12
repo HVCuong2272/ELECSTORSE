@@ -1,15 +1,44 @@
 const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const sendMail = require("../services/sendMail");
+const { sendEmail } = require("../services/sendMail");
 
 const { google } = require('googleapis')
+const nodemailer = require("nodemailer");
 const { OAuth2 } = google.auth
 // const fetch = require('node-fetch')
 
 const client = new OAuth2(process.env.MAILING_SERVICE_CLIENT_ID)
 
 const { CLIENT_URL } = process.env;
+
+// const smtpTransport = nodemailer.createTransport({
+//     service: "gmail",
+//     auth: {
+//         user: "techtechlms@gmail.com",
+//         pass: "rbzgfbylpeevqbmr",
+//     },
+// });
+
+// const mailOptions = {
+//     from: "techtechlms@gmail.com",
+//     to: 'thangle220909@gmail.com',
+//     subject: "Webshop Group",
+//     html: `
+//             <div style="max-width: 700px; margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
+//             <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the Webshop Group.</h2>
+//             <p>Congratulations! You're almost set to start using Webshop Group✮.
+//                 Just click the button below to validate your email address.
+//             </p>
+
+//             <a style="background: crimson; text-decoration: none; color: white; padding: 10px 20px; margin: 10px 0; display: inline-block;"></a>
+
+//             <p>If the button doesn't work for any reason, you can also click on the link below:</p>
+
+//             <div>yuyu</div>
+//             </div>
+//         `,
+// };
 
 const authController = {
     register: async (req, res) => {
@@ -50,7 +79,7 @@ const authController = {
             // console.log(activation_token);
 
             const url = `${CLIENT_URL}/user/activate/${activation_token}`;
-            sendMail(email, url, "Verify your email address");
+            sendEmail(email, url, "Verify your email address");
             res.json({
                 msg: "Register Success! Please activate your email to start.",
             });
@@ -141,7 +170,8 @@ const authController = {
             const access_token = createAccessToken({ id: user._id });
             const url = `${CLIENT_URL}/user/reset/${access_token}`;
 
-            sendMail(email, url, "Reset your password");
+            sendEmail(email, url, "Reset your password");
+            // const sendEmail = await smtpTransport.sendEmail(mailOptions);
             res.json({ msg: "Re-send the password, please check your email." });
         } catch (err) {
             return res.status(500).json({ msg: err.message });

@@ -1,9 +1,10 @@
 import { notification } from 'antd'
 
-const showSuccessMessage = content => {
+const showSuccessMessage = (content, placement) => {
     notification.success({
         message: 'Success',
         description: content,
+        placement
     })
 }
 

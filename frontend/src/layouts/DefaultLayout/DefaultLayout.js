@@ -16,7 +16,7 @@ function DefaultLayout({ children }) {
             <Header />
             <SubHeader />
             <div className={cx('container')}>
-                <div className={cx('content')}>{children}</div>
+                <div className={cx('content')} >{children}</div>
             </div>
             <Footer />
         </div>

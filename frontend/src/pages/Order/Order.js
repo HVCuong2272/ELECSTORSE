@@ -302,9 +302,9 @@ function Order() {
     const { order, loading, error } = orderDetails;
     console.log('dsadasd', order);
     const orderPay = useSelector((state) => state.orderPay);
-    const {loading: loadingPay, error: errorPay, success: successPay } = orderPay;
+    const { loading: loadingPay, error: errorPay, success: successPay } = orderPay;
     const dispatch = useDispatch();
-    
+
     const [errorVNPay, setErrorVNPay] = useState('');
     const [successVNPay, setSuccessVNPay] = useState('');
     const [loadingVNPay, setLoadingVNPay] = useState(false)
@@ -323,7 +323,7 @@ function Order() {
                 document.body.appendChild(script);
             };
             if (!order || successPay || (order && order._id !== orderId)) {
-                dispatch({type: ORDER_PAY_RESET});
+                dispatch({ type: ORDER_PAY_RESET });
                 dispatch(detailsOrder(orderId));
             } else {
                 if (!order.isPaid) {
@@ -342,11 +342,11 @@ function Order() {
     }, [dispatch, orderId, userSignin, order, sdkReady, successPay]);
 
     const successPaymentHandler = (paymentResult) => {
-        console.log('paymentResult: ',paymentResult);
+        console.log('paymentResult: ', paymentResult);
         dispatch(payOrder(order, paymentResult));
     };
     useEffect(() => {
-        if (order && order.paymentMethod === 'Momo') {
+        if (order && order.paymentMethod === 'VNPay') {
             const submitHandler = async (value) => {
                 console.log('Received values of form: ', order);
                 setLoadingVNPay(true);
@@ -366,24 +366,24 @@ function Order() {
                         paymentMethod: 'vnPay',
                         orderId: order._id,
                     },
-                    // {
-                    //     header: {
-                    //         'Content-Type': 'application/json',
-                    //         'Access-Control-Allow-Origin': '*'
-                    //     },
-                    // }
+                        // {
+                        //     header: {
+                        //         'Content-Type': 'application/json',
+                        //         'Access-Control-Allow-Origin': '*'
+                        //     },
+                        // }
                     );
                     // window.open(res.data,'NewWindow','resizable = yes');
                     // console.log(res.data.forwardLink)
                     if (order && !order.isPaid) {
                         window.location = res.data.forwardLink;
                         setSuccessVNPay(res.data.msg);
-                        console.log("SUCCESS PAY",res);
+                        console.log("SUCCESS PAY", res);
                         setLoadingVNPay(false)
-                      } else {
+                    } else {
                         setErrorVNPay(true)
                         setLoadingVNPay(false)
-                      }
+                    }
                     // window.location = res.data
 
                     // window.opener=null;
@@ -402,296 +402,298 @@ function Order() {
     }, [order]);
     return (
         <>
-        {(order && !order.isPaid && order.paymentMethod === 'Momo') ? (
-                    <div style={{ marginTop: '200px' }}>
-                        <Spin size="large" />
-                    </div>
-                ):
-           (<>
-                {loading ? (
-                    <div style={{ marginTop: '200px' }}>
-                        <Spin size="large" />
-                    </div>
-                ) : error ? (
-                    <Alert message="Error" description={error} type="error" showIcon />
-                ) : (
-                    <div>
-                    <CheckoutStep currentStep={2} disableStep2 />
-                    <div className={cx('grid wide')}>
-                        <div className={cx('checkout-content')}>
-                            <div className={cx('container')}>
-                                <div className={cx('row')}>
-                                    <div className={cx('col l-12 m-12 c-12')}>
-                                        <div className={cx('order-review')}>
-                                            <div
-                                                className={cx('heading-s1 space-mb--20')}
-                                                style={{ textAlign: 'center' }}
-                                            >
-                                                <h4 style={{ fontSize: '33px', textDecoration: '', color: '#ff4d4f' }}>
-                                                    Your Orders Sumary
-                                                </h4>
-                                            </div>
-                                            <div className={cx('table-responsive', 'order_table')}>
-                                                <table className={cx('table1')}>
-                                                    <thead>
-                                                        <tr
-                                                            style={{
-                                                                textAlign: 'center',
-                                                                fontSize: '22px',
-                                                                textDecoration: 'underline',
-                                                                color: '#ff4d4f',
-                                                            }}
-                                                        >
-                                                            <p style={{ fontWeight: 'bold' }}>
-                                                                Your Delivery Information
-                                                            </p>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style={{ border: 'none' }}></th>
-                                                            <th style={{ border: 'none' }}></th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style={{ borderTop: 'none' }}>First Name</th>
-                                                            <td
-                                                                className={cx('product-subtotal')}
-                                                                style={{ border: 'none' }}
-                                                            >
-                                                                {order.shippingAddress.firstName}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Last Name</th>
-                                                            <td className={cx('product-subtotal')}>
-                                                                {order.shippingAddress.lastName}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Address 01</th>
-                                                            <td className={cx('product-subtotal')}>
-                                                                {order.shippingAddress.address1}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Address 02</th>
-                                                            <td className={cx('product-subtotal')}>
-                                                                {order.shippingAddress.address2}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>City</th>
-                                                            <td className={cx('product-subtotal')}>
-                                                                {order.shippingAddress.city}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Country</th>
-                                                            <td className={cx('product-subtotal')}>
-                                                                {countryList[order.shippingAddress.country]}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Postal Code</th>
-                                                            <td className={cx('product-subtotal')}>
-                                                                {order.shippingAddress.postalCode}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Phone Number</th>
-                                                            <td className={cx('product-subtotal')}>
-                                                                {order.shippingAddress.phone}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Email</th>
-                                                            <td className={cx('product-subtotal')}>
-                                                                {order.shippingAddress.email}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Additional Note</th>
-                                                            <td className={cx('product-subtotal')}>
-                                                                {order.shippingAddress.note}
-                                                            </td>
-                                                        </tr>
-                                                    </thead>
-                                                </table>
-
-                                                <table className={cx('table3')}>
-                                                    <thead>
-                                                        <tr></tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr></tr>
-                                                    </tbody>
-                                                </table>
-
-                                                <table className={cx('table2')}>
-                                                    <thead>
-                                                        <tr
-                                                            style={{
-                                                                textAlign: 'center',
-                                                                fontSize: '22px',
-                                                                textDecoration: 'underline',
-                                                                color: '#ff4d4f',
-                                                            }}
-                                                        >
-                                                            <b style={{ fontWeight: 'bold' }}>Your Cart Detail</b>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style={{ border: 'none' }}></th>
-                                                            <th style={{ border: 'none' }}></th>
-                                                        </tr>
-
-                                                        <tr style={{ border: 'none' }}>
-                                                            <th>Product</th>
-                                                            <th>Total</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {order.orderItems.map((item, index) => {
-                                                            return (
-                                                                <tr key={index}>
-                                                                    <td>
-                                                                        <Link
-                                                                            to={`/product/${item.product}`}
-                                                                            className={cx('product-name')}
-                                                                        >
-                                                                            <div
-                                                                                style={{
-                                                                                    display: 'flex',
-                                                                                    justifyContent: 'center',
-                                                                                }}
-                                                                            >
-                                                                                <div>
-                                                                                    <img
-                                                                                        src={item.image1}
-                                                                                        alt="productImage"
-                                                                                        className={cx(
-                                                                                            'cart-image-product',
-                                                                                        )}
-                                                                                    ></img>
-                                                                                </div>
-                                                                                <div
-                                                                                    style={{
-                                                                                        marginTop: 'auto',
-                                                                                        marginBottom: 'auto',
-                                                                                    }}
-                                                                                >
-                                                                                    <span className={cx('item-name')}>
-                                                                                        {item.name}
-                                                                                    </span>
-                                                                                    <div className={cx('product-qty')}>
-                                                                                        x {item.qty}
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Link>
-                                                                    </td>
-                                                                    <td>${item.price}</td>
+            {(order && !order.isPaid && order.paymentMethod === 'VNPay') ? (
+                <div style={{ marginTop: '200px' }}>
+                    <Spin size="large" />
+                </div>
+            ) :
+                (<>
+                    {loading ? (
+                        <div style={{ marginTop: '200px' }}>
+                            <Spin size="large" />
+                        </div>
+                    ) : error ? (
+                        <Alert message="Error" description={error} type="error" showIcon />
+                    ) : (
+                        <div>
+                            <CheckoutStep currentStep={2} disableStep2 />
+                            <div className={cx('grid wide')}>
+                                <div className={cx('checkout-content')}>
+                                    <div className={cx('container')}>
+                                        <div className={cx('row')}>
+                                            <div className={cx('col l-12 m-12 c-12')}>
+                                                <div className={cx('order-review')}>
+                                                    <div
+                                                        className={cx('heading-s1 space-mb--20')}
+                                                        style={{ textAlign: 'center' }}
+                                                    >
+                                                        <h4 style={{ fontSize: '33px', textDecoration: '', color: '#ff4d4f' }}>
+                                                            Your Orders Sumary
+                                                        </h4>
+                                                    </div>
+                                                    <div className={cx('table-responsive', 'order_table')}>
+                                                        <table className={cx('table1')}>
+                                                            <thead>
+                                                                <tr
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        fontSize: '22px',
+                                                                        textDecoration: 'underline',
+                                                                        color: '#ff4d4f',
+                                                                    }}
+                                                                >
+                                                                    <p style={{ fontWeight: 'bold' }}>
+                                                                        Your Delivery Information
+                                                                    </p>
                                                                 </tr>
-                                                            );
-                                                        })}
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th>SubTotal</th>
-                                                            <td className={cx('product-subtotal')}>
-                                                                ${order.itemsPrice.toFixed(2)}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Shipping Price</th>
-                                                            <td>
-                                                                {order.shippingPrice !== 0
-                                                                    ? `$${order.shippingPrice.toFixed(2)}`
-                                                                    : 'Free Ship'}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Tax Price</th>
-                                                            <td>${order.taxPrice.toFixed(2)}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Total Price</th>
-                                                            <td className={cx('product-subtotal')}>
-                                                                ${order.totalPrice.toFixed(2)}
-                                                            </td>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                                <h4 style={{ color: '#ff4d4f', marginTop: '47px', fontSize: '28px' }}>
-                                                    Your Order Delivery Status
-                                                </h4>
-                                                {order.isDelivered ? (
-                                                    <Alert
-                                                        message="Success"
-                                                        description={`Delivered at ${order.deliveredAt}`}
-                                                        type="success"
-                                                    />
-                                                ) : (
-                                                    <Alert
-                                                        message="Order Delivery Status"
-                                                        description="Your order haven't been delivered yet."
-                                                        type="warning"
-                                                    />
-                                                )}
-                                            </div>
-                                            <div className={cx('payment-method')}>
-                                                <div
-                                                    className={cx('heading-s1 space-mb--20')}
-                                                    style={{ fontSize: '28px' }}
-                                                >
-                                                    <h4 style={{ color: '#ff4d4f', marginTop: '80px' }}>
-                                                        Your Payment Process
-                                                    </h4>
+                                                                <tr>
+                                                                    <th style={{ border: 'none' }}></th>
+                                                                    <th style={{ border: 'none' }}></th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th style={{ borderTop: 'none' }}>First Name</th>
+                                                                    <td
+                                                                        className={cx('product-subtotal')}
+                                                                        style={{ border: 'none' }}
+                                                                    >
+                                                                        {order.shippingAddress.firstName}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Last Name</th>
+                                                                    <td className={cx('product-subtotal')}>
+                                                                        {order.shippingAddress.lastName}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Address 01</th>
+                                                                    <td className={cx('product-subtotal')}>
+                                                                        {order.shippingAddress.address1}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Address 02</th>
+                                                                    <td className={cx('product-subtotal')}>
+                                                                        {order.shippingAddress.address2}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>City</th>
+                                                                    <td className={cx('product-subtotal')}>
+                                                                        {order.shippingAddress.city}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Country</th>
+                                                                    <td className={cx('product-subtotal')}>
+                                                                        {countryList[order.shippingAddress.country]}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Postal Code</th>
+                                                                    <td className={cx('product-subtotal')}>
+                                                                        {order.shippingAddress.postalCode}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Phone Number</th>
+                                                                    <td className={cx('product-subtotal')}>
+                                                                        {order.shippingAddress.phone}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Email</th>
+                                                                    <td className={cx('product-subtotal')}>
+                                                                        {order.shippingAddress.email}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Additional Note</th>
+                                                                    <td className={cx('product-subtotal')}>
+                                                                        {order.shippingAddress.note}
+                                                                    </td>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
 
-                                                    {!order.isPaid && (
-                                                        <li>
-                                                            {!sdkReady ? (
-                                                                <div style={{ marginTop: '200px' }}>
-                                                                    <Spin size="large" />
-                                                                </div>
-                                                            ) : (
-                                                                <div>
-                                                                    <div className={cx('paypal-button')}>
-                                                                        <>
-                                                                            {errorPay && (
-                                                                                <Alert message="Error" description={errorPay} type="error" showIcon />
-                                                                            )}
-                                                                            {loadingPay && 
-                                                                                
-                                                                                (
-                                                                                        <div style={{ marginTop: '200px' }}>
-                                                                                            <Spin size="large" />
+                                                        <table className={cx('table3')}>
+                                                            <thead>
+                                                                <tr></tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr></tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                        <table className={cx('table2')}>
+                                                            <thead>
+                                                                <tr
+                                                                    style={{
+                                                                        textAlign: 'center',
+                                                                        fontSize: '22px',
+                                                                        textDecoration: 'underline',
+                                                                        color: '#ff4d4f',
+                                                                    }}
+                                                                >
+                                                                    <b style={{ fontWeight: 'bold' }}>Your Cart Detail</b>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th style={{ border: 'none' }}></th>
+                                                                    <th style={{ border: 'none' }}></th>
+                                                                </tr>
+
+                                                                <tr style={{ border: 'none' }}>
+                                                                    <th>Product</th>
+                                                                    <th>Total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {order.orderItems.map((item, index) => {
+                                                                    return (
+                                                                        <tr key={index}>
+                                                                            <td>
+                                                                                <Link
+                                                                                    to={`/product/${item.product}`}
+                                                                                    className={cx('product-name')}
+                                                                                >
+                                                                                    <div
+                                                                                        style={{
+                                                                                            display: 'flex',
+                                                                                            justifyContent: 'center',
+                                                                                        }}
+                                                                                    >
+                                                                                        <div>
+                                                                                            <img
+                                                                                                src={item.image1}
+                                                                                                alt="productImage"
+                                                                                                className={cx(
+                                                                                                    'cart-image-product',
+                                                                                                )}
+                                                                                            ></img>
                                                                                         </div>
-                                                                                )
-                                                                                }
-                                                                            <PayPalButton
-                                                                                amount={order.totalPrice}
-                                                                                onSuccess={successPaymentHandler}
-                                                                            ></PayPalButton>
-                                                                        </>
-                                                                    </div>
-                                                                </div>
-                                                            )}
-                                                        </li>
-                                                    )}
-
-                                                    {order.isPaid ? (
-                                                        <div className={cx('alert')}>
+                                                                                        <div
+                                                                                            style={{
+                                                                                                marginTop: 'auto',
+                                                                                                marginBottom: 'auto',
+                                                                                            }}
+                                                                                        >
+                                                                                            <span className={cx('item-name')}>
+                                                                                                {item.name}
+                                                                                            </span>
+                                                                                            <div className={cx('product-qty')}>
+                                                                                                x {item.qty}
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </Link>
+                                                                            </td>
+                                                                            <td>${item.price}</td>
+                                                                        </tr>
+                                                                    );
+                                                                })}
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>SubTotal</th>
+                                                                    <td className={cx('product-subtotal')}>
+                                                                        ${order.itemsPrice.toFixed(2)}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Shipping Price</th>
+                                                                    <td>
+                                                                        {order.shippingPrice !== 0
+                                                                            ? `$${order.shippingPrice.toFixed(2)}`
+                                                                            : 'Free Ship'}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Tax Price</th>
+                                                                    <td>${order.taxPrice.toFixed(2)}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Total Price</th>
+                                                                    <td className={cx('product-subtotal')}>
+                                                                        ${order.totalPrice.toFixed(2)}
+                                                                    </td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                        <h4 style={{ color: '#ff4d4f', marginTop: '47px', fontSize: '28px' }}>
+                                                            Your Order Delivery Status
+                                                        </h4>
+                                                        {order.isDelivered ? (
                                                             <Alert
                                                                 message="Success"
-                                                                description={`Paid at ${order.paidAt}`}
+                                                                description={`Delivered at ${order.deliveredAt}`}
                                                                 type="success"
                                                             />
+                                                        ) : (
+                                                            <Alert
+                                                                message="Order Delivery Status"
+                                                                description="Your order haven't been delivered yet."
+                                                                type="warning"
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <div className={cx('payment-method')}>
+                                                        <div
+                                                            className={cx('heading-s1 space-mb--20')}
+                                                            style={{ fontSize: '28px' }}
+                                                        >
+                                                            <h4 style={{ color: '#ff4d4f', marginTop: '80px' }}>
+                                                                Your Payment Process
+                                                            </h4>
+
+                                                            {!order.isPaid && order.paymentMethod === "Paypal" && (
+                                                                <li>
+                                                                    {!sdkReady ? (
+                                                                        <div style={{ marginTop: '200px' }}>
+                                                                            <Spin size="large" />
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div>
+                                                                            <div className={cx('paypal-button')}>
+                                                                                <>
+                                                                                    {errorPay && (
+                                                                                        <Alert message="Error" description={errorPay} type="error" showIcon />
+                                                                                    )}
+                                                                                    {loadingPay &&
+
+                                                                                        (
+                                                                                            <div style={{ marginTop: '200px' }}>
+                                                                                                <Spin size="large" />
+                                                                                            </div>
+                                                                                        )
+                                                                                    }
+                                                                                    <PayPalButton
+                                                                                        amount={order.totalPrice}
+                                                                                        onSuccess={successPaymentHandler}
+                                                                                    ></PayPalButton>
+                                                                                </>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </li>
+                                                            )}
+
+                                                            {order.isPaid ? (
+                                                                <div className={cx('alert')}>
+                                                                    <Alert
+                                                                        message="Success"
+                                                                        description={`Paid at ${order.paidAt}`}
+                                                                        type="success"
+                                                                    />
+                                                                </div>
+                                                            ) : (
+                                                                <Alert
+                                                                    message="Your Payment Status"
+                                                                    description="You haven't paid this order yet."
+                                                                    type="warning"
+                                                                />
+                                                            )}
                                                         </div>
-                                                    ) : (
-                                                        <Alert
-                                                            message="Your Payment Status"
-                                                            description="You haven't paid this order yet."
-                                                            type="warning"
-                                                        />
-                                                    )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -699,11 +701,9 @@ function Order() {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                )}
-            </>)
-}
+                    )}
+                </>)
+            }
         </>
     );
 }

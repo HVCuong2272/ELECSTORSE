@@ -17,8 +17,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: "*" }));
 app.use(cookieParser());
 
-// const __dirname = path.resolve();
-// app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+const __dirname1 = path.resolve();
+app.use("/uploads", express.static(path.join(__dirname1, "/uploads")));
 // app.use(express.static(path.join(__dirname, "/frontend/build")));
 // app.get("*", (req, res) =>
 //   res.sendFile(path.join(__dirname, "/frontend/build/index.html"))
@@ -46,9 +46,9 @@ initRouter(app);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
-	const err = new Error('Not Found');
-	err.status = 404;
-	next(err);
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 

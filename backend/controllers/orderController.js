@@ -1,6 +1,7 @@
 const expressAsyncHandler = require('express-async-handler');
 const { data } = require("../data");
 const Order = require("../models/orderModel");
+const { sendEmail } = require('../services/sendMail');
 
 const createOrder = expressAsyncHandler(async (req, res) => {
     // console.log(req.body);
@@ -18,8 +19,10 @@ const createOrder = expressAsyncHandler(async (req, res) => {
             totalPrice: req.body.totalPrice,
             user: req.user.id,
         });
-        // console.log('weee', order);
         const createdOrder = await order.save();
+        if (createdOrder.paymentMethod === 'Card') {
+            sendEmail(createdOrder.shippingAddress.email, 'url gì đó', "Confirm order");
+        }
         res
             .status(201)
             .send({ message: "New Order Created", order: createdOrder });
@@ -27,35 +30,35 @@ const createOrder = expressAsyncHandler(async (req, res) => {
 })
 
 
-const getOrderByID =  expressAsyncHandler(async(req, res) => {
+const getOrderByID = expressAsyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
-    if(order){
+    if (order) {
         res.send(order);
     } else {
-        res.status(404).send({message: 'Order Not Found'});
+        res.status(404).send({ message: 'Order Not Found' });
     }
 })
 
-const updateOrderByID =  expressAsyncHandler(async(req, res) => {
+const updateOrderByID = expressAsyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
-    if(order){
-        order.isPaid=true;
-        order.paidAt=Date.now();
+    if (order) {
+        order.isPaid = true;
+        order.paidAt = Date.now();
         order.paymentResult = {
-            id:req.body.id, 
-            status:req.body.status,
-            update_time:req.body.update_time,
-            email_address:req.body.email_address,
+            id: req.body.id,
+            status: req.body.status,
+            update_time: req.body.update_time,
+            email_address: req.body.email_address,
         };
-        const updatedOrder=await order.save();
-        res.send({message:'Order Paid',order:updatedOrder});
+        const updatedOrder = await order.save();
+        res.send({ message: 'Order Paid', order: updatedOrder });
     } else {
-        res.status(404).send({message:'Order Not Found'});
+        res.status(404).send({ message: 'Order Not Found' });
     }
 })
-const getOrderHistory = expressAsyncHandler(async(req, res) => {
-   const orders = await Order.find({user: req.user.id, isPaid:true});
-   res.send(orders);
+const getOrderHistory = expressAsyncHandler(async (req, res) => {
+    const orders = await Order.find({ $or: [{ user: req.user.id, isPaid: true }, { user: req.user.id, paymentMethod: "Card" }] });
+    res.send(orders);
 })
 
 

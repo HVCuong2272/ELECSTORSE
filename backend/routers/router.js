@@ -5,13 +5,15 @@ const productRouter = require("./productRouter");
 const authRouter = require("./authRouter");
 const orderRouter = require("./orderRouter");
 const vnPayRouter = require("./vnPayRouter");
+const uploadRouter = require("./uploadRouter");
 module.exports = (app) => {
+  app.use("/api/uploads", uploadRouter);
   app.use("/api/users", authRouter),
     app.use("/api/users", userRouter),
     app.use("/api/products", productRouter);
   app.use("/api/orders", orderRouter);
   app.use("/paymentvnp", vnPayRouter);
-  app.use("/api/config/paypal", (req, res) =>{
+  app.use("/api/config/paypal", (req, res) => {
     res.send(process.env.PAYPAL_CLIENT_ID || 'sb')
   })
 };

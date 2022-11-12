@@ -49,12 +49,12 @@ export const signout = () => async (dispatch) => {
     // window.location.href = "/";
 };
 export const detailsUser = (userId) => async (dispatch, getState) => {
-    dispatch({type: USER_DETAILS_REQUEST, payload: userId})
+    dispatch({ type: USER_DETAILS_REQUEST, payload: userId })
     try {
         const {
             token,
-        }=getState();
-        const {data} = await Axios.get(`/api/users/${userId}`, {
+        } = getState();
+        const { data } = await Axios.get(`/api/users/${userId}`, {
             headers: { Authorization: token },
         });
         dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
@@ -69,15 +69,15 @@ export const detailsUser = (userId) => async (dispatch, getState) => {
     }
 };
 export const updateUserProfile = (user) => async (dispatch, getState) => {
-    dispatch({type: USER_UPDATE_PROFILE_REQUEST, payload: user});
+    dispatch({ type: USER_UPDATE_PROFILE_REQUEST, payload: user });
     try {
         const {
             token,
-        }=getState();
-        const {data} = await Axios.put(`/api/users/profile`, user, {
+        } = getState();
+        const { data } = await Axios.put(`/api/users/profile`, user, {
             headers: { Authorization: token },
         });
-        showSuccessMessage('Profile Updated Successfully')
+        showSuccessMessage('Profile Updated Successfully', 'topRight')
         dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data });
         dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
         localStorage.setItem('userInfo', JSON.stringify(data));

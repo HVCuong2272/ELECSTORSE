@@ -26,7 +26,7 @@ function Cart() {
     const dispatch = useDispatch();
     useEffect(() => {
         window.scrollTo(0, 0)
-      }, [])
+    }, [])
     useEffect(() => {
         console.log('init effect summary');
         if (productId) {
@@ -37,7 +37,7 @@ function Cart() {
         console.log('end effect summary1');
     }, [dispatch, productId, qty]);
     return (
-        <div className={cx('grid wide')} style={{marginTop: "calc(var(--header-height) * 2)"}}>
+        <div className={cx('grid wide')} style={{ marginTop: "calc(var(--header-height) * 2)" }}>
             {cartItems.length === 0 ? (
                 <Alert
                     message="Your Cart is Empty"
@@ -51,7 +51,7 @@ function Cart() {
                 />
             ) : (
                 <div className={cx('cart')}>
-                    <CartProductList/>
+                    <CartProductList />
                     <CartSummary />
                 </div>
             )}

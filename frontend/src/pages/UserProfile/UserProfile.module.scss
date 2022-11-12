@@ -1,33 +1,33 @@
 .user-profile {
     max-width: 60rem;
     margin: 0 auto;
-  }
-  
+}
+
 .user-profile > div {
     display: flex;
     flex-direction: column;
     margin: 1rem;
-  }
+}
 .user-profile label {
     margin: 1rem 0;
-  }
+}
 .user-profile__input,
 .user-profile__select,
 .user-profile__textarea,
 .user-profile__button {
-  padding: 1rem;
-  border-radius: 0.5rem;
-  border: 0.1rem #a4a4a4 solid;
-  font-size: 1.6rem;
-  font-family: Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 0.1rem #a4a4a4 solid;
+    font-size: 1.6rem;
+    font-family: Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 .user-profile__input:hover,
 .user-profile__select:hover,
 .user-profile__textarea:hover,
 .user-profile__button:hover {
-  border: 0.1rem #404040 solid;
+    border: 0.1rem #404040 solid;
 }
 .btn {
     display: inline-block;
@@ -95,7 +95,8 @@ fieldset:disabled a.btn {
 a.btn.disabled,
 fieldset:disabled a.btn {
     pointer-events: none;
-}.btn-fill-out {
+}
+.btn-fill-out {
     position: relative;
     z-index: 1;
     overflow: hidden;
@@ -173,7 +174,39 @@ input[type='reset'].btn-block,
 input[type='submit'].btn-block {
     width: 100%;
 }
-.user-avatar img{
+
+.user-avatar img:hover {
+    cursor: pointer;
+}
+
+.user-profile .user-avatar-container {
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.user-avatar {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+.user-avatar img {
     width: 183px;
     height: 170px;
+    border-radius: 2px;
+}
+
+.user-avatar-url {
+    flex: 1;
+}
+
+.user-avatar-url__button {
+    margin-top: 5px;
+}
+
+.user-avatar-url__button-submit {
+}
+
+.user-avatar-url__button-onFill {
+    margin: 0 5px;
 }
