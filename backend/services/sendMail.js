@@ -49,10 +49,17 @@ const sendEmail = (to, url, txt) => {
     subject: "TNT Shop",
     html: `
             <div style="max-width: 700px; margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
-            <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the TNT Shop.</h2>
-            <p>Congratulations! You're almost set to start using TNT Shop✮.
+            <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the Webshop Group.</h2>
+            <p>Congratulations! You're almost set to start using Webshop Group✮.
                 Just click the button below to validate your email address.
             </p>
+            
+            <a href=${url} style="background: crimson; text-decoration: none; color: white; padding: 10px 20px; margin: 10px 0; display: inline-block;">${txt}</a>
+        
+            <p>If the button doesn't work for any reason, you can also click on the link below:</p>
+        
+            <div>${url}</div>
+            </div>
         `,
   };
 
@@ -63,7 +70,7 @@ const sendEmail = (to, url, txt) => {
   });
 };
 
-const thankEmail = (to, url, txt) => {
+const thankEmail = (to, url, txt, orderDetailHTML, orderTotalPrice) => {
   const smtpTransport = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -123,13 +130,15 @@ const thankEmail = (to, url, txt) => {
                             style="border:0.5px; border:solid; border-color:rgb(124, 124, 124); text-align: center; color: black; font-family: cursive">
                             Total cost</th>
                     </tr>
+                    ${orderDetailHTML}
                     <tr>
-                        <td style="border:0.5px; border:solid; border-color:rgb(124, 124, 124);">
-                            <div style="position: relative; left: 50%; transform: translateX(-50%); margin: 0; width: 101px; word-wrap: break-word; ">Ayayayayayayayayayaya</div></td>
-                        <td style="border:0.5px; border:solid; border-color:rgb(124, 124, 124);">
-                            <div style="position: relative; left: 50%; transform: translateX(-50%); margin: 0; width: 101px; word-wrap: break-word;">200,000,000 Mora</div></td>
+                        <td style="border:0.5px; border:solid; border-color:rgb(124, 124, 124); width: 106px; text-align: center; font-weight: bold;">
+                            Total Price
+                        </td>
+                        <td style="border:0.5px; border:solid; border-color:rgb(124, 124, 124); width: 106px; text-align: center; font-weight: bold;">
+                          ${orderTotalPrice}
+                        </td>
                     </tr>
-                    
                 </table>
                 <p>Kind regards,</p>
                 <p>TNT Shop</p>

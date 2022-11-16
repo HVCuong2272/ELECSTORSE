@@ -17,7 +17,6 @@ const Register = () => {
     // const { isLogged } = userSignin;
 
     const [error, setError] = useState('');
-
     const [success, setSuccess] = useState('');
 
     const [searchParams] = useSearchParams();

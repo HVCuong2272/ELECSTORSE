@@ -21,10 +21,23 @@ const createOrder = expressAsyncHandler(async (req, res) => {
     });
     const createdOrder = await order.save();
     if (createdOrder.paymentMethod === "Card") {
+      var orderDetailHTML = createdOrder.orderItems.map((orderItem) => {
+        return `<tr>
+          <td style="border:0.5px; border:solid; border-color:rgb(124, 124, 124); width: 106px; text-align: center;">
+            ${orderItem.name} x${orderItem.qty}
+          </td>
+          <td style="border:0.5px; border:solid; border-color:rgb(124, 124, 124); width: 106px; text-align: center;">
+            ${orderItem.price * orderItem.qty}
+          </td>
+        </tr>`;
+      });
+
       thankEmail(
         createdOrder.shippingAddress.email,
         "url gì đó",
-        "Confirm order"
+        "Confirm order",
+        orderDetailHTML.join(""),
+        createdOrder.totalPrice
       );
     }
     res.status(201).send({ message: "New Order Created", order: createdOrder });

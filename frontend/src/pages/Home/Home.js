@@ -13,13 +13,12 @@ import Footer from '~/layouts/components/Footer';
 import GoToTop from '~/components/GoToTop';
 import ChatBot from '~/components/ChatBot';
 
-
 const cx = classNames.bind(styles);
 
 function Home() {
     useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
+        window.scrollTo(0, 0);
+    }, []);
     return (
         <div className={cx('home')}>
             <Header />
