@@ -307,7 +307,7 @@ function Order() {
 
     const [errorVNPay, setErrorVNPay] = useState('');
     const [successVNPay, setSuccessVNPay] = useState('');
-    const [loadingVNPay, setLoadingVNPay] = useState(false)
+    const [loadingVNPay, setLoadingVNPay] = useState(false);
 
     useEffect(() => {
         if (userSignin.userInfo) {
@@ -332,10 +332,9 @@ function Order() {
                     } else {
                         setSdkReady(true);
                     }
-                }
-                else {
+                } else {
                     dispatch({ type: CART_EMPTY });
-                    localStorage.removeItem("cartItems");
+                    localStorage.removeItem('cartItems');
                 }
             }
         }
@@ -351,21 +350,23 @@ function Order() {
                 console.log('Received values of form: ', order);
                 setLoadingVNPay(true);
                 try {
-                    const res = await Axios.post('/paymentvnp/checkout', {
-                        firstname: order.shippingAddress.firstName,
-                        astname: order.shippingAddress.lastName,
-                        billingStreet: order.shippingAddress.address1,
-                        billingCity: '01',
-                        billingStateProvince: order.shippingAddress.city,
-                        billingCountry: order.shippingAddress.country,
-                        billingPostCode: order.shippingAddress.postCode,
-                        email: order.shippingAddress.email,
-                        phoneNumber: order.shippingAddress.phone,
-                        // amount: '900000',
-                        amount: order.totalPrice,
-                        paymentMethod: 'vnPay',
-                        orderId: order._id,
-                    },
+                    const res = await Axios.post(
+                        '/paymentvnp/checkout',
+                        {
+                            firstname: order.shippingAddress.firstName,
+                            astname: order.shippingAddress.lastName,
+                            billingStreet: order.shippingAddress.address,
+                            billingCity: '01',
+                            billingStateProvince: order.shippingAddress.city,
+                            billingCountry: order.shippingAddress.country,
+                            billingPostCode: order.shippingAddress.postCode,
+                            email: order.shippingAddress.email,
+                            phoneNumber: order.shippingAddress.phone,
+                            // amount: '900000',
+                            amount: order.totalPrice,
+                            paymentMethod: 'vnPay',
+                            orderId: order._id,
+                        },
                         // {
                         //     header: {
                         //         'Content-Type': 'application/json',
@@ -378,11 +379,11 @@ function Order() {
                     if (order && !order.isPaid) {
                         window.location = res.data.forwardLink;
                         setSuccessVNPay(res.data.msg);
-                        console.log("SUCCESS PAY", res);
-                        setLoadingVNPay(false)
+                        console.log('SUCCESS PAY', res);
+                        setLoadingVNPay(false);
                     } else {
-                        setErrorVNPay(true)
-                        setLoadingVNPay(false)
+                        setErrorVNPay(true);
+                        setLoadingVNPay(false);
                     }
                     // window.location = res.data
 
@@ -393,8 +394,7 @@ function Order() {
                     // setSuccessVNPay(res.data.msg);
                 } catch (err) {
                     setSuccessVNPay('');
-                    err.response.data.msg &&
-                        setErrorVNPay(err.response.data.msg)
+                    err.response.data.msg && setErrorVNPay(err.response.data.msg);
                 }
             };
             submitHandler();
@@ -402,12 +402,12 @@ function Order() {
     }, [order]);
     return (
         <>
-            {(order && !order.isPaid && order.paymentMethod === 'VNPay') ? (
+            {order && !order.isPaid && order.paymentMethod === 'VNPay' ? (
                 <div style={{ marginTop: '200px' }}>
                     <Spin size="large" />
                 </div>
-            ) :
-                (<>
+            ) : (
+                <>
                     {loading ? (
                         <div style={{ marginTop: '200px' }}>
                             <Spin size="large" />
@@ -427,7 +427,13 @@ function Order() {
                                                         className={cx('heading-s1 space-mb--20')}
                                                         style={{ textAlign: 'center' }}
                                                     >
-                                                        <h4 style={{ fontSize: '33px', textDecoration: '', color: '#ff4d4f' }}>
+                                                        <h4
+                                                            style={{
+                                                                fontSize: '33px',
+                                                                textDecoration: '',
+                                                                color: '#ff4d4f',
+                                                            }}
+                                                        >
                                                             Your Orders Sumary
                                                         </h4>
                                                     </div>
@@ -466,27 +472,15 @@ function Order() {
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th>Address 01</th>
+                                                                    <th>House No.</th>
                                                                     <td className={cx('product-subtotal')}>
-                                                                        {order.shippingAddress.address1}
+                                                                        {order.shippingAddress.houseNo}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th>Address 02</th>
+                                                                    <th>Your Address</th>
                                                                     <td className={cx('product-subtotal')}>
-                                                                        {order.shippingAddress.address2}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>City</th>
-                                                                    <td className={cx('product-subtotal')}>
-                                                                        {order.shippingAddress.city}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Country</th>
-                                                                    <td className={cx('product-subtotal')}>
-                                                                        {countryList[order.shippingAddress.country]}
+                                                                        {order.shippingAddress.address}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -535,7 +529,9 @@ function Order() {
                                                                         color: '#ff4d4f',
                                                                     }}
                                                                 >
-                                                                    <b style={{ fontWeight: 'bold' }}>Your Cart Detail</b>
+                                                                    <b style={{ fontWeight: 'bold' }}>
+                                                                        Your Cart Detail
+                                                                    </b>
                                                                 </tr>
                                                                 <tr>
                                                                     <th style={{ border: 'none' }}></th>
@@ -577,10 +573,18 @@ function Order() {
                                                                                                 marginBottom: 'auto',
                                                                                             }}
                                                                                         >
-                                                                                            <span className={cx('item-name')}>
+                                                                                            <span
+                                                                                                className={cx(
+                                                                                                    'item-name',
+                                                                                                )}
+                                                                                            >
                                                                                                 {item.name}
                                                                                             </span>
-                                                                                            <div className={cx('product-qty')}>
+                                                                                            <div
+                                                                                                className={cx(
+                                                                                                    'product-qty',
+                                                                                                )}
+                                                                                            >
                                                                                                 x {item.qty}
                                                                                             </div>
                                                                                         </div>
@@ -619,7 +623,13 @@ function Order() {
                                                                 </tr>
                                                             </tfoot>
                                                         </table>
-                                                        <h4 style={{ color: '#ff4d4f', marginTop: '47px', fontSize: '28px' }}>
+                                                        <h4
+                                                            style={{
+                                                                color: '#ff4d4f',
+                                                                marginTop: '47px',
+                                                                fontSize: '28px',
+                                                            }}
+                                                        >
                                                             Your Order Delivery Status
                                                         </h4>
                                                         {order.isDelivered ? (
@@ -645,7 +655,7 @@ function Order() {
                                                                 Your Payment Process
                                                             </h4>
 
-                                                            {!order.isPaid && order.paymentMethod === "Paypal" && (
+                                                            {!order.isPaid && order.paymentMethod === 'Paypal' && (
                                                                 <li>
                                                                     {!sdkReady ? (
                                                                         <div style={{ marginTop: '200px' }}>
@@ -656,19 +666,27 @@ function Order() {
                                                                             <div className={cx('paypal-button')}>
                                                                                 <>
                                                                                     {errorPay && (
-                                                                                        <Alert message="Error" description={errorPay} type="error" showIcon />
+                                                                                        <Alert
+                                                                                            message="Error"
+                                                                                            description={errorPay}
+                                                                                            type="error"
+                                                                                            showIcon
+                                                                                        />
                                                                                     )}
-                                                                                    {loadingPay &&
-
-                                                                                        (
-                                                                                            <div style={{ marginTop: '200px' }}>
-                                                                                                <Spin size="large" />
-                                                                                            </div>
-                                                                                        )
-                                                                                    }
+                                                                                    {loadingPay && (
+                                                                                        <div
+                                                                                            style={{
+                                                                                                marginTop: '200px',
+                                                                                            }}
+                                                                                        >
+                                                                                            <Spin size="large" />
+                                                                                        </div>
+                                                                                    )}
                                                                                     <PayPalButton
                                                                                         amount={order.totalPrice}
-                                                                                        onSuccess={successPaymentHandler}
+                                                                                        onSuccess={
+                                                                                            successPaymentHandler
+                                                                                        }
                                                                                     ></PayPalButton>
                                                                                 </>
                                                                             </div>
@@ -702,8 +720,8 @@ function Order() {
                             </div>
                         </div>
                     )}
-                </>)
-            }
+                </>
+            )}
         </>
     );
 }

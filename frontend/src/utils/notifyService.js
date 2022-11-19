@@ -1,25 +1,26 @@
-import { notification } from 'antd'
+import { notification } from 'antd';
 
 const showSuccessMessage = (content, placement) => {
     notification.success({
         message: 'Success',
         description: content,
-        placement
-    })
-}
+        placement,
+    });
+};
 
-const showErrorMessage = content => {
+const showErrorMessage = (content, placement) => {
     notification.error({
         message: 'Error',
         description: content,
-    })
-}
+        placement,
+    });
+};
 
-const showWarningMessage = content => {
+const showWarningMessage = (content) => {
     notification.warning({
         message: 'Error Message',
         description: content,
-    })
-}
+    });
+};
 
-export { showErrorMessage, showWarningMessage, showSuccessMessage }
+export { showErrorMessage, showWarningMessage, showSuccessMessage };

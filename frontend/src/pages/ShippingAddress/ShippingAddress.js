@@ -1,5 +1,9 @@
+import 'mapbox-gl/dist/mapbox-gl.css';
+import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import MapGL from 'react-map-gl';
+import Geocoder from 'react-map-gl-geocoder';
 import classNames from 'classnames/bind';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import CheckoutStep from '~/components/CheckoutStep';
 import styles from './ShippingAddress.module.scss';
 import { Modal, Radio, Space } from 'antd';
@@ -11,265 +15,24 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { createOrder } from '~/redux/actions/orderActions';
 import { ORDER_CREATE_RESET } from '~/redux/constants/orderConstants';
 import { CART_EMPTY } from '~/redux/constants/cartConstants';
+import { showErrorMessage } from '~/utils/notifyService';
 
 const cx = classNames.bind(styles);
 
-const countryList = {
-    '': 'Select your country...',
-    AF: 'Afghanistan',
-    AL: 'Albania',
-    DZ: 'Algeria',
-    AS: 'American Samoa',
-    AD: 'Andorra',
-    AO: 'Angola',
-    AI: 'Anguilla',
-    AQ: 'Antarctica',
-    AG: 'Antigua and Barbuda',
-    AR: 'Argentina',
-    AM: 'Armenia',
-    AW: 'Aruba',
-    AU: 'Australia',
-    AT: 'Austria',
-    AZ: 'Azerbaijan',
-    BS: 'Bahamas (the)',
-    BH: 'Bahrain',
-    BD: 'Bangladesh',
-    BB: 'Barbados',
-    BY: 'Belarus',
-    BE: 'Belgium',
-    BZ: 'Belize',
-    BJ: 'Benin',
-    BM: 'Bermuda',
-    BT: 'Bhutan',
-    BO: 'Bolivia (Plurinational State of)',
-    BQ: 'Bonaire, Sint Eustatius and Saba',
-    BA: 'Bosnia and Herzegovina',
-    BW: 'Botswana',
-    BV: 'Bouvet Island',
-    BR: 'Brazil',
-    IO: 'British Indian Ocean Territory (the)',
-    BN: 'Brunei Darussalam',
-    BG: 'Bulgaria',
-    BF: 'Burkina Faso',
-    BI: 'Burundi',
-    CV: 'Cabo Verde',
-    KH: 'Cambodia',
-    CM: 'Cameroon',
-    CA: 'Canada',
-    KY: 'Cayman Islands (the)',
-    CF: 'Central African Republic (the)',
-    TD: 'Chad',
-    CL: 'Chile',
-    CN: 'China',
-    CX: 'Christmas Island',
-    CC: 'Cocos (Keeling) Islands (the)',
-    CO: 'Colombia',
-    KM: 'Comoros (the)',
-    CD: 'Congo (the Democratic Republic of the)',
-    CG: 'Congo (the)',
-    CK: 'Cook Islands (the)',
-    CR: 'Costa Rica',
-    HR: 'Croatia',
-    CU: 'Cuba',
-    CW: 'Curaçao',
-    CY: 'Cyprus',
-    CZ: 'Czechia',
-    CI: "Côte d'Ivoire",
-    DK: 'Denmark',
-    DJ: 'Djibouti',
-    DM: 'Dominica',
-    DO: 'Dominican Republic (the)',
-    EC: 'Ecuador',
-    EG: 'Egypt',
-    SV: 'El Salvador',
-    GQ: 'Equatorial Guinea',
-    ER: 'Eritrea',
-    EE: 'Estonia',
-    SZ: 'Eswatini',
-    ET: 'Ethiopia',
-    FK: 'Falkland Islands (the) [Malvinas]',
-    FO: 'Faroe Islands (the)',
-    FJ: 'Fiji',
-    FI: 'Finland',
-    FR: 'France',
-    GF: 'French Guiana',
-    PF: 'French Polynesia',
-    TF: 'French Southern Territories (the)',
-    GA: 'Gabon',
-    GM: 'Gambia (the)',
-    GE: 'Georgia',
-    DE: 'Germany',
-    GH: 'Ghana',
-    GI: 'Gibraltar',
-    GR: 'Greece',
-    GL: 'Greenland',
-    GD: 'Grenada',
-    GP: 'Guadeloupe',
-    GU: 'Guam',
-    GT: 'Guatemala',
-    GG: 'Guernsey',
-    GN: 'Guinea',
-    GW: 'Guinea-Bissau',
-    GY: 'Guyana',
-    HT: 'Haiti',
-    HM: 'Heard Island and McDonald Islands',
-    VA: 'Holy See (the)',
-    HN: 'Honduras',
-    HK: 'Hong Kong',
-    HU: 'Hungary',
-    IS: 'Iceland',
-    IN: 'India',
-    ID: 'Indonesia',
-    IR: 'Iran (Islamic Republic of)',
-    IQ: 'Iraq',
-    IE: 'Ireland',
-    IM: 'Isle of Man',
-    IL: 'Israel',
-    IT: 'Italy',
-    JM: 'Jamaica',
-    JP: 'Japan',
-    JE: 'Jersey',
-    JO: 'Jordan',
-    KZ: 'Kazakhstan',
-    KE: 'Kenya',
-    KI: 'Kiribati',
-    KP: "Korea (the Democratic People's Republic of)",
-    KR: 'Korea (the Republic of)',
-    KW: 'Kuwait',
-    KG: 'Kyrgyzstan',
-    LA: "Lao People's Democratic Republic (the)",
-    LV: 'Latvia',
-    LB: 'Lebanon',
-    LS: 'Lesotho',
-    LR: 'Liberia',
-    LY: 'Libya',
-    LI: 'Liechtenstein',
-    LT: 'Lithuania',
-    LU: 'Luxembourg',
-    MO: 'Macao',
-    MG: 'Madagascar',
-    MW: 'Malawi',
-    MY: 'Malaysia',
-    MV: 'Maldives',
-    ML: 'Mali',
-    MT: 'Malta',
-    MH: 'Marshall Islands (the)',
-    MQ: 'Martinique',
-    MR: 'Mauritania',
-    MU: 'Mauritius',
-    YT: 'Mayotte',
-    MX: 'Mexico',
-    FM: 'Micronesia (Federated States of)',
-    MD: 'Moldova (the Republic of)',
-    MC: 'Monaco',
-    MN: 'Mongolia',
-    ME: 'Montenegro',
-    MS: 'Montserrat',
-    MA: 'Morocco',
-    MZ: 'Mozambique',
-    MM: 'Myanmar',
-    NA: 'Namibia',
-    NR: 'Nauru',
-    NP: 'Nepal',
-    NL: 'Netherlands (the)',
-    NC: 'New Caledonia',
-    NZ: 'New Zealand',
-    NI: 'Nicaragua',
-    NE: 'Niger (the)',
-    NG: 'Nigeria',
-    NU: 'Niue',
-    NF: 'Norfolk Island',
-    MP: 'Northern Mariana Islands (the)',
-    NO: 'Norway',
-    OM: 'Oman',
-    PK: 'Pakistan',
-    PW: 'Palau',
-    PS: 'Palestine, State of',
-    PA: 'Panama',
-    PG: 'Papua New Guinea',
-    PY: 'Paraguay',
-    PE: 'Peru',
-    PH: 'Philippines (the)',
-    PN: 'Pitcairn',
-    PL: 'Poland',
-    PT: 'Portugal',
-    PR: 'Puerto Rico',
-    QA: 'Qatar',
-    MK: 'Republic of North Macedonia',
-    RO: 'Romania',
-    RU: 'Russian Federation (the)',
-    RW: 'Rwanda',
-    RE: 'Réunion',
-    BL: 'Saint Barthélemy',
-    SH: 'Saint Helena, Ascension and Tristan da Cunha',
-    KN: 'Saint Kitts and Nevis',
-    LC: 'Saint Lucia',
-    MF: 'Saint Martin (French part)',
-    PM: 'Saint Pierre and Miquelon',
-    VC: 'Saint Vincent and the Grenadines',
-    WS: 'Samoa',
-    SM: 'San Marino',
-    ST: 'Sao Tome and Principe',
-    SA: 'Saudi Arabia',
-    SN: 'Senegal',
-    RS: 'Serbia',
-    SC: 'Seychelles',
-    SL: 'Sierra Leone',
-    SG: 'Singapore',
-    SX: 'Sint Maarten (Dutch part)',
-    SK: 'Slovakia',
-    SI: 'Slovenia',
-    SB: 'Solomon Islands',
-    SO: 'Somalia',
-    ZA: 'South Africa',
-    GS: 'South Georgia and the South Sandwich Islands',
-    SS: 'South Sudan',
-    ES: 'Spain',
-    LK: 'Sri Lanka',
-    SD: 'Sudan (the)',
-    SR: 'Suriname',
-    SJ: 'Svalbard and Jan Mayen',
-    SE: 'Sweden',
-    CH: 'Switzerland',
-    SY: 'Syrian Arab Republic',
-    TW: 'Taiwan',
-    TJ: 'Tajikistan',
-    TZ: 'Tanzania, United Republic of',
-    TH: 'Thailand',
-    TL: 'Timor-Leste',
-    TG: 'Togo',
-    TK: 'Tokelau',
-    TO: 'Tonga',
-    TT: 'Trinidad and Tobago',
-    TN: 'Tunisia',
-    TR: 'Turkey',
-    TM: 'Turkmenistan',
-    TC: 'Turks and Caicos Islands (the)',
-    TV: 'Tuvalu',
-    UG: 'Uganda',
-    UA: 'Ukraine',
-    AE: 'United Arab Emirates (the)',
-    GB: 'United Kingdom of Great Britain and Northern Ireland (the)',
-    UM: 'United States Minor Outlying Islands (the)',
-    US: 'United States of America (the)',
-    UY: 'Uruguay',
-    UZ: 'Uzbekistan',
-    VU: 'Vanuatu',
-    VE: 'Venezuela (Bolivarian Republic of)',
-    VN: 'Viet Nam',
-    VG: 'Virgin Islands (British)',
-    VI: 'Virgin Islands (U.S.)',
-    WF: 'Wallis and Futuna',
-    EH: 'Western Sahara',
-    YE: 'Yemen',
-    ZM: 'Zambia',
-    ZW: 'Zimbabwe',
-    AX: 'Åland Islands',
-};
+const MAPBOX_TOKEN = 'pk.eyJ1Ijoiam9ubGVlb24iLCJhIjoiY2xhamxqcHF5MGFiNTNvcXkwdnU1Nnk3YiJ9.ODPvgRy0EYyIZ5Tmg7PDDw';
 
 function ShippingAddress() {
-    // console.log(Object.keys(countryList));
+    // Mapbox
+    const [viewport, setViewport] = useState({
+        latitude: 37.7577,
+        longitude: -122.4376,
+        zoom: 8,
+    });
+    const geocoderContainerRef = useRef();
+    const mapRef = useRef();
+    const handleViewportChange = useCallback((newViewport) => setViewport(newViewport), []);
 
+    // Handle ShippingAddress
     const navigate = useNavigate();
 
     const orderCreate = useSelector((state) => state.orderCreate);
@@ -280,10 +43,8 @@ function ShippingAddress() {
 
     const [fname, setfname] = useState(shippingAddress ? shippingAddress.firstName : '');
     const [lname, setlname] = useState(shippingAddress ? shippingAddress.lastName : '');
-    const [billing_address, setbilling_address] = useState(shippingAddress ? shippingAddress.address1 : '');
-    const [billing_address2, setbilling_address2] = useState(shippingAddress ? shippingAddress.address2 : '');
-    const [city, setcity] = useState(shippingAddress ? shippingAddress.city : '');
-    const [country, setCountry] = useState(shippingAddress ? shippingAddress.country : '');
+    const [billing_address, setbilling_address] = useState(shippingAddress ? shippingAddress.address : '');
+    const [houseNo, setHouseNo] = useState(shippingAddress ? shippingAddress.houseNo : '');
     const [zipcode, setzipcode] = useState(shippingAddress ? shippingAddress.postalCode : '');
     const [phone, setphone] = useState(shippingAddress ? shippingAddress.phone : '');
     const [email, setemail] = useState(
@@ -305,6 +66,10 @@ function ShippingAddress() {
             // cancelText: '取消',
             onOk() {
                 // console.log('OK');
+                if (!fname || !lname || !billing_address || !houseNo || !zipcode || !phone || !email) {
+                    showErrorMessage('Please Fill All Information!', 'topRight');
+                    return;
+                }
                 dispatch(
                     createOrder({
                         ...cart,
@@ -312,10 +77,8 @@ function ShippingAddress() {
                         shippingAddress: {
                             firstName: fname,
                             lastName: lname,
-                            address1: billing_address,
-                            address2: billing_address2,
-                            city: city,
-                            country: country,
+                            address: billing_address,
+                            houseNo: houseNo,
                             postalCode: zipcode,
                             phone: phone,
                             email: email,
@@ -335,14 +98,16 @@ function ShippingAddress() {
     const submitHandler = (e) => {
         e.preventDefault();
         //TODO: dispatch save shipping address action
+        console.log(fname, lname, billing_address, houseNo, zipcode, phone, email);
+        if (!fname || !lname || !billing_address || !houseNo || !zipcode || !phone || !email) {
+            return;
+        }
         dispatch(
             saveShippingAddress({
                 firstName: fname,
                 lastName: lname,
-                country,
-                address1: billing_address,
-                address2: billing_address2,
-                city,
+                address: billing_address,
+                houseNo: houseNo,
                 postalCode: zipcode,
                 phone,
                 email,
@@ -359,10 +124,8 @@ function ShippingAddress() {
                     shippingAddress: {
                         firstName: fname,
                         lastName: lname,
-                        address1: billing_address,
-                        address2: billing_address2,
-                        city: city,
-                        country: country,
+                        address: billing_address,
+                        houseNo: houseNo,
                         postalCode: zipcode,
                         phone: phone,
                         email: email,
@@ -388,6 +151,18 @@ function ShippingAddress() {
     cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
     const placeOrderHandler = () => {
         // TODO: dispatch place order action
+    };
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+        setbilling_address(geocoderContainerRef.current.children[0].childNodes[1].value);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
     };
 
     useEffect(() => {
@@ -433,32 +208,15 @@ function ShippingAddress() {
                                                 onChange={(e) => setlname(e.target.value)}
                                             ></input>
                                         </div>
-                                        <div className={cx('form-group')}>
-                                            <div className={cx('custom_select')}>
-                                                <select
-                                                    className={cx('form-control')}
-                                                    style={{ height: '50px' }}
-                                                    onChange={(e) => setCountry(e.target.value)}
-                                                    value={country}
-                                                >
-                                                    {Object.keys(countryList).map((countryKey, index) => {
-                                                        return (
-                                                            <option key={index} value={countryKey}>
-                                                                {countryList[countryKey]}{' '}
-                                                            </option>
-                                                        );
-                                                    })}
-                                                </select>
-                                            </div>
-                                        </div>
+
                                         <div className={cx('form-group')}>
                                             <input
                                                 type="text"
                                                 className={cx('form-control')}
                                                 name="billing_address"
-                                                placeholder="Address *"
-                                                value={billing_address}
-                                                onChange={(e) => setbilling_address(e.target.value)}
+                                                placeholder="House No. *"
+                                                value={houseNo}
+                                                onChange={(e) => setHouseNo(e.target.value)}
                                             ></input>
                                         </div>
                                         <div className={cx('form-group')}>
@@ -466,21 +224,51 @@ function ShippingAddress() {
                                                 type="text"
                                                 className={cx('form-control')}
                                                 name="billing_address2"
-                                                placeholder="Address line2"
-                                                value={billing_address2}
-                                                onChange={(e) => setbilling_address2(e.target.value)}
+                                                placeholder="Street/Town/City/Country "
+                                                value={billing_address}
+                                                onChange={(e) => setbilling_address(e.target.value)}
+                                                readonly="readonly"
+                                                onClick={showModal}
                                             ></input>
-                                        </div>
-                                        <div className={cx('form-group')}>
-                                            <input
-                                                className={cx('form-control')}
-                                                required=""
-                                                type="text"
-                                                name="city"
-                                                placeholder="City / Town *"
-                                                value={city}
-                                                onChange={(e) => setcity(e.target.value)}
-                                            ></input>
+                                            <Modal
+                                                title="Input your Address"
+                                                open={isModalOpen}
+                                                onOk={handleOk}
+                                                onCancel={handleCancel}
+                                                maskClosable={false}
+                                                width="90vw"
+                                                style={{ top: '20px' }}
+                                            >
+                                                <div style={{ height: '78vh' }}>
+                                                    <div
+                                                        ref={geocoderContainerRef}
+                                                        style={{ position: 'absolute', top: 20, left: 20, zIndex: 1 }}
+                                                    />
+                                                    <MapGL
+                                                        ref={mapRef}
+                                                        {...viewport}
+                                                        width="100%"
+                                                        height="100%"
+                                                        onViewportChange={handleViewportChange}
+                                                        mapboxApiAccessToken={MAPBOX_TOKEN}
+                                                    >
+                                                        <Geocoder
+                                                            mapRef={mapRef}
+                                                            containerRef={geocoderContainerRef}
+                                                            onViewportChange={handleViewportChange}
+                                                            mapboxApiAccessToken={MAPBOX_TOKEN}
+                                                            position="top-left"
+                                                        />
+                                                        {/* {isModalOpen &&
+                                                            typeof geocoderContainerRef.current !== 'undefined' &&
+                                                            console.log(
+                                                                'mapref',
+                                                                geocoderContainerRef.current.children[0].childNodes[1]
+                                                                    .value,
+                                                            )} */}
+                                                    </MapGL>
+                                                </div>
+                                            </Modal>
                                         </div>
                                         <div className={cx('form-group')}>
                                             <input
