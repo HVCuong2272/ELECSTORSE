@@ -10,8 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signin } from '~/redux/actions/userActions';
 import { USER_SIGNIN_FIRSTLOGIN, USER_SIGNIN_RESET } from '~/redux/constants/userConstants';
 import { GoogleLogin } from 'react-google-login';
-import { gapi } from "gapi-script";
-import axios from 'axios'
+import { gapi } from 'gapi-script';
+import axios from 'axios';
 import { successLoading } from '~/utils/loadingService';
 
 const cx = classNames.bind(styles);
@@ -21,8 +21,8 @@ const SigninScreen = () => {
     const { userInfo, loading, error } = userSignin;
 
     const [searchParams] = useSearchParams();
-    const redirectInUrl = searchParams.get("redirect");
-    const redirect = redirectInUrl ? redirectInUrl : "/";
+    const redirectInUrl = searchParams.get('redirect');
+    const redirect = redirectInUrl ? redirectInUrl : '/';
 
     const dispatch = useDispatch();
 
@@ -34,7 +34,7 @@ const SigninScreen = () => {
     }, [navigate, redirect, userInfo]);
 
     useEffect(() => {
-        dispatch({ type: USER_SIGNIN_RESET })
+        dispatch({ type: USER_SIGNIN_RESET });
         function start() {
             gapi.client.init({
                 clientId: '1069556497635-tcq16g1jl3uolk82hu2l34j8mtftg53o.apps.googleusercontent.com',
@@ -45,31 +45,30 @@ const SigninScreen = () => {
         gapi.load('client:auth2', start);
     }, []);
     useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
+        window.scrollTo(0, 0);
+    }, []);
     const submitHandler = (values) => {
         successLoading();
         // console.log('Received values of form: ', values);
-        dispatch(signin(values.email, values.password))
+        dispatch(signin(values.email, values.password));
     };
 
     const responseGoogle = async (response) => {
         // console.log(response);
         try {
             successLoading();
-            const res = await axios.post('/api/users/google_login', { tokenId: response.tokenId })
+            const res = await axios.post('/api/users/google_login', { tokenId: response.tokenId });
             // console.log(res);
-            localStorage.setItem('firstLogin', true)
+            localStorage.setItem('firstLogin', true);
             dispatch({ type: USER_SIGNIN_FIRSTLOGIN, payload: { isLogged: true } });
         } catch (err) {
             // err.response.data.msg &&
             //     setUser({ ...user, err: err.response.data.msg, success: '' })
         }
-    }
+    };
 
     return (
         <>
-
             {loading && (
                 <div style={{ display: 'flex' }}>
                     <div style={{ margin: '100px auto 0' }}>
@@ -125,12 +124,14 @@ const SigninScreen = () => {
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 Log in
                             </Button>
-                            <Link to="/forgot_password" className={cx('text__hover')}>Forgot your password?</Link>
+                            <Link to="/forgot_password" className={cx('text__hover')}>
+                                Forgot your password?
+                            </Link>
                         </Form.Item>
 
                         <div>Or Login With</div>
 
-                        <div className={cx("social")}>
+                        <div className={cx('social')}>
                             <GoogleLogin
                                 clientId="1069556497635-tcq16g1jl3uolk82hu2l34j8mtftg53o.apps.googleusercontent.com"
                                 buttonText="Login with google"
@@ -144,9 +145,13 @@ const SigninScreen = () => {
                                 fields="name,email,picture"
                                 callback={responseFacebook}
                             /> */}
-
                         </div>
-                        <p>New Customer? <Link to={`/register?redirect=${redirect}`} className={cx('text__hover')}>Register</Link></p>
+                        <p>
+                            New Customer?{' '}
+                            <Link to={`/register?redirect=${redirect}`} className={cx('text__hover')}>
+                                Register
+                            </Link>
+                        </p>
                     </Form>
                 </div>
             </div>

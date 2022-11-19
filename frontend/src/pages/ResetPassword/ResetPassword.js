@@ -12,27 +12,29 @@ import Axios from 'axios';
 const cx = classNames.bind(styles);
 
 const ResetPassword = () => {
-    const [error, setError] = useState('')
-    const [success, setSuccess] = useState('')
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
-    const { token } = useParams()
-
+    const { token } = useParams();
 
     const submitHandler = async (values) => {
         // console.log('Received values of form: ', values);
         try {
-            const res = await Axios.post('/api/users/reset', {
-                password: values.password,
-                confirmPassword: values.cf_password
-            }, {
-                headers: { Authorization: token }
-            })
+            const res = await Axios.post(
+                '/api/users/reset',
+                {
+                    password: values.password,
+                    confirmPassword: values.cf_password,
+                },
+                {
+                    headers: { Authorization: token },
+                },
+            );
             setError('');
             setSuccess(res.data.msg);
         } catch (err) {
             setSuccess('');
-            err.response.data.msg &&
-                setError(err.response.data.msg)
+            err.response.data.msg && setError(err.response.data.msg);
         }
     };
 
@@ -68,7 +70,7 @@ const ResetPassword = () => {
                                     required: true,
                                     message: 'Please input your Password!',
                                 },
-                                { min: 6, message: 'Password must be minimum 6 characters.' }
+                                { min: 6, message: 'Password must be minimum 6 characters.' },
                             ]}
                         >
                             <Input
@@ -84,7 +86,7 @@ const ResetPassword = () => {
                                     required: true,
                                     message: 'Please input your Confirm Password!',
                                 },
-                                { min: 6, message: 'Confirm Password must be minimum 6 characters.' }
+                                { min: 6, message: 'Confirm Password must be minimum 6 characters.' },
                             ]}
                         >
                             <Input

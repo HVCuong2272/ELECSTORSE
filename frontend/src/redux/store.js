@@ -3,21 +3,19 @@ import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import data from '~/data';
 import { cartReducer } from './reducers/cartReducers';
-import {
-    productDeatailsReducer,
-    productListReducer
-}
-    from './reducers/productReducers';
+import { productCreateReducer, productDeatailsReducer, productListReducer } from './reducers/productReducers';
 import { userDetailsReducer, userSigninReducer, userUpdateProfileReducer } from './reducers/userReducers';
 import tokenReducer from './reducers/tokenReducers';
-import { orderCreateReducer, orderDetailsReducer, orderMineListReducer, orderPayReducer } from './reducers/orderReducers';
+import {
+    orderCreateReducer,
+    orderDetailsReducer,
+    orderMineListReducer,
+    orderPayReducer,
+} from './reducers/orderReducers';
 
 const initialState = {
     cart: {
-
-        cartItems: localStorage.getItem('cartItems')
-            ? JSON.parse(localStorage.getItem('cartItems'))
-            : [],
+        cartItems: localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : [],
 
         shippingAddress: localStorage.getItem('shippingAddress')
             ? JSON.parse(localStorage.getItem('shippingAddress'))
@@ -25,8 +23,8 @@ const initialState = {
 
         paymentMethod: localStorage.getItem('cartSavePaymentMethod')
             ? JSON.parse(localStorage.getItem('cartSavePaymentMethod'))
-            : "Card",
-    }
+            : 'Card',
+    },
 };
 
 const reducer = combineReducers({
@@ -41,9 +39,10 @@ const reducer = combineReducers({
     orderMineList: orderMineListReducer,
     userDetails: userDetailsReducer,
     userUpdateProfile: userUpdateProfileReducer,
+    productCreate: productCreateReducer,
 });
 // const reducer = (state, action) => {
-//     console.log('reducer123');
+//     // console.log('reducer123');
 //     return { products: data.products };
 // };
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

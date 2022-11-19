@@ -12,7 +12,7 @@ import { signout } from '~/redux/actions/userActions';
 
 const cx = classNames.bind(styles);
 function SubHeader({ isHomePage }) {
-    console.log('init subheder');
+    // console.log('init subheder');
     const navigate = useNavigate();
     const cart = useSelector((state) => state.cart);
     const { cartItems } = cart;
@@ -55,7 +55,7 @@ function SubHeader({ isHomePage }) {
 
     const handleMenuClick = (e) => {
         message.info('Click on menu item.');
-        console.log('click', e);
+        // console.log('click', e);
     };
 
     const menu = (
@@ -118,7 +118,7 @@ function SubHeader({ isHomePage }) {
         if (key === '3') {
             dispatch(signout());
         } else if (key === '2') {
-            navigate('/orderhistory');
+            navigate('/productmanagement');
         } else if (key === '1') {
             navigate('/profile');
         }
@@ -131,10 +131,10 @@ function SubHeader({ isHomePage }) {
                     label: 'Profile',
                     key: '1',
                 },
-                // {
-                //     label: 'Order History',
-                //     key: '2',
-                // },
+                {
+                    label: 'Product Management',
+                    key: '2',
+                },
                 {
                     type: 'divider',
                 },

@@ -26,7 +26,7 @@ function ProductDetail(props) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const addToCartHandler = () => {
-        dispatch({type: CART_RESET_ITEM});
+        dispatch({ type: CART_RESET_ITEM });
         navigate(`/cart/${product._id}?qty=${qty}`);
     };
 
@@ -100,7 +100,7 @@ function ProductDetail(props) {
                     <div className={cx('product-detail__actions-selectQty')}>
                         <select value={qty} onChange={(e) => setQty(e.target.value)}>
                             {/* Nếu count in stock là 5 thì sẽ return từ 0->4 */}
-                            {/* {console.log([
+                            {/* {// console.log([
                                 ...Array(product.countInStock).keys(),
                               ])} */}
                             {[...Array(product.countInStock).keys()].map((x) => (

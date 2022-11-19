@@ -12,22 +12,20 @@ import Axios from 'axios';
 const cx = classNames.bind(styles);
 
 const ForgotPassword = () => {
-    const [error, setError] = useState('')
-    const [success, setSuccess] = useState('')
-
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     const submitHandler = async (values) => {
         // console.log('Received values of form: ', values);
         try {
             const res = await Axios.post('/api/users/forgot', {
                 email: values.email,
-            })
+            });
             setError('');
             setSuccess(res.data.msg);
         } catch (err) {
             setSuccess('');
-            err.response.data.msg &&
-                setError(err.response.data.msg)
+            err.response.data.msg && setError(err.response.data.msg);
         }
     };
 
@@ -65,7 +63,10 @@ const ForgotPassword = () => {
                                 },
                             ]}
                         >
-                            <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Enter Email" />
+                            <Input
+                                prefix={<MailOutlined className="site-form-item-icon" />}
+                                placeholder="Enter Email"
+                            />
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="submit" className="login-form-button">

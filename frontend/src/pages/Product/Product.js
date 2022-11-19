@@ -14,7 +14,7 @@ import { detailsProduct } from '~/redux/actions/productActions';
 const cx = classNames.bind(styles);
 
 function Product() {
-    console.log('init');
+    // console.log('init');
     const params = useParams();
     const { id: productId } = params;
     // console.log(productId);
@@ -24,19 +24,19 @@ function Product() {
     const { loading, error, product } = productDetails;
 
     useEffect(() => {
-        console.log('dis1');
+        // console.log('dis1');
         dispatch(detailsProduct(productId));
-        console.log('dis2');
+        // console.log('dis2');
     }, [dispatch, productId]);
     // if (!product) {
     //     return <div>Product Not Found</div>;
     // }
     useEffect(() => {
-        window.scrollTo(0, 0)
-      }, [])
+        window.scrollTo(0, 0);
+    }, []);
     return (
         <>
-            {console.log('bind-product')}
+            {/* {// console.log('bind-product')} */}
             {loading ? (
                 <div style={{ marginTop: '100px' }}>
                     <Spin size="large" />

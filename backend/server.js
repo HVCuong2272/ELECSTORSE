@@ -24,9 +24,7 @@ app.use("/uploads", express.static(path.join(__dirname1, "/uploads")));
 //   res.sendFile(path.join(__dirname, "/frontend/build/index.html"))
 // );
 
-mongoose.connect(
-  process.env.MONGODB_URL || "mongodb://localhost:27017/kltn"
-);
+mongoose.connect(process.env.MONGODB_URL || "mongodb://localhost:27017/kltn");
 
 // app.get("/api/products/:id", (req, res) => {
 //   const product = data.products.find((x) => x._id === req.params.id);
@@ -46,17 +44,15 @@ initRouter(app);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
-  const err = new Error('Not Found');
+  const err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
-
 
 //express-async-handler npm package (when expressAsyncHandler catch error will go to this middleware )
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
-
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

@@ -288,7 +288,7 @@ function Order() {
 
     //   const [paymentMethod, setPaymentMethod] = useState(paymentMethodInStore || "Card");
     //   const onChangePaymentMethod = (e) => {
-    //     console.log('radio checked', e.target.value);
+    //     // console.log('radio checked', e.target.value);
     //     setPaymentMethod(e.target.value);
     //     dispatch(savePaymentMethod(e.target.value));
     //   };
@@ -300,7 +300,7 @@ function Order() {
     const { id: orderId } = params;
     const orderDetails = useSelector((state) => state.orderDetails);
     const { order, loading, error } = orderDetails;
-    console.log('dsadasd', order);
+    // console.log('dsadasd', order);
     const orderPay = useSelector((state) => state.orderPay);
     const { loading: loadingPay, error: errorPay, success: successPay } = orderPay;
     const dispatch = useDispatch();
@@ -341,13 +341,13 @@ function Order() {
     }, [dispatch, orderId, userSignin, order, sdkReady, successPay]);
 
     const successPaymentHandler = (paymentResult) => {
-        console.log('paymentResult: ', paymentResult);
+        // console.log('paymentResult: ', paymentResult);
         dispatch(payOrder(order, paymentResult));
     };
     useEffect(() => {
         if (order && order.paymentMethod === 'VNPay') {
             const submitHandler = async (value) => {
-                console.log('Received values of form: ', order);
+                // console.log('Received values of form: ', order);
                 setLoadingVNPay(true);
                 try {
                     const res = await Axios.post(
@@ -379,7 +379,7 @@ function Order() {
                     if (order && !order.isPaid) {
                         window.location = res.data.forwardLink;
                         setSuccessVNPay(res.data.msg);
-                        console.log('SUCCESS PAY', res);
+                        // console.log("SUCCESS PAY", res);
                         setLoadingVNPay(false);
                     } else {
                         setErrorVNPay(true);

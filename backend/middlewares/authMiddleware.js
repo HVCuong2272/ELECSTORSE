@@ -26,7 +26,7 @@ const isAuth = (req, res, next) => {
       if (err) return res.status(400).json({ msg: "Invalid Authentication." });
 
       req.user = user;
-      //   console.log("chamcam", user);
+      //   // console.log("chamcam", user);
       next();
     });
   } catch (err) {

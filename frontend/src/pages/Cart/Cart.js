@@ -12,7 +12,7 @@ import { addToCart } from '~/redux/actions/cartActions';
 const cx = classNames.bind(styles);
 
 function Cart() {
-    console.log('init summary');
+    // console.log('init summary');
     const navigate = useNavigate();
     const params = useParams();
     const { id: productId } = params;
@@ -25,19 +25,19 @@ function Cart() {
 
     const dispatch = useDispatch();
     useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
+        window.scrollTo(0, 0);
+    }, []);
     useEffect(() => {
-        console.log('init effect summary');
+        // console.log('init effect summary');
         if (productId) {
-            console.log('init effect summary1');
+            // console.log('init effect summary1');
             dispatch(addToCart(productId, qty));
-            console.log('end effect summary');
+            // console.log('end effect summary');
         }
-        console.log('end effect summary1');
+        // console.log('end effect summary1');
     }, [dispatch, productId, qty]);
     return (
-        <div className={cx('grid wide')} style={{ marginTop: "calc(var(--header-height) * 2)" }}>
+        <div className={cx('grid wide')} style={{ marginTop: 'calc(var(--header-height) * 2)' }}>
             {cartItems.length === 0 ? (
                 <Alert
                     message="Your Cart is Empty"

@@ -8,7 +8,7 @@ const getAllProducts = expressAsyncHandler(async (req, res) => {
 });
 
 const createProductSeed = expressAsyncHandler(async (req, res) => {
-  console.log(data);
+  // console.log(data);
   // await User.remove({});
   // const seller = await User.findOne({ isSeller: true });
   // if (seller) {
@@ -40,7 +40,7 @@ const getProductById = expressAsyncHandler(async (req, res) => {
 
 const productElement = expressAsyncHandler(async (req, res) => {
   const product = new Product({
-    name: "sample name",
+    name: "sample name" + Date.now(),
     image1: "/assets/images/productImage/p6.jpg",
     image2: "/assets/images/productImage/p6.jpg",
     image3: "/assets/images/productImage/p6.jpg",

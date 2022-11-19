@@ -139,7 +139,7 @@ function ShippingAddress() {
 
     const [paymentMethod, setPaymentMethod] = useState(paymentMethodInStore || 'Card');
     const onChangePaymentMethod = (e) => {
-        console.log('radio checked', e.target.value);
+        // console.log('radio checked', e.target.value);
         setPaymentMethod(e.target.value);
         dispatch(savePaymentMethod(e.target.value));
     };
@@ -167,7 +167,7 @@ function ShippingAddress() {
 
     useEffect(() => {
         if (success) {
-            console.log('success', success);
+            // console.log('success', success);
             navigate(`/order/${order._id}`);
             dispatch({ type: ORDER_CREATE_RESET });
         }
@@ -361,7 +361,7 @@ function ShippingAddress() {
                                                 </tr>
                                                 <tr>
                                                     <th>Shipping Price</th>
-                                                    {/* {console.log(cart.shippingPrice)} */}
+                                                    {/* {// console.log(cart.shippingPrice)} */}
                                                     <td>
                                                         {cart.shippingPrice !== 0
                                                             ? `$${cart.shippingPrice.toFixed(2)}`

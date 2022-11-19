@@ -36,7 +36,7 @@ const CC = require("currency-converter-lt");
 
 const checkoutPaymentVNP = async (req, res) => {
   const userAgent = req.headers["user-agent"];
-  console.log("userAgent", userAgent);
+  // console.log("userAgent", userAgent);
 
   const params = Object.assign({}, req.body);
   // console.log("ASDF", req.body);
@@ -110,7 +110,7 @@ const checkoutPaymentVNP = async (req, res) => {
 
 const callbackPaymentVNP = (req, res) => {
   const gateway = req.params.gateway;
-  console.log("gateway", req.params.gateway);
+  // console.log("gateway", req.params.gateway);
   let asyncFunc = null;
   asyncFunc = callbackVNPay(req, res);
   if (asyncFunc) {
@@ -129,12 +129,13 @@ const callbackPaymentVNP = (req, res) => {
         //     billingStateProvince: res.locals.billingStateProvince,
         //     billingPostalCode: res.locals.billingPostalCode
         //   });
-        console.log("RESPONSE:", res.locals.isSucceed);
+        // console.log("RESPONSE:", res.locals.isSucceed);
 
         if (res.locals.isSucceed) {
-          res.redirect(`http://localhost:3000/order/${res.locals.orderId}`); return;
-        }
-        else res.redirect('http://localhost:3000/shipping'); return;
+          res.redirect(`http://localhost:3000/order/${res.locals.orderId}`);
+          return;
+        } else res.redirect("http://localhost:3000/shipping");
+        return;
       })
       .catch((err) => {
         res.send(err.message);

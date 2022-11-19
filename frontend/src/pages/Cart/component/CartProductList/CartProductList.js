@@ -9,7 +9,7 @@ import { addToCart, removeFromCart } from '~/redux/actions/cartActions';
 const cx = classNames.bind(styles);
 
 function CartProductList() {
-    console.log('init plist');
+    // console.log('init plist');
     const cart = useSelector((state) => state.cart);
     // const [qty, setQty] = useState(qtyReceive);
     const { cartItems, success } = cart;
@@ -101,7 +101,7 @@ function CartProductList() {
     ];
     return (
         <div className={cx('cart-product-list')}>
-            {console.log('bind plist')}
+            {/* {// console.log('bind plist')} */}
             <Table columns={columns} dataSource={data} pagination={false} />
         </div>
     );

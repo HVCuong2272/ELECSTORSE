@@ -1,5 +1,8 @@
 import Axios from 'axios';
 import {
+    PRODUCT_CREATE_FAIL,
+    PRODUCT_CREATE_REQUEST,
+    PRODUCT_CREATE_SUCCESS,
     PRODUCT_DETAILS_FAIL,
     PRODUCT_DETAILS_REQUEST,
     PRODUCT_DETAILS_SUCCESS,
@@ -9,44 +12,66 @@ import {
 } from '../constants/productConstants';
 
 export const listProducts = () => async (dispatch) => {
-    console.log('act1');
+    // console.log('act1');
     dispatch({
         type: PRODUCT_LIST_REQUEST,
     });
-    console.log('act2');
+    // console.log('act2');
     try {
-        console.log('act3');
+        // console.log('act3');
         const { data } = await Axios.get(`/api/products`);
         // console.log(data);
-        console.log('act4');
+        // console.log('act4');
         dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
-        console.log('act5');
+        // console.log('act5');
     } catch (error) {
-        console.log(error);
-        console.log('act6');
+        // console.log(error);
+        // console.log('act6');
         dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });
-        console.log('act7');
+        // console.log('act7');
     }
 };
 
 export const detailsProduct = (productId) => async (dispatch) => {
-    console.log('acc1');
+    // console.log('acc1');
     dispatch({ type: PRODUCT_DETAILS_REQUEST });
-    console.log('acc2');
+    // console.log('acc2');
     try {
-        console.log('acc3');
+        // console.log('acc3');
         const { data } = await Axios.get(`/api/products/${productId}`);
         // console.log(data);
-        console.log('acc4');
+        // console.log('acc4');
         dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data });
-        console.log('acc5');
+        // console.log('acc5');
     } catch (error) {
-        console.log(error); //(Axios error)
-        console.log('acc6');
+        // console.log(error); //(Axios error)
+        // console.log('acc6');
         dispatch({
             type: PRODUCT_DETAILS_FAIL,
             payload: error.response && error.response.data.message ? error.response.data.message : error.message,
         });
-        console.log('acc7');
+        // console.log('acc7');
+    }
+};
+
+export const createProduct = () => async (dispatch, getState) => {
+    dispatch({ type: PRODUCT_CREATE_REQUEST });
+    try {
+        const { token } = getState();
+        const { data } = await Axios.post(
+            `/api/products`,
+            {},
+            {
+                headers: {
+                    Authorization: `${token}`,
+                },
+            },
+        );
+        dispatch({ type: PRODUCT_CREATE_SUCCESS, payload: data.product });
+    } catch (error) {
+        dispatch({
+            type: PRODUCT_CREATE_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+        });
     }
 };
