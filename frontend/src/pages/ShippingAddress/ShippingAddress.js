@@ -6,7 +6,7 @@ import { Modal, Radio, Space } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { savePaymentMethod, saveShippingAddress } from '~/redux/actions/cartActions';
 import { Link, useNavigate } from 'react-router-dom';
-import { VisaIcon, MasterCardIcon, MomoIcon, PaypalIcon, VnPayIcon } from '~/components/Icons';
+import { VisaIcon, MasterCardIcon, MomoIcon, PaypalIcon, VnPayIcon, CODIcon } from '~/components/Icons';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { createOrder } from '~/redux/actions/orderActions';
 import { ORDER_CREATE_RESET } from '~/redux/constants/orderConstants';
@@ -615,18 +615,14 @@ function ShippingAddress() {
                                                         <Space direction="vertical">
                                                             <Radio value={'Card'}>
                                                                 <h3>
-                                                                    <span>
-                                                                        {' '}
-                                                                        <VisaIcon />
+                                                                    <span style={{ marginLeft: 10 }}>
+                                                                        <CODIcon />
                                                                     </span>
                                                                     <span style={{ marginLeft: 10 }}>
-                                                                        <MasterCardIcon />
-                                                                    </span>
-                                                                    <span style={{ marginLeft: 10 }}>
-                                                                        Visa or Master Card
+                                                                        Payment on Delivery
                                                                     </span>
                                                                 </h3>
-                                                                <p>We accepts major credit and debit cards.</p>
+                                                                <p>Paying when your package arrived.</p>
                                                             </Radio>
                                                             <Radio value={'VNPay'}>
                                                                 <h3>

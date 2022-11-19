@@ -9,7 +9,7 @@ import Home from '~/pages/Home';
 import Product from '~/pages/Product';
 import Register from '~/pages/Register';
 import SigninScreen from '~/pages/SignIn';
-import ActivationEmail from '~/pages/activationEmail'
+import ActivationEmail from '~/pages/activationEmail';
 import ForgetPassword from '~/pages/ForgetPassword';
 import ResetPassword from '~/pages/ResetPassword';
 import ShippingAddress from '~/pages/ShippingAddress';
@@ -17,7 +17,6 @@ import PrivateRoute from '~/components/PrivateRoute';
 import Order from '~/pages/Order';
 import OrderHistory from '~/pages/OrderHistory/OrderHistory';
 import UserProfile from '~/pages/UserProfile';
-
 
 // Public routes
 const publicRoutes = [

@@ -14,10 +14,10 @@ const cx = classNames.bind(styles);
 function SubHeader({ isHomePage }) {
     console.log('init subheder');
     const navigate = useNavigate();
-    const cart = useSelector(state => state.cart);
+    const cart = useSelector((state) => state.cart);
     const { cartItems } = cart;
-    const userSignin = useSelector(state => state.userSignin)
-    const { userInfo } = userSignin
+    const userSignin = useSelector((state) => state.userSignin);
+    const { userInfo } = userSignin;
     // console.log(userInfo);
 
     const dispatch = useDispatch();
@@ -85,12 +85,10 @@ function SubHeader({ isHomePage }) {
         // message.info(`Click on item ${key}`);
         if (key === '3') {
             dispatch(signout());
-        }
-        else if (key === '2'){
+        } else if (key === '2') {
             navigate('/orderhistory');
-        }
-        else if (key === '1'){
-            navigate('/profile')
+        } else if (key === '1') {
+            navigate('/profile');
         }
     };
     const menuProfile = (
@@ -105,6 +103,38 @@ function SubHeader({ isHomePage }) {
                     label: 'Order History',
                     key: '2',
                 },
+                {
+                    type: 'divider',
+                },
+                {
+                    label: 'Logout',
+                    key: '3',
+                },
+            ]}
+        />
+    );
+    const handleClickAdminMenuProfile = ({ key }) => {
+        // message.info(`Click on item ${key}`);
+        if (key === '3') {
+            dispatch(signout());
+        } else if (key === '2') {
+            navigate('/orderhistory');
+        } else if (key === '1') {
+            navigate('/profile');
+        }
+    };
+    const menuAdminProfile = (
+        <Menu
+            onClick={handleClickAdminMenuProfile}
+            items={[
+                {
+                    label: 'Profile',
+                    key: '1',
+                },
+                // {
+                //     label: 'Order History',
+                //     key: '2',
+                // },
                 {
                     type: 'divider',
                 },
@@ -147,15 +177,27 @@ function SubHeader({ isHomePage }) {
                     </div>
                     <SearchBox />
                     <div className={cx('sub-header__actions')}>
-                        <Link to="/cart" className={cx('sub-header__actions-cart')} onClick={() => { dispatch({ type: CART_RESET_ITEM }) }}>
+                        <Link
+                            to="/cart"
+                            className={cx('sub-header__actions-cart')}
+                            onClick={() => {
+                                dispatch({ type: CART_RESET_ITEM });
+                            }}
+                        >
                             <ShoppingCartOutlined />
-                            {cartItems.length > 0 && <span className={cx('sub-header__actions-cart-notify')}> {cartItems.length}</span>}
+                            {cartItems.length > 0 && (
+                                <span className={cx('sub-header__actions-cart-notify')}> {cartItems.length}</span>
+                            )}
                         </Link>
-                        {
-                            userInfo ? (
+                        {userInfo ? (
+                            userInfo.isAdmin === false ? (
                                 <div className={cx('sub-header__info-container')}>
                                     <Dropdown overlay={menuProfile} placement="bottomRight" arrow>
-                                        <a href="/" onClick={(e) => e.preventDefault()} className={cx('sub-header__info-user-name')}>
+                                        <a
+                                            href="/"
+                                            onClick={(e) => e.preventDefault()}
+                                            className={cx('sub-header__info-user-name')}
+                                        >
                                             <img
                                                 src={userInfo.avatar}
                                                 alt=""
@@ -166,11 +208,28 @@ function SubHeader({ isHomePage }) {
                                     </Dropdown>
                                 </div>
                             ) : (
-                                <Link to="/signin" className={cx('sub-header__actions-signin')}>
-                                    Sign In
-                                </Link>
+                                <div className={cx('sub-header__info-container')}>
+                                    <Dropdown overlay={menuAdminProfile} placement="bottomRight" arrow>
+                                        <a
+                                            href="/"
+                                            onClick={(e) => e.preventDefault()}
+                                            className={cx('sub-header__info-user-name')}
+                                        >
+                                            <img
+                                                src={userInfo.avatar}
+                                                alt=""
+                                                className={cx('sub-header__info-user-img')}
+                                            />
+                                            {userInfo.name}
+                                        </a>
+                                    </Dropdown>
+                                </div>
                             )
-                        }
+                        ) : (
+                            <Link to="/signin" className={cx('sub-header__actions-signin')}>
+                                Sign In
+                            </Link>
+                        )}
                     </div>
                 </div>
             </div>
