@@ -28,10 +28,58 @@ function ShippingAddress() {
         longitude: -122.4376,
         zoom: 8,
     });
+    const [sViewport, setSViewport] = useState({
+        latitude: 37.7577,
+        longitude: -122.4376,
+        zoom: 8,
+      });
     const geocoderContainerRef = useRef();
     const mapRef = useRef();
     const handleViewportChange = useCallback((newViewport) => setViewport(newViewport), []);
+    // console.log("List: ",viewport);
 
+    // Get distance between two place
+    function distance(lat1, lon1, lat2, lon2, unit) {
+        var radlat1 = Math.PI * lat1/180
+        var radlat2 = Math.PI * lat2/180
+        var theta = lon1-lon2
+        var radtheta = Math.PI * theta/180
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        dist = Math.acos(dist)
+        dist = dist * 180/Math.PI
+        dist = dist * 60 * 1.1515
+        if (unit==="K") { dist = dist * 1.609344 }
+        if (unit==="M") { dist = dist * 0.8684 }
+        return dist
+    }
+
+    // Calculate Price 
+    const calculatePrice = (distance) => {
+        var shippingPrice;
+        var bac1=0.015, bac2=0.03, bac3=0.045, bac4=0.06, bac5=0.075, bac6=0.09;
+        if(distance<0){
+          shippingPrice=0
+          }else if(distance<=100){
+           shippingPrice=distance*bac1;
+          //  <=100 99=> 99 *a 
+          }else if(distance<=200){
+           shippingPrice=100*bac1+((distance-100)*bac2);
+          //  <=200 (199) => 100*a + 99*b (101) => 100*a + 1*b
+          }else if(distance<=400){
+            shippingPrice=100*bac1+(100*bac2)+((distance-300)*bac3);
+          //  <=400 399 => 100*a +100*b + 199*c (201) => 100a + 100b + 1c
+          }else if(distance<=800){
+           shippingPrice=100*bac1+(100*bac2)+(200*bac3)+((distance-400)*bac4);
+          //  <=800 799 => 100a + 100b + 200c + 299d
+          }else if(distance<=1000){
+           shippingPrice=100*bac1+(100*bac2)+(200*bac3)+(400*bac4)+((distance-800)*bac5);
+          //  <=1000 999 => 100a + 100b + 200c + 400e + 199f
+          }else if(distance>1000){
+           shippingPrice=100*bac1+(100*bac2)+(200*bac3)+(400*bac4)+(200*bac5)+((distance-1000)*bac6);
+          //  >1000 1001 >= 100a + 200a + 200c + 300e + 200f + 1h
+          }
+          return shippingPrice;
+      }
     // Handle ShippingAddress
     const navigate = useNavigate();
 
@@ -144,9 +192,10 @@ function ShippingAddress() {
         dispatch(savePaymentMethod(e.target.value));
     };
 
-    const toPrice = (num) => Number(num.toFixed(2)); // 5.123 => "5.12" => 5.12
+    const toPrice = (num) => Number(num.toFixed(0)); // 5.123 => "5.12" => 5.12
     cart.itemsPrice = toPrice(cart.cartItems.reduce((a, c) => a + c.qty * c.price, 0));
-    cart.shippingPrice = cart.itemsPrice > 100 ? toPrice(0) : toPrice(10);
+    // cart.shippingPrice = cart.itemsPrice > 100 ? toPrice(0) : toPrice(10);
+    cart.shippingPrice = toPrice(calculatePrice(distance(sViewport.latitude,sViewport.longitude,viewport.latitude,viewport.longitude,'K')));
     cart.taxPrice = toPrice(0.15 * cart.itemsPrice);
     cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
     const placeOrderHandler = () => {
@@ -160,6 +209,9 @@ function ShippingAddress() {
     const handleOk = () => {
         setIsModalOpen(false);
         setbilling_address(geocoderContainerRef.current.children[0].childNodes[1].value);
+        // console.log('Get: ',{...viewport});
+        // console.log('Distance: ',distance(sViewport.latitude,sViewport.longitude,viewport.latitude,viewport.longitude,'K'))
+        // console.log('Price: ',calculatePrice(distance(sViewport.latitude,sViewport.longitude,viewport.latitude,viewport.longitude,'K')))
     };
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -361,11 +413,11 @@ function ShippingAddress() {
                                                 </tr>
                                                 <tr>
                                                     <th>Shipping Price</th>
-                                                    {/* {// console.log(cart.shippingPrice)} */}
-                                                    <td>
+                                                    {/* {console.log(cart.shippingPrice)} */}
+                                                    <td style={{color: 'red'}}>
                                                         {cart.shippingPrice !== 0
                                                             ? `$${cart.shippingPrice.toFixed(2)}`
-                                                            : 'Free Ship'}
+                                                            : '_ _ _'}
                                                     </td>
                                                 </tr>
                                                 <tr>
