@@ -3,7 +3,12 @@ import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import data from '~/data';
 import { cartReducer } from './reducers/cartReducers';
-import { productCreateReducer, productDeatailsReducer, productListReducer } from './reducers/productReducers';
+import {
+    productCreateReducer,
+    productDetailsReducer,
+    productListReducer,
+    productUpdateReducer,
+} from './reducers/productReducers';
 import { userDetailsReducer, userSigninReducer, userUpdateProfileReducer } from './reducers/userReducers';
 import tokenReducer from './reducers/tokenReducers';
 import {
@@ -29,7 +34,7 @@ const initialState = {
 
 const reducer = combineReducers({
     productList: productListReducer,
-    productDetails: productDeatailsReducer,
+    productDetails: productDetailsReducer,
     cart: cartReducer,
     userSignin: userSigninReducer,
     token: tokenReducer,
@@ -40,6 +45,7 @@ const reducer = combineReducers({
     userDetails: userDetailsReducer,
     userUpdateProfile: userUpdateProfileReducer,
     productCreate: productCreateReducer,
+    productUpdate: productUpdateReducer,
 });
 // const reducer = (state, action) => {
 //     // console.log('reducer123');

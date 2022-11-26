@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { showSuccessMessage } from '~/utils/notifyService';
 import {
     PRODUCT_CREATE_FAIL,
     PRODUCT_CREATE_REQUEST,
@@ -9,6 +10,9 @@ import {
     PRODUCT_LIST_FAIL,
     PRODUCT_LIST_REQUEST,
     PRODUCT_LIST_SUCCESS,
+    PRODUCT_UPDATE_FAIL,
+    PRODUCT_UPDATE_REQUEST,
+    PRODUCT_UPDATE_SUCCESS,
 } from '../constants/productConstants';
 
 export const listProducts = () => async (dispatch) => {
@@ -71,6 +75,24 @@ export const createProduct = () => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: PRODUCT_CREATE_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+        });
+    }
+};
+export const updateProduct = (product) => async (dispatch, getState) => {
+    dispatch({ type: PRODUCT_UPDATE_REQUEST, payload: product });
+    try {
+        const { token } = getState();
+        const { data } = await Axios.put(`/api/products/${product._id}`, product, {
+            headers: {
+                Authorization: `${token}`,
+            },
+        });
+        showSuccessMessage('Product Updated Successfully', 'topRight');
+        dispatch({ type: PRODUCT_UPDATE_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({
+            type: PRODUCT_UPDATE_FAIL,
             payload: error.response && error.response.data.message ? error.response.data.message : error.message,
         });
     }

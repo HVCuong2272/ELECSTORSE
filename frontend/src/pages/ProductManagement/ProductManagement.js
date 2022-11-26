@@ -76,13 +76,28 @@ export default function ProductManagement() {
                             </thead>
                             <tbody>
                                 {products.map((product) => (
-                                    <tr key={Product._id}>
+                                    <tr key={product._id}>
                                         <td>{product._id}</td>
                                         <td>{product.name}</td>
                                         <td>{product.price}</td>
                                         <td>{product.category}</td>
                                         <td>{product.brand}</td>
-                                        <td>{product.actions}</td>
+                                        <td>
+                                            <button
+                                                type="button"
+                                                className="small"
+                                                onClick={() => navigate(`/product/${product._id}/edit`)}
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="small"
+                                                onClick={() => deleteHandler(product)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

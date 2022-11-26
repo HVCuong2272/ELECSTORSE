@@ -12,6 +12,7 @@ const publicRoutes = {
 const privateRoutes = {
     shipping: '/shipping',
     orderWId: '/order/:id',
+    productEditWId: '/product/:id/edit',
     orderHistory: '/orderhistory',
     userProfile: '/profile',
     productManagement: '/productmanagement',

@@ -14,7 +14,7 @@ const Product = () => {
     const dispatch = useDispatch();
     const productList = useSelector((state) => state.productList);
     const { loading, error, products } = productList;
-    console.log(loading);
+    // console.log(loading);
 
     useEffect(() => {
         console.log('ef1');
@@ -99,9 +99,13 @@ const Product = () => {
                     ) : (
                         <>
                             <section>
-                                {products.map((product) => (
-                                    <ProductItem key={product._id} product={product}></ProductItem>
-                                ))}
+                                {products
+                                    .slice(-9)
+                                    .reverse()
+                                    .map((product) => {
+                                        // console.log('wwww', product);
+                                        return <ProductItem key={product._id} product={product}></ProductItem>;
+                                    })}
                             </section>
                             <Link to="/" className={cx('view-more-btn')}>
                                 View More

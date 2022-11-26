@@ -19,6 +19,8 @@ import OrderHistory from '~/pages/OrderHistory/OrderHistory';
 import UserProfile from '~/pages/UserProfile';
 import { createProduct } from '~/redux/actions/productActions';
 import ProductManagement from '~/pages/ProductManagement';
+import ProductEdit from '~/pages/ProductEdit';
+import AdminRoute from '~/components/AdminRoute';
 
 // Public routes
 const publicRoutes = [
@@ -43,7 +45,8 @@ const privateRoutes = [
     { path: config.privateRoutes.orderWId, component: Order, isPrivate: PrivateRoute },
     { path: config.privateRoutes.orderHistory, component: OrderHistory, isPrivate: PrivateRoute },
     { path: config.privateRoutes.userProfile, component: UserProfile, isPrivate: PrivateRoute },
-    { path: config.privateRoutes.productManagement, component: ProductManagement, isPrivate: PrivateRoute },
+    { path: config.privateRoutes.productManagement, component: ProductManagement, isAdminPrivate: AdminRoute },
+    { path: config.privateRoutes.productEditWId, component: ProductEdit, isPrivate: PrivateRoute },
 ];
 
 export { publicRoutes, privateRoutes };
