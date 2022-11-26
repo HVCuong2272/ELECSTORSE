@@ -71,6 +71,19 @@ const updateOrderByID = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const deliverOrder = expressAsyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+
+    const updatedOrder = await order.save();
+    res.send({ message: "Order Delivered", order: updatedOrder });
+  } else {
+    res.status(404).send({ message: "Order Not Found" });
+  }
+});
+
 const getOrderHistory = expressAsyncHandler(async (req, res) => {
   const orders = await Order.find({
     $or: [
@@ -103,4 +116,5 @@ module.exports = {
   getOrderHistory,
   getOrderList,
   deleteOrder,
+  deliverOrder,
 };

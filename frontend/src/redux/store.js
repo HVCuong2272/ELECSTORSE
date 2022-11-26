@@ -15,6 +15,7 @@ import tokenReducer from './reducers/tokenReducers';
 import {
     orderCreateReducer,
     orderDeleteReducer,
+    orderDeliverReducer,
     orderDetailsReducer,
     orderListReducer,
     orderMineListReducer,
@@ -52,6 +53,7 @@ const reducer = combineReducers({
     productDelete: productDeleteReducer,
     orderList: orderListReducer,
     orderDelete: orderDeleteReducer,
+    orderDeliver: orderDeliverReducer,
 });
 // const reducer = (state, action) => {
 //     // console.log('reducer123');

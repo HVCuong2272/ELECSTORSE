@@ -22,4 +22,11 @@ orderRouter.delete(
 );
 
 orderRouter.put("/:id/pay", authMiddle.isAuth, orderController.updateOrderByID);
+
+orderRouter.put(
+  "/:id/deliver",
+  authMiddle.isAuth,
+  orderController.deliverOrder
+);
+
 module.exports = orderRouter;
