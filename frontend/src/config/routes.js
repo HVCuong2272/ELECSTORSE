@@ -16,6 +16,7 @@ const privateRoutes = {
     orderHistory: '/orderhistory',
     userProfile: '/profile',
     productManagement: '/productmanagement',
+    orderList: '/orderlist',
 };
 
 export { publicRoutes, privateRoutes };

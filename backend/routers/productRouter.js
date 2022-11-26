@@ -19,4 +19,10 @@ productRouter.put(
   productController.editProduct
 );
 
+productRouter.delete(
+  "/:id",
+  [authMiddle.isAuth, authMiddle.isAdmin],
+  productController.deleteProduct
+);
+
 module.exports = productRouter;

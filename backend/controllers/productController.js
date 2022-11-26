@@ -76,10 +76,21 @@ const editProduct = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const deleteProduct = expressAsyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  if (product) {
+    const deleteProduct = await product.remove();
+    res.send({ message: "Product Deleted", product: deleteProduct });
+  } else {
+    res.status(404).send({ message: "Product Not Found" });
+  }
+});
+
 module.exports = {
   createProductSeed,
   getAllProducts,
   getProductById,
   productElement,
   editProduct,
+  deleteProduct,
 };

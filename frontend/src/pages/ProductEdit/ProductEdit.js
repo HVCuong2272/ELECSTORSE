@@ -54,7 +54,6 @@ export default function ProductEdit() {
             setBrand(product.brand);
             setDescription(product.description);
         }
-        // }, [product, dispatch, productId, successUpdate, navigate]);
     }, [product, dispatch, productId, successUpdate, navigate]);
 
     const uploadFileHandler = (e, imgNo) => {

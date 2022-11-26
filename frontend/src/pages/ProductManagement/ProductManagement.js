@@ -1,10 +1,10 @@
-import { createProduct, listProducts } from '~/redux/actions/productActions';
+import { createProduct, deleteProduct, listProducts } from '~/redux/actions/productActions';
 import { Alert, Radio, Space, Spin } from 'antd';
 import { useEffect } from 'react';
 import Product from '../Product/Product';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { PRODUCT_CREATE_RESET } from '~/redux/constants/productConstants';
+import { PRODUCT_CREATE_RESET, PRODUCT_DELETE_RESET } from '~/redux/constants/productConstants';
 import styles from './ProductManagement.module.scss';
 import classNames from 'classnames/bind';
 
@@ -20,6 +20,9 @@ export default function ProductManagement() {
         success: successCreate,
         product: createdProduct,
     } = productCreate;
+
+    const productDelete = useSelector((state) => state.productDelete);
+    const { loading: loadingDelete, success: successDelete, error: errorDelete } = productDelete;
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -29,11 +32,15 @@ export default function ProductManagement() {
             navigate(`/product/${createdProduct._id}/edit`);
         } else if (errorCreate) {
             dispatch({ type: PRODUCT_CREATE_RESET });
+        } else if (successDelete) {
+            dispatch({ type: PRODUCT_DELETE_RESET });
         }
         dispatch(listProducts());
-    }, [createdProduct, dispatch, navigate, successCreate]);
-    const deleteHandler = () => {
-        //TODO: dispatch delete action
+    }, [createdProduct, dispatch, navigate, successCreate, successDelete]);
+    const deleteHandler = (product) => {
+        if (window.confirm('Are you sure to delete?')) {
+            dispatch(deleteProduct(product._id));
+        }
     };
     const createHandler = () => {
         dispatch(createProduct());
@@ -47,6 +54,16 @@ export default function ProductManagement() {
                 </button>
             </div>
             <div className={cx('row')}>
+                {loadingDelete && <Spin size="large" />}
+                {errorDelete && (
+                    <Alert
+                        message="Error"
+                        style={{ width: '100%', margin: '0 30px 30px' }}
+                        description={errorDelete}
+                        type="error"
+                        showIcon
+                    />
+                )}
                 {loadingCreate && <Spin size="large" />}
                 {errorCreate && (
                     <Alert
@@ -84,15 +101,15 @@ export default function ProductManagement() {
                                         <td>{product.brand}</td>
                                         <td>
                                             <button
-                                                type="button"
-                                                className="small"
+                                                className={cx('btn', 'btn-fill-out', 'btn-block')}
+                                                style={{ width: '100%', height: '50%' }}
                                                 onClick={() => navigate(`/product/${product._id}/edit`)}
                                             >
                                                 Edit
                                             </button>
                                             <button
-                                                type="button"
-                                                className="small"
+                                                className={cx('btn', 'btn-fill-out', 'btn-block')}
+                                                style={{ width: '100%', height: '50%' }}
                                                 onClick={() => deleteHandler(product)}
                                             >
                                                 Delete

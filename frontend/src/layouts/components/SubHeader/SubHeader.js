@@ -124,12 +124,14 @@ function SubHeader({ isHomePage }) {
     );
     const handleClickAdminMenuProfile = ({ key }) => {
         // message.info(`Click on item ${key}`);
-        if (key === '3') {
+        if (key === '4') {
             dispatch(signout());
-        } else if (key === '2') {
-            navigate('/productmanagement');
         } else if (key === '1') {
             navigate('/profile');
+        } else if (key === '2') {
+            navigate('/productmanagement');
+        } else if (key === '3') {
+            navigate('/orderlist');
         }
     };
     const menuAdminProfile = (
@@ -145,11 +147,30 @@ function SubHeader({ isHomePage }) {
                     key: '2',
                 },
                 {
+                    label: 'Order Management',
+                    key: '3',
+                },
+                // {
+                //     key: '5',
+                //     label: 'disabled sub menu',
+                //     disabled: true,
+                //     children: [
+                //         {
+                //             key: '5-1',
+                //             label: '5d menu item',
+                //         },
+                //         {
+                //             key: '5-2',
+                //             label: '6th menu item',
+                //         },
+                //     ],
+                // },
+                {
                     type: 'divider',
                 },
                 {
                     label: 'Logout',
-                    key: '3',
+                    key: '4',
                 },
             ]}
         />
