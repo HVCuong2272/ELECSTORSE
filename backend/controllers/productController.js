@@ -40,7 +40,7 @@ const getProductById = expressAsyncHandler(async (req, res) => {
 
 const productElement = expressAsyncHandler(async (req, res) => {
   const product = new Product({
-    name: "sample name" + Date.now(),
+    name: "sample name " + Date.now(),
     image1: "/assets/images/productImage/p6.jpg",
     image2: "/assets/images/productImage/p6.jpg",
     image3: "/assets/images/productImage/p6.jpg",
@@ -56,9 +56,30 @@ const productElement = expressAsyncHandler(async (req, res) => {
   res.send({ message: "Product Created", product: createProduct });
 });
 
+const editProduct = expressAsyncHandler(async (req, res) => {
+  const productId = req.params.id;
+  const product = await Product.findById(productId);
+  if (product) {
+    product.name = req.body.name;
+    product.price = req.body.price;
+    product.image1 = req.body.image1;
+    product.image2 = req.body.image2;
+    product.image3 = req.body.image3;
+    product.category = req.body.category;
+    product.brand = req.body.brand;
+    product.countInStock = req.body.countInStock;
+    product.description = req.body.description;
+    const updatedProduct = await product.save();
+    res.send({ message: "Product Updated", product: updatedProduct });
+  } else {
+    res.status(404).send({ message: "Product not Found" });
+  }
+});
+
 module.exports = {
   createProductSeed,
   getAllProducts,
   getProductById,
   productElement,
+  editProduct,
 };

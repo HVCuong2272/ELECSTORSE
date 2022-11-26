@@ -4,13 +4,19 @@ const productController = require("../controllers/productController");
 const authMiddle = require("../middlewares/authMiddleware");
 
 productRouter.get("/", productController.getAllProducts);
-productRouter.get("/seed", productController.createProductSeed);
-productRouter.get("/:id", productController.getProductById);
-
 productRouter.post(
   "/",
   [authMiddle.isAuth, authMiddle.isAdmin],
   productController.productElement
+);
+
+productRouter.get("/seed", productController.createProductSeed);
+productRouter.get("/:id", productController.getProductById);
+
+productRouter.put(
+  "/:id",
+  [authMiddle.isAuth, authMiddle.isAdmin],
+  productController.editProduct
 );
 
 module.exports = productRouter;

@@ -24,7 +24,7 @@ function SubHeader({ isHomePage }) {
     const SubHeaderElement = useRef();
     useEffect(() => {
         const handleScroll = () => {
-            // console.log(window.scrollY);
+            // console.log('ssss', window.scrollY);
             // if(window.innerWidth)
             if (window.scrollY >= 56) {
                 Object.assign(SubHeaderElement.current.style, {
@@ -43,6 +43,15 @@ function SubHeader({ isHomePage }) {
         };
         if (isHomePage) {
             window.addEventListener('scroll', handleScroll);
+        } else {
+            Object.assign(SubHeaderElement.current.style, {
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                backgroundColor: 'white',
+                zIndex: 2,
+            });
         }
 
         return () => {

@@ -1,9 +1,15 @@
+import PropTypes from 'prop-types';
+import classNames from 'classnames/bind';
+import styles from './ProductEdit.module.scss';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Alert, Radio, Space, Spin } from 'antd';
-import { detailsProduct } from '~/redux/actions/productActions';
+
+import { detailsProduct, updateProduct } from '~/redux/actions/productActions';
+import { PRODUCT_UPDATE_RESET } from '~/redux/constants/productConstants';
+const cx = classNames.bind(styles);
 
 export default function ProductEdit() {
     const navigate = useNavigate();
@@ -14,82 +20,120 @@ export default function ProductEdit() {
 
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
-    const [image, setImage] = useState('');
+    const [image1, setImage1] = useState('');
+    const [imageFile1, setImageFile1] = useState('');
+    const [image2, setImage2] = useState('');
+    const [imageFile2, setImageFile2] = useState('');
+    const [image3, setImage3] = useState('');
+    const [imageFile3, setImageFile3] = useState('');
     const [category, setCategory] = useState('');
     const [countInStock, setCountInStock] = useState('');
     const [brand, setBrand] = useState('');
     const [description, setDescription] = useState('');
 
-    // const productUpdate = useSelector((state) => state.productUpdate);
-    // const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = productUpdate;
+    const productUpdate = useSelector((state) => state.productUpdate);
+    const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = productUpdate;
 
+    const token = useSelector((state) => state.token);
     const dispatch = useDispatch();
     useEffect(() => {
-        // if (successUpdate) {
-        //     navigate('/productlist');
-        // }
-        if (product && Object.keys(product).length === 0 && Object.getPrototypeOf(product) === Object.prototype) {
-            // dispatch({ type: PRODUCT_UPDATE_RESET });
+        if (successUpdate) {
+            navigate('/productmanagement');
+        }
+        if (!product || product._id !== productId || successUpdate) {
+            dispatch({ type: PRODUCT_UPDATE_RESET });
             dispatch(detailsProduct(productId));
-        } else if (loading === false && typeof error === 'undefined') {
+        } else {
             setName(product.name);
             setPrice(product.price);
-            setImage(product.image);
+            setImage1(product.image1);
+            setImage2(product.image2);
+            setImage3(product.image3);
             setCategory(product.category);
             setCountInStock(product.countInStock);
             setBrand(product.brand);
             setDescription(product.description);
         }
         // }, [product, dispatch, productId, successUpdate, navigate]);
-    }, [product, dispatch, productId]);
-    const submitHandler = (e) => {
-        e.preventDefault();
-        // TODO: dispatch update product
-        // dispatch(
-        //     updateProduct({
-        //         _id: productId,
-        //         name,
-        //         price,
-        //         image,
-        //         category,
-        //         brand,
-        //         countInStock,
-        //         description,
-        //     }),
-        // );
-    };
-    const [loadingUpload, setLoadingUpload] = useState(false);
-    const [errorUpload, setErrorUpload] = useState('');
+    }, [product, dispatch, productId, successUpdate, navigate]);
 
-    const userSignin = useSelector((state) => state.userSignin);
-    const { userInfo } = userSignin;
-    const uploadFileHandler = async (e) => {
+    const uploadFileHandler = (e, imgNo) => {
         const file = e.target.files[0];
-        const bodyFormData = new FormData();
-        bodyFormData.append('image', file);
-        setLoadingUpload(true);
-        try {
-            const { data } = await Axios.post('/api/uploads', bodyFormData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${userInfo.token}`,
-                },
-            });
-            setImage(data);
-            setLoadingUpload(false);
-        } catch (error) {
-            setErrorUpload(error.message);
-            setLoadingUpload(false);
+        file.preview = URL.createObjectURL(file);
+        if (imgNo === 1) {
+            setImage1(file.preview);
+            setImageFile1(file);
+        } else if (imgNo === 2) {
+            setImage2(file.preview);
+            setImageFile2(file);
+        } else {
+            setImage3(file.preview);
+            setImageFile3(file);
         }
     };
 
+    const handleUploadFile = async (imgFile) => {
+        const bodyFormData = new FormData();
+        bodyFormData.append('image', imgFile);
+        try {
+            // const { data } = await Axios.post("/api/uploads/s3", // upload to upload folder s3
+            const { data } = await Axios.post('/api/uploads', bodyFormData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `${token}`,
+                },
+            });
+            return data;
+        } catch (error) {
+            //   setErrorUpload(error.message);
+            //   setLoadingUpload(false);
+        }
+    };
+
+    // Function to check if value is file or not
+    const isFile = (input) => 'File' in window && input instanceof File;
+
+    // Handle Update Product Click
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        let img1 = image1;
+        let img2 = image2;
+        let img3 = image3;
+        if (isFile(imageFile1)) {
+            const img1URL = await handleUploadFile(imageFile1);
+            img1 = `http://localhost:5000${img1URL}`;
+        }
+        if (isFile(imageFile2)) {
+            const img2URL = await handleUploadFile(imageFile2);
+            img2 = `http://localhost:5000${img2URL}`;
+        }
+        if (isFile(imageFile3)) {
+            const img3URL = await handleUploadFile(imageFile3);
+            img3 = `http://localhost:5000${img3URL}`;
+        }
+        dispatch(
+            updateProduct({
+                _id: productId,
+                name,
+                price,
+                image1: img1,
+                image2: img2,
+                image3: img3,
+                category,
+                brand,
+                countInStock,
+                description,
+            }),
+        );
+    };
+
     return (
-        <div>
-            <form className="form" onSubmit={submitHandler}>
+        <div className={cx('wrapper')}>
+            <form className={cx('form')} onSubmit={submitHandler}>
                 <div>
                     <h1>Edit Product {productId}</h1>
                 </div>
-                {/* {loadingUpdate && <Spin size="large" />}
+                {loadingUpdate && <Spin size="large" />}
                 {errorUpdate && (
                     <Alert
                         message="Error"
@@ -98,7 +142,7 @@ export default function ProductEdit() {
                         type="error"
                         showIcon
                     />
-                )} */}
+                )}
                 {loading ? (
                     <Spin size="large" />
                 ) : error ? (
@@ -125,33 +169,62 @@ export default function ProductEdit() {
                                 onChange={(e) => setPrice(e.target.value)}
                             ></input>
                         </div>
-                        <div>
-                            <label htmlFor="image">Image</label>
+                        <div className={cx('upload-file-img-container')}>
+                            <label htmlFor="image">Product Image 1</label>
                             <input
                                 id="image"
                                 type="text"
-                                placeholder="Enter image"
-                                value={image}
-                                onChange={(e) => setImage(e.target.value)}
+                                placeholder="Choose image file or input url"
+                                value={image1}
+                                onChange={(e) => setImage1(e.target.value)}
                             ></input>
+                            <input
+                                type="file"
+                                id="img1"
+                                style={{ display: 'none' }}
+                                onChange={(e) => uploadFileHandler(e, 1)}
+                            />
+                            <label htmlFor="img1" className={cx('upload-file-img-btn')}>
+                                Choose File
+                            </label>
                         </div>
-                        <div>
-                            <label htmlFor="imageFile">Image File</label>
-                            <input type="file" id="imageFile" label="Choose Image" onChange={uploadFileHandler}></input>
-                            {/* {loadingUpload && <LoadingBox></LoadingBox>}
-                {errorUpload && (
-                  <MessageBox variant="danger">{errorUpload}</MessageBox>
-                )} */}
-                            {loadingUpload && <Spin size="large" />}
-                            {errorUpload && (
-                                <Alert
-                                    message="Error"
-                                    style={{ width: '100%', margin: '0 30px 30px' }}
-                                    description={errorUpload}
-                                    type="error"
-                                    showIcon
-                                />
-                            )}
+                        <div className={cx('upload-file-img-container')}>
+                            <label htmlFor="image">Product Image 2</label>
+                            <input
+                                id="image"
+                                type="text"
+                                placeholder="Choose image file or input url"
+                                value={image2}
+                                onChange={(e) => setImage2(e.target.value)}
+                            ></input>
+                            <input
+                                type="file"
+                                id="img2"
+                                style={{ display: 'none' }}
+                                onChange={(e) => uploadFileHandler(e, 2)}
+                            />
+                            <label htmlFor="img2" className={cx('upload-file-img-btn')}>
+                                Choose File
+                            </label>
+                        </div>
+                        <div className={cx('upload-file-img-container')}>
+                            <label htmlFor="image">Product Image 3</label>
+                            <input
+                                id="image"
+                                type="text"
+                                placeholder="Choose image file or input url"
+                                value={image3}
+                                onChange={(e) => setImage3(e.target.value)}
+                            ></input>
+                            <input
+                                type="file"
+                                id="img3"
+                                style={{ display: 'none' }}
+                                onChange={(e) => uploadFileHandler(e, 3)}
+                            />
+                            <label htmlFor="img3" className={cx('upload-file-img-btn')}>
+                                Choose File
+                            </label>
                         </div>
                         <div>
                             <label htmlFor="category">Category</label>
@@ -196,7 +269,7 @@ export default function ProductEdit() {
                         </div>
                         <div>
                             <label></label>
-                            <button className="primary" type="submit">
+                            <button className={cx('btn', 'btn-fill-out', 'btn-block')} type="submit">
                                 Update
                             </button>
                         </div>
