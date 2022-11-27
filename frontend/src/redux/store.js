@@ -16,6 +16,7 @@ import {
     userListReducer,
     userSigninReducer,
     userUpdateProfileReducer,
+    userUpdateReducer,
 } from './reducers/userReducers';
 import tokenReducer from './reducers/tokenReducers';
 import {
@@ -61,6 +62,7 @@ const reducer = combineReducers({
     orderDelete: orderDeleteReducer,
     orderDeliver: orderDeliverReducer,
     userList: userListReducer,
+    userUpdate: userUpdateReducer,
     userDelete: userDeleteReducer,
 });
 // const reducer = (state, action) => {

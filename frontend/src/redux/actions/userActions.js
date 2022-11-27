@@ -17,10 +17,13 @@ import {
     USER_SIGNIN_REQUEST,
     USER_SIGNIN_SUCCESS,
     USER_SIGNOUT,
+    USER_UPDATE_FAIL,
     USER_UPDATE_PROFILE_FAIL,
     USER_UPDATE_PROFILE_REQUEST,
     USER_UPDATE_PROFILE_RESET,
     USER_UPDATE_PROFILE_SUCCESS,
+    USER_UPDATE_REQUEST,
+    USER_UPDATE_SUCCESS,
 } from '../constants/userConstants';
 
 export const fetchUser = async (token) => {
@@ -111,6 +114,24 @@ export const listUsers = () => async (dispatch, getState) => {
         // console.log(error); //(Axios error)
         dispatch({
             type: USER_LIST_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+        });
+    }
+};
+
+export const updateUser = (user) => async (dispatch, getState) => {
+    dispatch({ type: USER_UPDATE_REQUEST, payload: user });
+    try {
+        const { token } = getState();
+        const { data } = await Axios.put(`/api/users/${user._id}`, user, {
+            headers: { Authorization: token },
+        });
+        showSuccessMessage('User Updated Successfully', 'topRight');
+        dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
+    } catch (error) {
+        // console.log(error); //(Axios error)
+        dispatch({
+            type: USER_UPDATE_FAIL,
             payload: error.response && error.response.data.message ? error.response.data.message : error.message,
         });
     }

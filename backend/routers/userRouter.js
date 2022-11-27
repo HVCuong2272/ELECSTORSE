@@ -14,6 +14,12 @@ userRouter.get(
   userController.getUsers
 );
 
+userRouter.put(
+  "/:id",
+  [authMiddle.isAuth, authMiddle.isAdmin],
+  userController.editUser
+);
+
 userRouter.delete(
   "/:id",
   [authMiddle.isAuth, authMiddle.isAdmin],

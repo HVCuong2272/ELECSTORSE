@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { deleteUser, listUsers } from '~/redux/actions/userActions';
+import { USER_DETAILS_RESET } from '~/redux/constants/userConstants';
 import { USER_DELETE_RESET } from '~/redux/constants/userConstants';
 
 const cx = classNames.bind(styles);
@@ -28,6 +29,7 @@ function UserList() {
     useEffect(() => {
         if (userSignin.userInfo) {
             dispatch(listUsers());
+            dispatch({ type: USER_DETAILS_RESET });
         }
     }, [dispatch, userSignin.userInfo, successDelete]);
 

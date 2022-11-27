@@ -18,6 +18,7 @@ const privateRoutes = {
     productManagement: '/productmanagement',
     orderList: '/orderlist',
     userList: '/userlist',
+    userEdit: '/user/:id/edit',
 };
 
 export { publicRoutes, privateRoutes };
