@@ -1,7 +1,10 @@
 import Axios from 'axios';
-import { showSuccessMessage } from '~/utils/notifyService';
+import { showErrorMessage, showSuccessMessage } from '~/utils/notifyService';
 import { CART_EMPTY } from '../constants/cartConstants';
 import {
+    USER_DELETE_FAIL,
+    USER_DELETE_REQUEST,
+    USER_DELETE_SUCCESS,
     USER_DETAILS_FAIL,
     USER_DETAILS_REQUEST,
     USER_DETAILS_RESET,
@@ -108,6 +111,27 @@ export const listUsers = () => async (dispatch, getState) => {
         // console.log(error); //(Axios error)
         dispatch({
             type: USER_LIST_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+        });
+    }
+};
+
+export const deleteUser = (userId) => async (dispatch, getState) => {
+    dispatch({ type: USER_DELETE_REQUEST, payload: userId });
+    try {
+        const { token } = getState();
+        const { data } = await Axios.delete(`/api/users/${userId}`, {
+            headers: { Authorization: token },
+        });
+        showSuccessMessage('Delete User Successfully', 'topRight');
+        dispatch({ type: USER_DELETE_SUCCESS, payload: data });
+    } catch (error) {
+        showErrorMessage(
+            error.response && error.response.data.message ? error.response.data.message : error.message,
+            'topRight',
+        );
+        dispatch({
+            type: USER_DELETE_FAIL,
             payload: error.response && error.response.data.message ? error.response.data.message : error.message,
         });
     }

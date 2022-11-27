@@ -5,7 +5,8 @@ import styles from './UserList.module.scss';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { listUsers } from '~/redux/actions/userActions';
+import { deleteUser, listUsers } from '~/redux/actions/userActions';
+import { USER_DELETE_RESET } from '~/redux/constants/userConstants';
 
 const cx = classNames.bind(styles);
 
@@ -18,26 +19,48 @@ function UserList() {
     const userList = useSelector((state) => state.userList);
     const { loading, error, users } = userList;
 
+    const userDelete = useSelector((state) => state.userDelete);
+    const { loading: loadingDelete, error: errorDelete, success: successDelete } = userDelete;
+
+    // useEffect(() => {
+    //     dispatch({ type: USER_DELETE_RESET });
+    // }, []);
     useEffect(() => {
         if (userSignin.userInfo) {
             dispatch(listUsers());
         }
-    }, [dispatch, userSignin.userInfo]);
+    }, [dispatch, userSignin.userInfo, successDelete]);
 
     const deleteHandler = (user) => {
         if (window.confirm('Are you sure?')) {
-            //   dispatch(deleteUser(user._id));
+            dispatch(deleteUser(user._id));
         }
     };
 
     return (
         <div className={cx('user-management-container')}>
             <h1>Users</h1>
-            {/* {loadingDelete && <LoadingBox></LoadingBox>}
-        {errorDelete && <MessageBox variant="danger">{errorDelete}</MessageBox>} */}
+
+            {loadingDelete && <Spin size="large" />}
+            {/* {errorDelete && (
+                <Alert
+                    message="Error"
+                    style={{ width: '100%', margin: '0 30px 30px' }}
+                    description={errorDelete}
+                    type="error"
+                    showIcon
+                />
+            )} */}
             {/* {successDelete && (
-          <MessageBox variant="success">User Deleted Successfully</MessageBox>
-        )} */}
+                <Alert
+                    message="User Delete Successfully"
+                    style={{ width: '100%', margin: '0 30px 30px' }}
+                    description={successDelete}
+                    type="success"
+                    showIcon
+                />
+            )} */}
+
             {loading ? (
                 <div style={{ marginTop: '200px' }}>
                     <Spin size="large" />

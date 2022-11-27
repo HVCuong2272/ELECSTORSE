@@ -11,6 +11,7 @@ import {
     productUpdateReducer,
 } from './reducers/productReducers';
 import {
+    userDeleteReducer,
     userDetailsReducer,
     userListReducer,
     userSigninReducer,
@@ -60,6 +61,7 @@ const reducer = combineReducers({
     orderDelete: orderDeleteReducer,
     orderDeliver: orderDeliverReducer,
     userList: userListReducer,
+    userDelete: userDeleteReducer,
 });
 // const reducer = (state, action) => {
 //     // console.log('reducer123');

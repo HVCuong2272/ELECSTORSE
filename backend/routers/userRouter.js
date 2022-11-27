@@ -14,4 +14,10 @@ userRouter.get(
   userController.getUsers
 );
 
+userRouter.delete(
+  "/:id",
+  [authMiddle.isAuth, authMiddle.isAdmin],
+  userController.deleteUser
+);
+
 module.exports = userRouter;
