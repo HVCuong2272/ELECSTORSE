@@ -70,6 +70,24 @@ const updateOrderByID = expressAsyncHandler(async (req, res) => {
     res.status(404).send({ message: "Order Not Found" });
   }
 });
+
+const deliverOrder = expressAsyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+    if (order.paymentMethod === "Card") {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+    }
+
+    const updatedOrder = await order.save();
+    res.send({ message: "Order Delivered", order: updatedOrder });
+  } else {
+    res.status(404).send({ message: "Order Not Found" });
+  }
+});
+
 const getOrderHistory = expressAsyncHandler(async (req, res) => {
   const orders = await Order.find({
     $or: [
@@ -80,9 +98,27 @@ const getOrderHistory = expressAsyncHandler(async (req, res) => {
   res.send(orders);
 });
 
+const getOrderList = expressAsyncHandler(async (req, res) => {
+  const orders = await Order.find({}).populate("user", "name");
+  res.send(orders);
+});
+
+const deleteOrder = expressAsyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  if (order) {
+    const deletedOrder = await order.remove();
+    res.send({ message: "Order Deleted", order: deletedOrder });
+  } else {
+    res.status(404).send({ message: "Order Not Found" });
+  }
+});
+
 module.exports = {
   createOrder,
   getOrderByID,
   updateOrderByID,
   getOrderHistory,
+  getOrderList,
+  deleteOrder,
+  deliverOrder,
 };

@@ -1,25 +1,34 @@
-.product-management-container {
-    margin-top: var(--header-height);
+.user-edit {
+    max-width: 60rem;
+    margin: 0 auto;
 }
 
-.product-management-table {
-    width: 100%;
-    border-collapse: collapse;
-    padding: 0 10px 0 10px;
-    margin: 0 30px;
+.user-edit > div {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
 }
-.product-management-table tbody tr:nth-of-type(odd) {
-    background-color: #f4f4f4;
+.user-edit label {
+    margin: 1rem 0;
 }
-.product-management-table td,
-.product-management-table th {
-    text-align: left;
-    border: 0.1rem solid #e4e4e4;
-    padding: 0.5rem;
-    text-align: center;
+
+.user-edit input,
+.user-edit select,
+.user-edit textarea,
+.user-edit button {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 0.1rem #a4a4a4 solid;
+    font-size: 1.6rem;
+    font-family: Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
-.product-management-table button {
-    margin: 0 0.2rem;
+.user-edit input:hover,
+.user-edit select:hover,
+.user-edit textarea:hover,
+.user-edit button:hover {
+    border: 0.1rem #404040 solid;
 }
 .btn {
     display: inline-block;
@@ -44,13 +53,6 @@
         box-shadow 0.15s ease-in-out;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
         box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-}
-.go-shopping-btn {
-    font-weight: 600;
-    font-size: 1.6rem;
-}
-.go-shopping-btn:hover {
-    color: var(--primary-color);
 }
 @media (prefers-reduced-motion: reduce) {
     .btn {
@@ -94,15 +96,6 @@ fieldset:disabled a.btn {
 a.btn.disabled,
 fieldset:disabled a.btn {
     pointer-events: none;
-}
-@media only screen and (min-width: 992px) and (max-width: 1199px) {
-    .light-skin .navigation .sub-menu .header-banner .shop-bn-content .shop-title {
-        font-size: 15px;
-    }
-    .light-skin .navigation .sub-menu .header-banner .shop-bn-content a.btn {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
 }
 .btn-fill-out {
     position: relative;
@@ -181,19 +174,4 @@ input[type='button'].btn-block,
 input[type='reset'].btn-block,
 input[type='submit'].btn-block {
     width: 100%;
-}
-.product-management-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0 20px 20px;
-}
-
-.product-management-heading h1 {
-    margin: 0;
-}
-.product-management-heading button {
-    margin: 0;
-    width: 23%;
-    height: 50%;
 }

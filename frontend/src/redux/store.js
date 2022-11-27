@@ -5,15 +5,26 @@ import data from '~/data';
 import { cartReducer } from './reducers/cartReducers';
 import {
     productCreateReducer,
+    productDeleteReducer,
     productDetailsReducer,
     productListReducer,
     productUpdateReducer,
 } from './reducers/productReducers';
-import { userDetailsReducer, userSigninReducer, userUpdateProfileReducer } from './reducers/userReducers';
+import {
+    userDeleteReducer,
+    userDetailsReducer,
+    userListReducer,
+    userSigninReducer,
+    userUpdateProfileReducer,
+    userUpdateReducer,
+} from './reducers/userReducers';
 import tokenReducer from './reducers/tokenReducers';
 import {
     orderCreateReducer,
+    orderDeleteReducer,
+    orderDeliverReducer,
     orderDetailsReducer,
+    orderListReducer,
     orderMineListReducer,
     orderPayReducer,
 } from './reducers/orderReducers';
@@ -46,6 +57,13 @@ const reducer = combineReducers({
     userUpdateProfile: userUpdateProfileReducer,
     productCreate: productCreateReducer,
     productUpdate: productUpdateReducer,
+    productDelete: productDeleteReducer,
+    orderList: orderListReducer,
+    orderDelete: orderDeleteReducer,
+    orderDeliver: orderDeliverReducer,
+    userList: userListReducer,
+    userUpdate: userUpdateReducer,
+    userDelete: userDeleteReducer,
 });
 // const reducer = (state, action) => {
 //     // console.log('reducer123');

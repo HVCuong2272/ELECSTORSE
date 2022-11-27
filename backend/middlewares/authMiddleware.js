@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { getAccessToken } = require("../controllers/authController");
 const Users = require("../models/userModel");
 
 // const generateToken = (user) => {
@@ -23,13 +24,14 @@ const isAuth = (req, res, next) => {
     if (!token) return res.status(400).json({ msg: "Invalid Authentication." });
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-      if (err) return res.status(400).json({ msg: "Invalid Authentication." });
-
+      if (err) {
+        return res.status(400).json({ msg: "Invalid Authentication." });
+      }
       req.user = user;
-      //   // console.log("chamcam", user);
       next();
     });
   } catch (err) {
+    console.log("weed", err);
     return res.status(500).json({ msg: err.message });
   }
 };

@@ -42,8 +42,48 @@ const userProfileUpdate = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const getUsers = expressAsyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.send(users);
+});
+
+const editUser = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    // user.isSeller =
+    //   req.body.isSeller === user.isSeller ? user.isSeller : req.body.isSeller;
+    // user.isAdmin =
+    //   req.body.isAdmin === user.isAdmin ? user.isAdmin : req.body.isAdmin;
+    user.isSeller = Boolean(req.body.isSeller);
+    user.isAdmin = Boolean(req.body.isAdmin);
+    const updatedUser = await user.save();
+    res.send({ message: "User Updated", user: updatedUser });
+  } else {
+    res.status(404).send({ message: "User Not Found" });
+  }
+});
+
+const deleteUser = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    if (user.isAdmin) {
+      res.status(400).send({ message: "Cannot Delete Admin User" });
+      return;
+    }
+    const deleteUser = await user.remove();
+    res.send({ message: "User Deleted", user: deleteUser });
+  } else {
+    res.status(404).send({ message: "User Not Found" });
+  }
+});
+
 module.exports = {
   createUserSeed,
   userProfileDetail,
   userProfileUpdate,
+  getUsers,
+  editUser,
+  deleteUser,
 };

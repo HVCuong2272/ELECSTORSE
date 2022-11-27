@@ -1,11 +1,12 @@
 .sub-header {
     height: var(--subHeader-height);
     border-bottom: 1px solid #ced4da;
-    position: fixed;
-    left: 0;
-    right: 0;
+    // position: fixed;
+    // top: 45;
+    // left: 0;
+    // right: 0;
     background-color: var(--white-color);
-    z-index: 101;
+    // z-index: 101;
 }
 
 .sub-header__container {

@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { savePaymentMethod, saveOrder } from '~/redux/actions/cartActions';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { VisaIcon, MasterCardIcon, MomoIcon, PaypalIcon } from '~/components/Icons';
-import { createOrder, detailsOrder, payOrder } from '~/redux/actions/orderActions';
-import { ORDER_CREATE_RESET, ORDER_PAY_RESET } from '~/redux/constants/orderConstants';
+import { createOrder, deliverOrder, detailsOrder, payOrder } from '~/redux/actions/orderActions';
+import { ORDER_CREATE_RESET, ORDER_DELIVER_RESET, ORDER_PAY_RESET } from '~/redux/constants/orderConstants';
 import Axios from 'axios';
 import { PayPalButton } from 'react-paypal-button-v2';
 import { CART_EMPTY } from '~/redux/constants/cartConstants';
@@ -303,11 +303,20 @@ function Order() {
     // console.log('dsadasd', order);
     const orderPay = useSelector((state) => state.orderPay);
     const { loading: loadingPay, error: errorPay, success: successPay } = orderPay;
+    const orderDeliver = useSelector((state) => state.orderDeliver);
+    const { loading: loadingDeliver, error: errorDeliver, success: successDeliver } = orderDeliver;
     const dispatch = useDispatch();
 
     const [errorVNPay, setErrorVNPay] = useState('');
     const [successVNPay, setSuccessVNPay] = useState('');
     const [loadingVNPay, setLoadingVNPay] = useState(false);
+    const { userInfo } = userSignin;
+
+    useEffect(() => {
+        if (errorDeliver) {
+            dispatch({ type: ORDER_DELIVER_RESET });
+        }
+    }, []);
 
     useEffect(() => {
         if (userSignin.userInfo) {
@@ -322,8 +331,9 @@ function Order() {
                 };
                 document.body.appendChild(script);
             };
-            if (!order || successPay || (order && order._id !== orderId)) {
+            if (!order || successPay || successDeliver || (order && order._id !== orderId)) {
                 dispatch({ type: ORDER_PAY_RESET });
+                dispatch({ type: ORDER_DELIVER_RESET });
                 dispatch(detailsOrder(orderId));
             } else {
                 if (!order.isPaid) {
@@ -338,11 +348,14 @@ function Order() {
                 }
             }
         }
-    }, [dispatch, orderId, userSignin, order, sdkReady, successPay]);
+    }, [dispatch, orderId, userSignin, order, sdkReady, successPay, successDeliver]);
 
     const successPaymentHandler = (paymentResult) => {
         // console.log('paymentResult: ', paymentResult);
         dispatch(payOrder(order, paymentResult));
+    };
+    const deliverHandler = () => {
+        dispatch(deliverOrder(order._id));
     };
     useEffect(() => {
         if (order && order.paymentMethod === 'VNPay') {
@@ -446,11 +459,10 @@ function Order() {
                                                                         fontSize: '22px',
                                                                         textDecoration: 'underline',
                                                                         color: '#ff4d4f',
+                                                                        fontWeight: 'bold',
                                                                     }}
                                                                 >
-                                                                    <p style={{ fontWeight: 'bold' }}>
-                                                                        Your Delivery Information
-                                                                    </p>
+                                                                    Your Delivery Information
                                                                 </tr>
                                                                 <tr>
                                                                     <th style={{ border: 'none' }}></th>
@@ -527,11 +539,10 @@ function Order() {
                                                                         fontSize: '22px',
                                                                         textDecoration: 'underline',
                                                                         color: '#ff4d4f',
+                                                                        fontWeight: 'bold',
                                                                     }}
                                                                 >
-                                                                    <b style={{ fontWeight: 'bold' }}>
-                                                                        Your Cart Detail
-                                                                    </b>
+                                                                    Your Cart Detail
                                                                 </tr>
                                                                 <tr>
                                                                     <th style={{ border: 'none' }}></th>
@@ -623,28 +634,6 @@ function Order() {
                                                                 </tr>
                                                             </tfoot>
                                                         </table>
-                                                        <h4
-                                                            style={{
-                                                                color: '#ff4d4f',
-                                                                marginTop: '47px',
-                                                                fontSize: '28px',
-                                                            }}
-                                                        >
-                                                            Your Order Delivery Status
-                                                        </h4>
-                                                        {order.isDelivered ? (
-                                                            <Alert
-                                                                message="Success"
-                                                                description={`Delivered at ${order.deliveredAt}`}
-                                                                type="success"
-                                                            />
-                                                        ) : (
-                                                            <Alert
-                                                                message="Order Delivery Status"
-                                                                description="Your order haven't been delivered yet."
-                                                                type="warning"
-                                                            />
-                                                        )}
                                                     </div>
                                                     <div className={cx('payment-method')}>
                                                         <div
@@ -709,6 +698,63 @@ function Order() {
                                                                     description="You haven't paid this order yet."
                                                                     type="warning"
                                                                 />
+                                                            )}
+
+                                                            <h4
+                                                                style={{
+                                                                    color: '#ff4d4f',
+                                                                    marginTop: '47px',
+                                                                    fontSize: '28px',
+                                                                }}
+                                                            >
+                                                                Your Order Delivery Status
+                                                            </h4>
+                                                            {order.isDelivered ? (
+                                                                <Alert
+                                                                    message="Success"
+                                                                    description={`Delivered at ${order.deliveredAt}`}
+                                                                    type="success"
+                                                                />
+                                                            ) : (
+                                                                <Alert
+                                                                    message="Order Delivery Status"
+                                                                    description="Your order haven't been delivered yet."
+                                                                    type="warning"
+                                                                />
+                                                            )}
+                                                            {((userInfo.isAdmin &&
+                                                                order.isPaid &&
+                                                                !order.isDelivered) ||
+                                                                (userInfo.isAdmin &&
+                                                                    order.paymentMethod === 'Card' &&
+                                                                    !order.isDelivered)) && (
+                                                                <li>
+                                                                    {loadingDeliver && <Spin size="large" />}
+                                                                    {errorDeliver && (
+                                                                        <Alert
+                                                                            message="Error"
+                                                                            style={{
+                                                                                width: '100%',
+                                                                                margin: '0 30px 30px',
+                                                                            }}
+                                                                            description={errorDeliver}
+                                                                            type="error"
+                                                                            showIcon
+                                                                        />
+                                                                    )}
+                                                                    <button
+                                                                        className={cx(
+                                                                            'btn',
+                                                                            'btn-fill-out',
+                                                                            'btn-block',
+                                                                        )}
+                                                                        style={{ width: '100%', height: '50%' }}
+                                                                        type="button"
+                                                                        onClick={deliverHandler}
+                                                                    >
+                                                                        Deliver Order
+                                                                    </button>
+                                                                </li>
                                                             )}
                                                         </div>
                                                     </div>
