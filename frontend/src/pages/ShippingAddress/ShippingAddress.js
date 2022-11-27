@@ -430,6 +430,12 @@ function ShippingAddress() {
                                                         ${cart.totalPrice.toFixed(2)}
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <th>Convert to Crypto</th>
+                                                    <td className={cx('product-subtotal')}>
+                                                        0000
+                                                    </td>
+                                                </tr>
                                             </tfoot>
                                         </table>
                                     </div>
