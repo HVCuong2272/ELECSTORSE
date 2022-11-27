@@ -124,7 +124,7 @@ function SubHeader({ isHomePage }) {
     );
     const handleClickAdminMenuProfile = ({ key }) => {
         // message.info(`Click on item ${key}`);
-        if (key === '4') {
+        if (key === '5') {
             dispatch(signout());
         } else if (key === '1') {
             navigate('/profile');
@@ -132,6 +132,8 @@ function SubHeader({ isHomePage }) {
             navigate('/productmanagement');
         } else if (key === '3') {
             navigate('/orderlist');
+        } else if (key === '4') {
+            navigate('/userlist');
         }
     };
     const menuAdminProfile = (
@@ -149,6 +151,10 @@ function SubHeader({ isHomePage }) {
                 {
                     label: 'Order Management',
                     key: '3',
+                },
+                {
+                    label: 'User Management',
+                    key: '4',
                 },
                 // {
                 //     key: '5',
@@ -170,7 +176,7 @@ function SubHeader({ isHomePage }) {
                 },
                 {
                     label: 'Logout',
-                    key: '4',
+                    key: '5',
                 },
             ]}
         />

@@ -10,7 +10,12 @@ import {
     productListReducer,
     productUpdateReducer,
 } from './reducers/productReducers';
-import { userDetailsReducer, userSigninReducer, userUpdateProfileReducer } from './reducers/userReducers';
+import {
+    userDetailsReducer,
+    userListReducer,
+    userSigninReducer,
+    userUpdateProfileReducer,
+} from './reducers/userReducers';
 import tokenReducer from './reducers/tokenReducers';
 import {
     orderCreateReducer,
@@ -54,6 +59,7 @@ const reducer = combineReducers({
     orderList: orderListReducer,
     orderDelete: orderDeleteReducer,
     orderDeliver: orderDeliverReducer,
+    userList: userListReducer,
 });
 // const reducer = (state, action) => {
 //     // console.log('reducer123');

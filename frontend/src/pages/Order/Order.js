@@ -725,7 +725,9 @@ function Order() {
                                                             {((userInfo.isAdmin &&
                                                                 order.isPaid &&
                                                                 !order.isDelivered) ||
-                                                                order.paymentMethod === 'Card') && (
+                                                                (userInfo.isAdmin &&
+                                                                    order.paymentMethod === 'Card' &&
+                                                                    !order.isDelivered)) && (
                                                                 <li>
                                                                     {loadingDeliver && <Spin size="large" />}
                                                                     {errorDeliver && (

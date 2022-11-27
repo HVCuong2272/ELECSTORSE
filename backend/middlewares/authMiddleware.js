@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { getAccessToken } = require("../controllers/authController");
 const Users = require("../models/userModel");
 
 // const generateToken = (user) => {
@@ -23,10 +24,16 @@ const isAuth = (req, res, next) => {
     if (!token) return res.status(400).json({ msg: "Invalid Authentication." });
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-      if (err) return res.status(400).json({ msg: "Invalid Authentication." });
-
+      // const alf = req.get("referer");
+      // console.log("wwww", alf);
+      // if (err instanceof TokenExpiredError) {
+      // }
+      if (err && err.name === "TokenExpiredError") {
+        // return res.redirect(`/orderlist`);
+      } else if (err && err.name !== "TokenExpiredError") {
+        return res.status(400).json({ msg: "Invalid Authentication." });
+      }
       req.user = user;
-      //   // console.log("chamcam", user);
       next();
     });
   } catch (err) {

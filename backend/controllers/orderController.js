@@ -76,6 +76,10 @@ const deliverOrder = expressAsyncHandler(async (req, res) => {
   if (order) {
     order.isDelivered = true;
     order.deliveredAt = Date.now();
+    if (order.paymentMethod === "Card") {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+    }
 
     const updatedOrder = await order.save();
     res.send({ message: "Order Delivered", order: updatedOrder });

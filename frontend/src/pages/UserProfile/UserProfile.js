@@ -147,7 +147,7 @@ export default function UserProfile() {
                                 <Spin size="large" />
                             </div>
                         )}
-                        {errorUpdate && <Alert message="Error" description={error} type="error" showIcon />}{' '}
+                        {errorUpdate && <Alert message="Error" description={errorUpdate} type="error" showIcon />}{' '}
                         {/* {successUpdate && (
                             <Alert
                                 message="Success"

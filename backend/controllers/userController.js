@@ -42,8 +42,14 @@ const userProfileUpdate = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const getUsers = expressAsyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.send(users);
+});
+
 module.exports = {
   createUserSeed,
   userProfileDetail,
   userProfileUpdate,
+  getUsers,
 };

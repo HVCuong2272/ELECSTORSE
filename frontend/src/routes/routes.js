@@ -22,6 +22,7 @@ import ProductManagement from '~/pages/ProductManagement';
 import ProductEdit from '~/pages/ProductEdit';
 import AdminRoute from '~/components/AdminRoute';
 import OrderList from '~/pages/OrderList';
+import UserList from '~/pages/UserList/UserList';
 
 // Public routes
 const publicRoutes = [
@@ -49,6 +50,7 @@ const privateRoutes = [
     { path: config.privateRoutes.productManagement, component: ProductManagement, isAdminPrivate: AdminRoute },
     { path: config.privateRoutes.productEditWId, component: ProductEdit, isPrivate: PrivateRoute },
     { path: config.privateRoutes.orderList, component: OrderList, isAdminPrivate: AdminRoute },
+    { path: config.privateRoutes.userList, component: UserList, isAdminPrivate: AdminRoute },
 ];
 
 export { publicRoutes, privateRoutes };
