@@ -1,50 +1,59 @@
-.order-list__container {
+.seller-salary-table-container {
     margin-top: var(--header-height);
     min-height: 58vh;
     margin-left: 30px;
     margin-right: 30px;
 }
-.order-list__heading {
-}
 
-.order-list-table-filter {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.order-list-table-filter {
-}
-.order-list-table__search {
-    width: 24%;
-}
-
-.order-list-table-search button:hover {
-}
-
-.order-list-table__datepicker {
-    margin-left: 20px;
-    width: 20%;
-}
-.order-list-table {
+.seller-salary-table {
     width: 100%;
     border-collapse: collapse;
     padding: 0 10px 0 10px;
     margin-top: 10px;
 }
-.order-list-table tbody tr:nth-of-type(odd) {
+.seller-salary-table-filter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.seller-salary-table-search {
+    width: 24%;
+}
+
+.seller-salary-table__datepicker {
+    margin-left: 20px;
+    width: 20%;
+}
+.seller-salary-table tbody tr:nth-of-type(odd) {
     background-color: #f4f4f4;
 }
-.order-list-table td,
-.order-list-table th {
+.seller-salary-table td,
+.seller-salary-table th {
+    white-space: pre-wrap;
     text-align: left;
     border: 0.1rem solid #e4e4e4;
     padding: 0.5rem;
     text-align: center;
 }
-.order-list-table button {
+.seller-salary-table button {
     margin: 0 0.2rem;
 }
+
+.orderId-table {
+    display: block;
+    height: 24px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    cursor: pointer;
+    // text-overflow: ellipsis;
+}
+.orderId-table:hover {
+    color: var(--primary-color);
+}
+
 .btn {
     display: inline-block;
     font-weight: 400;

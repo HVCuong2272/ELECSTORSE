@@ -8,6 +8,7 @@
     --primary-color: #ff324d;
     --white-color: #fff;
     --black-color: #333;
+    --blue-color: #1677ff;
     --breadcrumb-background: #f7f8fb;
     --product-text-color: #687188;
     --orange-text: orangered;
@@ -172,4 +173,24 @@ textarea:focus {
 }
 .alert {
     border-radius: 15px 50px;
+}
+
+.ant-btn-primary {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+}
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+}
+
+.ant-input-search .ant-input:hover,
+.ant-input-search .ant-input:focus {
+    border-color: var(--primary-color);
+}
+
+.ant-input:focus,
+.ant-input-focused {
+    box-shadow: none;
 }

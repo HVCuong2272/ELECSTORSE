@@ -24,6 +24,16 @@ import {
     ORDER_PAY_REQUEST,
     ORDER_PAY_RESET,
     ORDER_PAY_SUCCESS,
+    PAY_SELLER_SALARY_FAIL,
+    PAY_SELLER_SALARY_REQUEST,
+    PAY_SELLER_SALARY_RESET,
+    PAY_SELLER_SALARY_SUCCESS,
+    SELLER_SALARY_LIST_FAIL,
+    SELLER_SALARY_LIST_FAIL1,
+    SELLER_SALARY_LIST_REQUEST,
+    SELLER_SALARY_LIST_REQUEST1,
+    SELLER_SALARY_LIST_SUCCESS,
+    SELLER_SALARY_LIST_SUCCESS1,
 } from '../constants/orderConstants';
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -123,6 +133,46 @@ export const orderDeliverReducer = (state = {}, action) => {
         case ORDER_DELIVER_FAIL:
             return { loading: false, error: action.payload };
         case ORDER_DELIVER_RESET:
+            return {};
+        default:
+            return state;
+    }
+};
+
+export const listSellerSalaryReducer = (state = { sellerSalaryTable: [] }, action) => {
+    switch (action.type) {
+        case SELLER_SALARY_LIST_REQUEST:
+            return { loading: true };
+        case SELLER_SALARY_LIST_SUCCESS:
+            return { loading: false, sellerSalaryTable: action.payload };
+        case SELLER_SALARY_LIST_FAIL:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+};
+export const listSellerSalaryReducer1 = (state = { sellerSalaryTable: [] }, action) => {
+    switch (action.type) {
+        case SELLER_SALARY_LIST_REQUEST1:
+            return { loading: true };
+        case SELLER_SALARY_LIST_SUCCESS1:
+            return { loading: false, sellerSalaryTable: action.payload };
+        case SELLER_SALARY_LIST_FAIL1:
+            return { loading: false, error: action.payload };
+        default:
+            return state;
+    }
+};
+
+export const paySellerSalaryReducer = (state = {}, action) => {
+    switch (action.type) {
+        case PAY_SELLER_SALARY_REQUEST:
+            return { loading: true };
+        case PAY_SELLER_SALARY_SUCCESS:
+            return { loading: false, success: true };
+        case PAY_SELLER_SALARY_FAIL:
+            return { loading: false, error: action.payload };
+        case PAY_SELLER_SALARY_RESET:
             return {};
         default:
             return state;

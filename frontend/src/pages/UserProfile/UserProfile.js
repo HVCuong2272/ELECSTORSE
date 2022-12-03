@@ -16,6 +16,7 @@ export default function UserProfile() {
     const token = useSelector((state) => state.token);
     const userDetails = useSelector((state) => state.userDetails);
     const { loading, error, user } = userDetails;
+    console.log('fff', user);
 
     // Avatar
     const [imgUrl, setImgUrl] = useState('');
@@ -26,6 +27,10 @@ export default function UserProfile() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [sellerName, setSellerName] = useState('');
+    const [sellerLogo, setSellerLogo] = useState('');
+    const [sellerPayment, setSellerPayment] = useState('');
+    const [sellerDescription, setSellerDescription] = useState('');
 
     const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
     const { success: successUpdate, error: errorUpdate, loading: loadingUpdate } = userUpdateProfile;
@@ -42,6 +47,12 @@ export default function UserProfile() {
         if (user) {
             setName(user.name);
             setEmail(user.email);
+            if (user.seller) {
+                setSellerName(user.seller.name);
+                setSellerLogo(user.seller.logo);
+                setSellerPayment(user.seller.paymentSalaryMethod ? user.seller.paymentSalaryMethod : '');
+                setSellerDescription(user.seller.description);
+            }
         }
     }, [user]);
 
@@ -71,7 +82,17 @@ export default function UserProfile() {
                 },
             });
             dispatch(
-                updateUserProfile({ userId: user._id, name, email, password, avatar: `http://localhost:5000${data}` }),
+                updateUserProfile({
+                    userId: user._id,
+                    name,
+                    email,
+                    password,
+                    avatar: `http://localhost:5000${data}`,
+                    sellerName,
+                    sellerLogo,
+                    sellerPayment,
+                    sellerDescription,
+                }),
             );
             //   setLoadingUpload(false);
         } catch (error) {
@@ -99,6 +120,10 @@ export default function UserProfile() {
                         email,
                         password,
                         avatar: avatar ? avatar.preview : '',
+                        sellerName,
+                        sellerLogo,
+                        sellerPayment,
+                        sellerDescription,
                     }),
                 );
                 setImgUrl('');
@@ -253,6 +278,55 @@ export default function UserProfile() {
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                             ></input>
                         </div>
+                        {user && user.isSeller && (
+                            <>
+                                <h2>Seller</h2>
+                                <div>
+                                    <label htmlFor="sellerName">Seller Name</label>
+                                    <input
+                                        className={cx('user-profile__input')}
+                                        id="sellerName"
+                                        type="text"
+                                        placeholder="Enter Seller Name"
+                                        value={sellerName}
+                                        onChange={(e) => setSellerName(e.target.value)}
+                                    ></input>
+                                </div>
+                                <div>
+                                    <label htmlFor="sellerLogo">Seller Logo</label>
+                                    <input
+                                        className={cx('user-profile__input')}
+                                        id="sellerLogo"
+                                        type="text"
+                                        placeholder="Enter Seller Logo"
+                                        value={sellerLogo}
+                                        onChange={(e) => setSellerLogo(e.target.value)}
+                                    ></input>
+                                </div>
+                                <div>
+                                    <label htmlFor="sellerPayment">Seller Payment</label>
+                                    <input
+                                        className={cx('user-profile__input')}
+                                        id="sellerPayment"
+                                        type="text"
+                                        placeholder="STK/Tên chủ thẻ/Tên Ngân Hàng "
+                                        value={sellerPayment}
+                                        onChange={(e) => setSellerPayment(e.target.value)}
+                                    ></input>
+                                </div>
+                                <div>
+                                    <label htmlFor="sellerDescription">Seller Description</label>
+                                    <input
+                                        className={cx('user-profile__input')}
+                                        id="sellerDescription"
+                                        type="text"
+                                        placeholder="Enter Seller Description"
+                                        value={sellerDescription}
+                                        onChange={(e) => setSellerDescription(e.target.value)}
+                                    ></input>
+                                </div>
+                            </>
+                        )}
                         <div>
                             <label />
                             <button className={cx('btn', 'btn-fill-out', 'btn-block')} type="submit">

@@ -3,7 +3,7 @@ import { Alert, Radio, Space, Spin } from 'antd';
 import { useEffect } from 'react';
 import Product from '../Product/Product';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PRODUCT_CREATE_RESET, PRODUCT_DELETE_RESET } from '~/redux/constants/productConstants';
 import styles from './ProductManagement.module.scss';
 import classNames from 'classnames/bind';
@@ -11,6 +11,8 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
 export default function ProductManagement() {
+    const { pathname } = useLocation();
+    const sellerMode = pathname.indexOf('/seller') >= 0;
     const productList = useSelector((state) => state.productList);
     const { loading, error, products } = productList;
     const productCreate = useSelector((state) => state.productCreate);
@@ -35,7 +37,7 @@ export default function ProductManagement() {
         } else if (successDelete) {
             dispatch({ type: PRODUCT_DELETE_RESET });
         }
-        dispatch(listProducts());
+        dispatch(listProducts({ seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '' }));
     }, [createdProduct, dispatch, navigate, successCreate, successDelete]);
     const deleteHandler = (product) => {
         if (window.confirm('Are you sure to delete?')) {
@@ -49,10 +51,19 @@ export default function ProductManagement() {
         <div className={cx('product-management-container')}>
             <div className={cx('product-management-heading')}>
                 <h1>Products</h1>
-                <button type="button" className={cx('btn', 'btn-fill-out', 'btn-block')} onClick={createHandler}>
-                    Create Product
-                </button>
+                {localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).isSeller === true && (
+                    <button type="button" className={cx('btn', 'btn-fill-out', 'btn-block')} onClick={createHandler}>
+                        Create Product
+                    </button>
+                )}
             </div>
+            {localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).isSeller === true && (
+                <div style={{ margin: '0 0 10px 20px', fontStyle: 'italic', color: `var(--product-text-color)` }}>
+                    *Note For Seller: Please Remember Update Your Seller Information in Profile Before Using Create
+                    Product Function
+                </div>
+            )}
+
             <div className={cx('row')}>
                 {loadingDelete && <Spin size="large" />}
                 {errorDelete && (
@@ -86,8 +97,13 @@ export default function ProductManagement() {
                                     <th>ID</th>
                                     <th>NAME</th>
                                     <th>PRICE</th>
+                                    <th>COUNT IN STOCK</th>
                                     <th>CATEGORY</th>
                                     <th>BRAND</th>
+                                    {localStorage.getItem('userInfo') &&
+                                        JSON.parse(localStorage.getItem('userInfo')).isAdmin === true && (
+                                            <th>SELLER EMAIL</th>
+                                        )}
                                     <th>ACTIONS</th>
                                 </tr>
                             </thead>
@@ -97,19 +113,43 @@ export default function ProductManagement() {
                                         <td>{product._id}</td>
                                         <td>{product.name}</td>
                                         <td>{product.price}</td>
+                                        <td>{product.countInStock}</td>
                                         <td>{product.category}</td>
                                         <td>{product.brand}</td>
+                                        {localStorage.getItem('userInfo') &&
+                                            JSON.parse(localStorage.getItem('userInfo')).isAdmin === true && (
+                                                <td>{product.seller.email}</td>
+                                            )}
                                         <td>
-                                            <button
-                                                className={cx('btn', 'btn-fill-out', 'btn-block')}
-                                                style={{ width: '100%', height: '50%' }}
-                                                onClick={() => navigate(`/product/${product._id}/edit`)}
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    marginBottom: '5px',
+                                                }}
                                             >
-                                                Edit
-                                            </button>
+                                                <div style={{ flex: 1, marginRight: '5px' }}>
+                                                    <button
+                                                        className={cx('btn', 'btn-fill-out', 'btn-block')}
+                                                        style={{ width: '100%', height: '100%' }}
+                                                        onClick={() => navigate(`/product/${product._id}`)}
+                                                    >
+                                                        View
+                                                    </button>
+                                                </div>
+                                                <div style={{ flex: 1 }}>
+                                                    <button
+                                                        className={cx('btn', 'btn-fill-out', 'btn-block')}
+                                                        style={{ width: '100%', height: '100%' }}
+                                                        onClick={() => navigate(`/product/${product._id}/edit`)}
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                </div>
+                                            </div>
                                             <button
                                                 className={cx('btn', 'btn-fill-out', 'btn-block')}
-                                                style={{ width: '100%', height: '50%' }}
+                                                style={{ width: '100%' }}
                                                 onClick={() => deleteHandler(product)}
                                             >
                                                 Delete

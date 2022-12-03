@@ -1,6 +1,14 @@
 .user-management-container {
     margin-top: var(--header-height);
 }
+
+.user-management__heading {
+    margin: 0 30px 10px 30px;
+}
+
+.user-management-search {
+    width: 24%;
+}
 .user-management-table {
     width: 96%;
     border-collapse: collapse;

@@ -10,10 +10,24 @@ const orderSchema = new mongoose.Schema(
         image2: { type: String },
         image3: { type: String },
         price: { type: Number, required: true },
+        countInStock: { type: Number, required: true },
         product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
           required: true,
+        },
+        seller: {
+          seller: {
+            name: { type: String },
+            logo: { type: String },
+            rating: { type: Number },
+            numReviews: { type: Number },
+          },
+          _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+          },
         },
       },
     ],
@@ -41,7 +55,7 @@ const orderSchema = new mongoose.Schema(
     taxPrice: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    // seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    seller: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     isPaid: { type: Boolean, default: false },
     paidAt: { type: Date },
     isDelivered: { type: Boolean, default: false },

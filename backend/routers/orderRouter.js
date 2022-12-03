@@ -5,13 +5,24 @@ const Order = require("../models/orderModel");
 
 orderRouter.get(
   "/",
-  [authMiddle.isAuth, authMiddle.isAdmin],
+  [authMiddle.isAuth, authMiddle.isSellerOrAdmin],
   orderController.getOrderList
 );
 
 orderRouter.post("/", authMiddle.isAuth, orderController.createOrder);
 
 orderRouter.get("/mine", authMiddle.isAuth, orderController.getOrderHistory);
+orderRouter.get(
+  "/paySummary",
+  [authMiddle.isAuth, authMiddle.isAdmin],
+  orderController.paySummary
+);
+orderRouter.get(
+  "/paySummary1",
+  [authMiddle.isAuth, authMiddle.isAdmin],
+  orderController.paySummary1
+);
+orderRouter.put("/paySellerSalary/:id", orderController.paySellerSalary);
 
 orderRouter.get("/:id", authMiddle.isAuth, orderController.getOrderByID);
 

@@ -20,6 +20,8 @@ import {
 } from './reducers/userReducers';
 import tokenReducer from './reducers/tokenReducers';
 import {
+    listSellerSalaryReducer,
+    listSellerSalaryReducer1,
     orderCreateReducer,
     orderDeleteReducer,
     orderDeliverReducer,
@@ -27,6 +29,7 @@ import {
     orderListReducer,
     orderMineListReducer,
     orderPayReducer,
+    paySellerSalaryReducer,
 } from './reducers/orderReducers';
 
 const initialState = {
@@ -64,6 +67,9 @@ const reducer = combineReducers({
     userList: userListReducer,
     userUpdate: userUpdateReducer,
     userDelete: userDeleteReducer,
+    listSellerSalary: listSellerSalaryReducer,
+    listSellerSalary1: listSellerSalaryReducer1,
+    paySellerSalary: paySellerSalaryReducer,
 });
 // const reducer = (state, action) => {
 //     // console.log('reducer123');

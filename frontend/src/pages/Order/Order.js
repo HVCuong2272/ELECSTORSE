@@ -296,6 +296,7 @@ function Order() {
     const [sdkReady, setSdkReady] = useState(false);
     const token = useSelector((state) => state.token);
     const userSignin = useSelector((state) => state.userSignin);
+    const { userInfo } = userSignin;
     const params = useParams();
     const { id: orderId } = params;
     const orderDetails = useSelector((state) => state.orderDetails);
@@ -310,7 +311,6 @@ function Order() {
     const [errorVNPay, setErrorVNPay] = useState('');
     const [successVNPay, setSuccessVNPay] = useState('');
     const [loadingVNPay, setLoadingVNPay] = useState(false);
-    const { userInfo } = userSignin;
 
     useEffect(() => {
         if (errorDeliver) {
@@ -357,8 +357,33 @@ function Order() {
     const deliverHandler = () => {
         dispatch(deliverOrder(order._id));
     };
+
+    // Handle RollBack
+    const calcDate = (date) => {
+        const date1 = new Date(); // currentDate
+        const date2 = new Date(date);
+        const diffTime = Math.abs(date1 - date2);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        // console.log(date1 + ' day1');
+        // console.log(date2 + ' day2');
+        // console.log(diffTime + ' milliseconds');
+        // console.log(diffDays + ' days');
+        if (diffDays < 4) {
+            return true;
+        }
+        return false;
+    };
+
+    const handleRollBack = (e) => {
+        // handleRollBack
+    };
     useEffect(() => {
-        if (order && order.paymentMethod === 'VNPay') {
+        if (
+            order &&
+            order.paymentMethod === 'VNPay' &&
+            !JSON.parse(localStorage.getItem('userInfo')).isAdmin &&
+            !JSON.parse(localStorage.getItem('userInfo')).isSeller
+        ) {
             const submitHandler = async (value) => {
                 // console.log('Received values of form: ', order);
                 setLoadingVNPay(true);
@@ -415,7 +440,11 @@ function Order() {
     }, [order]);
     return (
         <>
-            {order && !order.isPaid && order.paymentMethod === 'VNPay' ? (
+            {order &&
+            !order.isPaid &&
+            order.paymentMethod === 'VNPay' &&
+            !JSON.parse(localStorage.getItem('userInfo')).isAdmin &&
+            !JSON.parse(localStorage.getItem('userInfo')).isSeller ? (
                 <div style={{ marginTop: '200px' }}>
                     <Spin size="large" />
                 </div>
@@ -447,7 +476,7 @@ function Order() {
                                                                 color: '#ff4d4f',
                                                             }}
                                                         >
-                                                            Your Orders Sumary
+                                                            Your Orders Summary
                                                         </h4>
                                                     </div>
                                                     <div className={cx('table-responsive', 'order_table')}>
@@ -462,7 +491,9 @@ function Order() {
                                                                         fontWeight: 'bold',
                                                                     }}
                                                                 >
-                                                                    Your Delivery Information
+                                                                    <td style={{ border: 'none' }}>
+                                                                        Your Delivery Information
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th style={{ border: 'none' }}></th>
@@ -542,7 +573,7 @@ function Order() {
                                                                         fontWeight: 'bold',
                                                                     }}
                                                                 >
-                                                                    Your Cart Detail
+                                                                    <td style={{ border: 'none' }}>Your Cart Detail</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th style={{ border: 'none' }}></th>
@@ -557,7 +588,24 @@ function Order() {
                                                             <tbody>
                                                                 {order.orderItems.map((item, index) => {
                                                                     return (
-                                                                        <tr key={index}>
+                                                                        <tr
+                                                                            key={index}
+                                                                            style={{
+                                                                                backgroundColor:
+                                                                                    JSON.parse(
+                                                                                        localStorage.getItem(
+                                                                                            'userInfo',
+                                                                                        ),
+                                                                                    ).isSeller &&
+                                                                                    item.seller._id ===
+                                                                                        JSON.parse(
+                                                                                            localStorage.getItem(
+                                                                                                'userInfo',
+                                                                                            ),
+                                                                                        )._id &&
+                                                                                    '#20a020',
+                                                                            }}
+                                                                        >
                                                                             <td>
                                                                                 <Link
                                                                                     to={`/product/${item.product}`}
@@ -685,13 +733,33 @@ function Order() {
                                                             )}
 
                                                             {order.isPaid ? (
-                                                                <div className={cx('alert')}>
-                                                                    <Alert
-                                                                        message="Success"
-                                                                        description={`Paid at ${order.paidAt}`}
-                                                                        type="success"
-                                                                    />
-                                                                </div>
+                                                                <>
+                                                                    <div className={cx('alert')}>
+                                                                        <Alert
+                                                                            message="Success"
+                                                                            // description={`Paid at ${order.paidAt}`}
+                                                                            description={`Paid at ${new Date(
+                                                                                order.paidAt,
+                                                                            ).toLocaleDateString('en-GB')} ${new Date(
+                                                                                order.paidAt,
+                                                                            ).toLocaleTimeString()}`}
+                                                                            type="success"
+                                                                        />
+                                                                    </div>
+                                                                    {!JSON.parse(localStorage.getItem('userInfo'))
+                                                                        .isAdmin &&
+                                                                        !JSON.parse(localStorage.getItem('userInfo'))
+                                                                            .isSeller &&
+                                                                        calcDate(order.paidAt) &&
+                                                                        !order.isDelivered && (
+                                                                            <div
+                                                                                className={cx('rollback-btn')}
+                                                                                onClick={handleRollBack}
+                                                                            >
+                                                                                RollBack
+                                                                            </div>
+                                                                        )}
+                                                                </>
                                                             ) : (
                                                                 <Alert
                                                                     message="Your Payment Status"
@@ -712,7 +780,12 @@ function Order() {
                                                             {order.isDelivered ? (
                                                                 <Alert
                                                                     message="Success"
-                                                                    description={`Delivered at ${order.deliveredAt}`}
+                                                                    // description={`Delivered at ${order.deliveredAt}`}
+                                                                    description={`Delivered at ${new Date(
+                                                                        order.deliveredAt,
+                                                                    ).toLocaleDateString('en-GB')} ${new Date(
+                                                                        order.deliveredAt,
+                                                                    ).toLocaleTimeString()}`}
                                                                     type="success"
                                                                 />
                                                             ) : (

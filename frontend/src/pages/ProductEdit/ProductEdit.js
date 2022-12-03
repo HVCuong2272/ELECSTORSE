@@ -4,7 +4,7 @@ import styles from './ProductEdit.module.scss';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Alert, Radio, Space, Spin } from 'antd';
 
 import { detailsProduct, updateProduct } from '~/redux/actions/productActions';
@@ -37,8 +37,21 @@ export default function ProductEdit() {
     const token = useSelector((state) => state.token);
     const dispatch = useDispatch();
     useEffect(() => {
+        if (
+            product &&
+            product._id === productId &&
+            product.seller._id !== JSON.parse(localStorage.getItem('userInfo'))._id
+        ) {
+            navigate('/');
+        }
+    }, [navigate, product, productId]);
+    useEffect(() => {
         if (successUpdate) {
-            navigate('/productmanagement');
+            if (JSON.parse(localStorage.getItem('userInfo')).isAdmin === true) {
+                navigate('/productmanagement');
+            } else {
+                navigate('/productmanagement/seller');
+            }
         }
         if (!product || product._id !== productId || successUpdate) {
             dispatch({ type: PRODUCT_UPDATE_RESET });
@@ -134,13 +147,7 @@ export default function ProductEdit() {
                 </div>
                 {loadingUpdate && <Spin size="large" />}
                 {errorUpdate && (
-                    <Alert
-                        message="Error"
-                        style={{ width: '100%', margin: '0 30px 30px' }}
-                        description={errorUpdate}
-                        type="error"
-                        showIcon
-                    />
+                    <Alert message="Error" style={{ width: '100%' }} description={errorUpdate} type="error" showIcon />
                 )}
                 {loading ? (
                     <Spin size="large" />
@@ -148,6 +155,14 @@ export default function ProductEdit() {
                     <Alert message="Error" description={error} type="error" showIcon />
                 ) : (
                     <>
+                        <Link to={`/product/${productId}`}>
+                            <button
+                                style={{ width: '30%', height: '44px', marginLeft: '10px' }}
+                                className={cx('btn', 'btn-fill-out', 'btn-block')}
+                            >
+                                View Product
+                            </button>
+                        </Link>
                         <div>
                             <label htmlFor="name">Name</label>
                             <input

@@ -1,29 +1,33 @@
 const expressAsyncHandler = require("express-async-handler");
 const { data } = require("../data");
 const Product = require("../models/productModel");
+const User = require("../models/userModel");
 
 const getAllProducts = expressAsyncHandler(async (req, res) => {
-  const products = await Product.find({});
+  const seller = req.query.seller || "";
+  const sellerFilter = seller ? { seller } : {};
+  const products = await Product.find({
+    ...sellerFilter,
+  }).populate("seller", "seller.name seller.logo email");
   res.send(products);
 });
 
 const createProductSeed = expressAsyncHandler(async (req, res) => {
   // console.log(data);
   // await User.remove({});
-  // const seller = await User.findOne({ isSeller: true });
-  // if (seller) {
-  //     const products = data.products.map((product) => ({
-  //         ...product,
-  //         seller: seller._id,
-  //     }));
-  // await Product.remove({});
-  const createdProducts = await Product.insertMany(data.products);
-  res.send({ createdProducts });
-  // } else {
-  //     res
-  //         .status(500)
-  //         .send({ message: "No seller found. first run /api/users/seed" });
-  // }
+  const seller = await User.findOne({ isSeller: true });
+  if (seller) {
+    const products = data.products.map((product) => ({
+      ...product,
+      seller: seller._id,
+    }));
+    const createdProducts = await Product.insertMany(products);
+    res.send({ createdProducts });
+  } else {
+    res
+      .status(500)
+      .send({ message: "No seller found. first run /api/users/seed" });
+  }
 });
 
 const getProductById = expressAsyncHandler(async (req, res) => {
@@ -31,7 +35,10 @@ const getProductById = expressAsyncHandler(async (req, res) => {
   //     "seller",
   //     "seller.name seller.logo seller.rating seller.numReviews"
   //   );
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findById(req.params.id).populate(
+    "seller",
+    "seller.name seller.logo seller.rating seller.numReviews"
+  );
   if (!product) {
     return res.status(404).send({ message: "Product not Found" });
   }
@@ -39,8 +46,10 @@ const getProductById = expressAsyncHandler(async (req, res) => {
 });
 
 const productElement = expressAsyncHandler(async (req, res) => {
+  // console.log("aduu", req.user);
   const product = new Product({
     name: "sample name " + Date.now(),
+    seller: req.user.id,
     image1: "/assets/images/productImage/p6.jpg",
     image2: "/assets/images/productImage/p6.jpg",
     image3: "/assets/images/productImage/p6.jpg",
@@ -60,6 +69,11 @@ const editProduct = expressAsyncHandler(async (req, res) => {
   const productId = req.params.id;
   const product = await Product.findById(productId);
   if (product) {
+    if (!req.user._id.equals(product.seller._id)) {
+      return res
+        .status(400)
+        .send({ message: "Cannot edit other seller product!" });
+    }
     product.name = req.body.name;
     product.price = req.body.price;
     product.image1 = req.body.image1;

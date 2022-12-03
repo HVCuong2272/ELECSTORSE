@@ -124,7 +124,7 @@ function SubHeader({ isHomePage }) {
     );
     const handleClickAdminMenuProfile = ({ key }) => {
         // message.info(`Click on item ${key}`);
-        if (key === '5') {
+        if (key === '6') {
             dispatch(signout());
         } else if (key === '1') {
             navigate('/profile');
@@ -134,6 +134,8 @@ function SubHeader({ isHomePage }) {
             navigate('/orderlist');
         } else if (key === '4') {
             navigate('/userlist');
+        } else if (key === '5') {
+            navigate('/paySellerSalary');
         }
     };
     const menuAdminProfile = (
@@ -154,6 +156,69 @@ function SubHeader({ isHomePage }) {
                 },
                 {
                     label: 'User Management',
+                    key: '4',
+                },
+                {
+                    label: 'Pay Salary Seller Management',
+                    key: '5',
+                },
+                // {
+                //     key: '5',
+                //     label: 'disabled sub menu',
+                //     disabled: true,
+                //     children: [
+                //         {
+                //             key: '5-1',
+                //             label: '5d menu item',
+                //         },
+                //         {
+                //             key: '5-2',
+                //             label: '6th menu item',
+                //         },
+                //     ],
+                // },
+                {
+                    type: 'divider',
+                },
+                {
+                    label: 'Logout',
+                    key: '6',
+                },
+            ]}
+        />
+    );
+    const handleClickSellerMenuProfile = ({ key }) => {
+        // message.info(`Click on item ${key}`);
+        if (key === '5') {
+            dispatch(signout());
+        } else if (key === '1') {
+            navigate('/profile');
+        } else if (key === '2') {
+            navigate('/productmanagement/seller');
+        } else if (key === '3') {
+            navigate('/orderlist/seller');
+        } else if (key === '4') {
+            navigate(`/seller/${JSON.parse(localStorage.getItem('userInfo'))._id}`);
+        }
+    };
+    const menuSellerProfile = (
+        <Menu
+            onClick={handleClickSellerMenuProfile}
+            items={[
+                {
+                    label: 'Profile',
+                    key: '1',
+                },
+                {
+                    label: 'Product Management',
+                    key: '2',
+                },
+                {
+                    label: 'Order Management',
+                    key: '3',
+                },
+                {
+                    label: 'Your Seller Page',
                     key: '4',
                 },
                 // {
@@ -213,36 +278,62 @@ function SubHeader({ isHomePage }) {
                     </div>
                     <SearchBox />
                     <div className={cx('sub-header__actions')}>
-                        <Link
-                            to="/cart"
-                            className={cx('sub-header__actions-cart')}
-                            onClick={() => {
-                                dispatch({ type: CART_RESET_ITEM });
-                            }}
-                        >
-                            <ShoppingCartOutlined />
-                            {cartItems.length > 0 && (
-                                <span className={cx('sub-header__actions-cart-notify')}> {cartItems.length}</span>
-                            )}
-                        </Link>
+                        {localStorage.getItem('userInfo') &&
+                        (JSON.parse(localStorage.getItem('userInfo')).isSeller === true ||
+                            JSON.parse(localStorage.getItem('userInfo')).isAdmin === true) ? (
+                            <div></div>
+                        ) : (
+                            <Link
+                                to="/cart"
+                                className={cx('sub-header__actions-cart')}
+                                onClick={() => {
+                                    dispatch({ type: CART_RESET_ITEM });
+                                }}
+                            >
+                                <ShoppingCartOutlined />
+                                {cartItems.length > 0 && (
+                                    <span className={cx('sub-header__actions-cart-notify')}> {cartItems.length}</span>
+                                )}
+                            </Link>
+                        )}
+
                         {userInfo ? (
                             userInfo.isAdmin === false ? (
-                                <div className={cx('sub-header__info-container')}>
-                                    <Dropdown overlay={menuProfile} placement="bottomRight" arrow>
-                                        <a
-                                            href="/"
-                                            onClick={(e) => e.preventDefault()}
-                                            className={cx('sub-header__info-user-name')}
-                                        >
-                                            <img
-                                                src={userInfo.avatar}
-                                                alt=""
-                                                className={cx('sub-header__info-user-img')}
-                                            />
-                                            {userInfo.name}
-                                        </a>
-                                    </Dropdown>
-                                </div>
+                                userInfo.isSeller === false ? (
+                                    <div className={cx('sub-header__info-container')}>
+                                        <Dropdown overlay={menuProfile} placement="bottomRight" arrow>
+                                            <a
+                                                href="/"
+                                                onClick={(e) => e.preventDefault()}
+                                                className={cx('sub-header__info-user-name')}
+                                            >
+                                                <img
+                                                    src={userInfo.avatar}
+                                                    alt=""
+                                                    className={cx('sub-header__info-user-img')}
+                                                />
+                                                {userInfo.name}
+                                            </a>
+                                        </Dropdown>
+                                    </div>
+                                ) : (
+                                    <div className={cx('sub-header__info-container')}>
+                                        <Dropdown overlay={menuSellerProfile} placement="bottomRight" arrow>
+                                            <a
+                                                href="/"
+                                                onClick={(e) => e.preventDefault()}
+                                                className={cx('sub-header__info-user-name')}
+                                            >
+                                                <img
+                                                    src={userInfo.avatar}
+                                                    alt=""
+                                                    className={cx('sub-header__info-user-img')}
+                                                />
+                                                {userInfo.name}
+                                            </a>
+                                        </Dropdown>
+                                    </div>
+                                )
                             ) : (
                                 <div className={cx('sub-header__info-container')}>
                                     <Dropdown overlay={menuAdminProfile} placement="bottomRight" arrow>

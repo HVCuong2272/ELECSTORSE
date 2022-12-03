@@ -21,7 +21,7 @@ function Cart() {
     const qty = qtyInUrl ? Number(qtyInUrl) : 1;
 
     const cart = useSelector((state) => state.cart);
-    const { cartItems } = cart;
+    const { cartItems, error } = cart;
 
     const dispatch = useDispatch();
     useEffect(() => {
@@ -38,6 +38,7 @@ function Cart() {
     }, [dispatch, productId, qty]);
     return (
         <div className={cx('grid wide')} style={{ marginTop: 'calc(var(--header-height) * 2)' }}>
+            {error && <Alert message="Error" description={error} type="error" showIcon />}
             {cartItems.length === 0 ? (
                 <Alert
                     message="Your Cart is Empty"

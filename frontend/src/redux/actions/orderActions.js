@@ -1,5 +1,6 @@
 import { message } from 'antd';
 import Axios from 'axios';
+import { showErrorMessage, showSuccessMessage } from '~/utils/notifyService';
 import { CART_EMPTY } from '../constants/cartConstants';
 import {
     ORDER_CREATE_FAIL,
@@ -23,6 +24,15 @@ import {
     ORDER_PAY_FAIL,
     ORDER_PAY_REQUEST,
     ORDER_PAY_SUCCESS,
+    PAY_SELLER_SALARY_FAIL,
+    PAY_SELLER_SALARY_REQUEST,
+    PAY_SELLER_SALARY_SUCCESS,
+    SELLER_SALARY_LIST_FAIL,
+    SELLER_SALARY_LIST_FAIL1,
+    SELLER_SALARY_LIST_REQUEST,
+    SELLER_SALARY_LIST_REQUEST1,
+    SELLER_SALARY_LIST_SUCCESS,
+    SELLER_SALARY_LIST_SUCCESS1,
 } from '../constants/orderConstants';
 export const createOrder = (order) => async (dispatch, getState) => {
     // console.log('asds', order);
@@ -39,6 +49,10 @@ export const createOrder = (order) => async (dispatch, getState) => {
         // dispatch({ type: CART_EMPTY });
         // localStorage.removeItem("cartItems");
     } catch (error) {
+        showErrorMessage(
+            error.response && error.response.data.message ? error.response.data.message : error.message,
+            'topRight',
+        );
         dispatch({
             type: ORDER_CREATE_FAIL,
             payload: error.response && error.response.data.message ? error.response.data.message : error.message,
@@ -97,21 +111,26 @@ export const listOrderMine = () => async (dispatch, getState) => {
     }
 };
 
-export const listOrders = () => async (dispatch, getState) => {
-    dispatch({ type: ORDER_LIST_REQUEST });
-    try {
-        const { token } = getState();
-        const { data } = await Axios.get(`/api/orders`, {
-            headers: {
-                Authorization: `${token}`,
-            },
-        });
-        dispatch({ type: ORDER_LIST_SUCCESS, payload: data });
-    } catch (error) {
-        const message = error.response && error.response.data.message ? error.response.data.message : error.message;
-        dispatch({ type: ORDER_LIST_FAIL, payload: message });
-    }
-};
+export const listOrders =
+    ({ seller = '', searchValue = '', month, year }) =>
+    async (dispatch, getState) => {
+        dispatch({ type: ORDER_LIST_REQUEST });
+        try {
+            const { token } = getState();
+            const { data } = await Axios.get(
+                `/api/orders?seller=${seller}&searchValue=${searchValue}&month=${month}&year=${year}`,
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                },
+            );
+            dispatch({ type: ORDER_LIST_SUCCESS, payload: data });
+        } catch (error) {
+            const message = error.response && error.response.data.message ? error.response.data.message : error.message;
+            dispatch({ type: ORDER_LIST_FAIL, payload: message });
+        }
+    };
 
 export const deleteOrder = (orderId) => async (dispatch, getState) => {
     dispatch({ type: ORDER_DELETE_REQUEST, payload: orderId });
@@ -149,3 +168,69 @@ export const deliverOrder = (orderId) => async (dispatch, getState) => {
         dispatch({ type: ORDER_DELIVER_FAIL, payload: message });
     }
 };
+
+export const listSellerSalary =
+    ({ month = new Date().getMonth() + 1, year = new Date().getFullYear(), searchValue = '' }) =>
+    async (dispatch, getState) => {
+        // console.log('mmm', month, year);
+        dispatch({ type: SELLER_SALARY_LIST_REQUEST });
+        try {
+            const { token } = getState();
+            const { data } = await Axios.get(
+                `/api/orders/paySummary?month=${month}&year=${year}&searchValue=${searchValue}`,
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                },
+            );
+            dispatch({ type: SELLER_SALARY_LIST_SUCCESS, payload: data });
+        } catch (error) {
+            const message = error.response && error.response.data.message ? error.response.data.message : error.message;
+            dispatch({ type: SELLER_SALARY_LIST_FAIL, payload: message });
+        }
+    };
+export const listSellerSalary1 =
+    ({ month = new Date().getMonth() + 1, year = new Date().getFullYear(), searchValue = '' }) =>
+    async (dispatch, getState) => {
+        // console.log('mmm', month, year);
+        dispatch({ type: SELLER_SALARY_LIST_REQUEST1 });
+        try {
+            const { token } = getState();
+            const { data } = await Axios.get(
+                `/api/orders/paySummary1?month=${month}&year=${year}&searchValue=${searchValue}`,
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                },
+            );
+            dispatch({ type: SELLER_SALARY_LIST_SUCCESS1, payload: data });
+        } catch (error) {
+            const message = error.response && error.response.data.message ? error.response.data.message : error.message;
+            dispatch({ type: SELLER_SALARY_LIST_FAIL1, payload: message });
+        }
+    };
+
+export const paySellerSalary =
+    ({ sellerName, sellerId, payMonth, payYear }) =>
+    async (dispatch, getState) => {
+        dispatch({ type: PAY_SELLER_SALARY_REQUEST, payload: sellerId });
+        try {
+            const { token } = getState();
+            const { data } = await Axios.put(
+                `/api/orders/paySellerSalary/${sellerId}?payMonth=${payMonth}&payYear=${payYear}`,
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                    },
+                },
+            );
+            // console.log(data);
+            showSuccessMessage(`Pay Salary ${payMonth}/${payYear} for ${sellerName} successfully!`, 'topRight');
+            dispatch({ type: PAY_SELLER_SALARY_SUCCESS, payload: data });
+        } catch (error) {
+            const message = error.response && error.response.data.message ? error.response.data.message : error.message;
+            dispatch({ type: PAY_SELLER_SALARY_FAIL, payload: message });
+        }
+    };

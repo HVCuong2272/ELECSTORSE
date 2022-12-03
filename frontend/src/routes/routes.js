@@ -24,6 +24,9 @@ import AdminRoute from '~/components/AdminRoute';
 import OrderList from '~/pages/OrderList';
 import UserList from '~/pages/UserList/UserList';
 import UserEdit from '~/pages/UserEdit';
+import SellerRoute from '~/components/SellerRoute';
+import SellerScreen from '~/pages/SellerScreen';
+import PaySellerSalary from '~/pages/PaySellerSalary';
 
 // Public routes
 const publicRoutes = [
@@ -36,6 +39,7 @@ const publicRoutes = [
     { path: config.publicRoutes.activateEmail, component: ActivationEmail },
     { path: config.publicRoutes.forgetPass, component: ForgetPassword },
     { path: config.publicRoutes.resetPass, component: ResetPassword },
+    { path: config.publicRoutes.sellerPage, component: SellerScreen },
 
     // { path: config.publicRoutes.following, component: Following },
     // { path: config.publicRoutes.profile, component: Profile },
@@ -53,6 +57,9 @@ const privateRoutes = [
     { path: config.privateRoutes.orderList, component: OrderList, isAdminPrivate: AdminRoute },
     { path: config.privateRoutes.userList, component: UserList, isAdminPrivate: AdminRoute },
     { path: config.privateRoutes.userEdit, component: UserEdit, isAdminPrivate: AdminRoute },
+    { path: config.privateRoutes.productManagementSeller, component: ProductManagement, isSellerPrivate: SellerRoute },
+    { path: config.privateRoutes.orderListSeller, component: OrderList, isSellerPrivate: SellerRoute },
+    { path: config.privateRoutes.paySellerSalary, component: PaySellerSalary, isAdminPrivate: AdminRoute },
 ];
 
 export { publicRoutes, privateRoutes };

@@ -54,27 +54,41 @@ function ProductDetail(props) {
             </div>
             <div className={cx('product-detail__description')}>{product.description}</div>
             <ul className={cx('product-detail__info-list')}>
+                {localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).isSeller === true && (
+                    <li className={cx('product-detail__info-item')}>
+                        <span style={{ fontStyle: 'italic' }}>
+                            *Note For Seller: Update Your Seller Information in Profile
+                        </span>
+                    </li>
+                )}
                 <li className={cx('product-detail__info-item')}>
                     <span>Seller:</span>
-                    <Link to={{}} className={cx('product-detail__info-item__user')}>
+                    {/* <Link to={{}} className={cx('product-detail__info-item__user')}> */}
+                    <Link to={`/seller/${product.seller._id}`} className={cx('product-detail__info-item__user')}>
                         <img
-                            src="https://adev42.com/frontend/assets/f8-shop/img/avatar-1.jpg"
-                            alt=""
+                            // src="https://adev42.com/frontend/assets/f8-shop/img/avatar-1.jpg"
+                            src={product.seller.seller.logo}
+                            alt={''}
                             className={cx('product-detail__info-item__user-img')}
                         />
-                        <span className={cx('product-detail__info-item__user-name')}>Thang Le</span>
+                        <span className={cx('product-detail__info-item__user-name')}>{product.seller.seller.name}</span>
                         <span className={cx('product-detail__info-item__user-statistic')}>
-                            (rating: 5
+                            (rating: {product.seller.seller.rating}
                             <span>
                                 <StarFilled style={{ color: '#fadb14' }} />
                             </span>
-                            , 0 review)
+                            ,{' '}
+                            {product.seller.seller.numReviews > 1
+                                ? `${product.seller.seller.numReviews} reviews`
+                                : `${product.seller.seller.numReviews} review`}
+                            )
                         </span>
                     </Link>
                 </li>
                 <li className={cx('product-detail__info-item')}>
                     <span>Category:</span>
-                    <Link to={{}}>fashion</Link> , <Link to={{}}>men</Link>
+                    {/* <Link to={{}}>fashion</Link> , <Link to={{}}>men</Link> */}
+                    <Link to={{}}>{product.category}</Link>
                 </li>
                 <li className={cx('product-detail__info-item')}>
                     <span>Share:</span>
@@ -95,28 +109,43 @@ function ProductDetail(props) {
                     </Link>
                 </li>
             </ul>
-            {product.countInStock > 0 && (
-                <div className={cx('product-detail__actions')}>
-                    <div className={cx('product-detail__actions-selectQty')}>
-                        <select value={qty} onChange={(e) => setQty(e.target.value)}>
-                            {/* Nếu count in stock là 5 thì sẽ return từ 0->4 */}
-                            {/* {// console.log([
-                                ...Array(product.countInStock).keys(),
-                              ])} */}
-                            {[...Array(product.countInStock).keys()].map((x) => (
-                                <option key={x + 1} value={x + 1}>
-                                    {x + 1}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className={cx('product-detail__actions-addToCart')} onClick={addToCartHandler}>
-                        <div>
-                            <ShoppingCartOutlined />
-                            <span>Add to Cart</span>
+            {localStorage.getItem('userInfo') &&
+            (JSON.parse(localStorage.getItem('userInfo')).isAdmin === true ||
+                JSON.parse(localStorage.getItem('userInfo')).isSeller === true) ? (
+                <div>
+                    Add To Cart Only Use For User Role
+                    {product && product.seller._id === JSON.parse(localStorage.getItem('userInfo'))._id && (
+                        <Link to={`/product/${product._id}/edit`}>
+                            <div style={{ width: '180px', marginTop: '20px' }}>
+                                <div className={cx('product-detail__actions-edit')}>Edit Product</div>
+                            </div>
+                        </Link>
+                    )}
+                </div>
+            ) : (
+                product.countInStock > 0 && (
+                    <div className={cx('product-detail__actions')}>
+                        <div className={cx('product-detail__actions-selectQty')}>
+                            <select value={qty} onChange={(e) => setQty(e.target.value)}>
+                                {/* Nếu count in stock là 5 thì sẽ return từ 0->4 */}
+                                {/* {// console.log([
+                                    ...Array(product.countInStock).keys(),
+                                  ])} */}
+                                {[...Array(product.countInStock).keys()].map((x) => (
+                                    <option key={x + 1} value={x + 1}>
+                                        {x + 1}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className={cx('product-detail__actions-addToCart')} onClick={addToCartHandler}>
+                            <div>
+                                <ShoppingCartOutlined />
+                                <span>Add to Cart</span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )
             )}
         </div>
     );

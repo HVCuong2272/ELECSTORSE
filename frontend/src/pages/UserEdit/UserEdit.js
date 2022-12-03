@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { detailsUser, updateUser } from '~/redux/actions/userActions';
 import { USER_UPDATE_RESET } from '~/redux/constants/userConstants';
+import { showErrorMessage } from '~/utils/notifyService';
 
 const cx = classNames.bind(styles);
 
@@ -33,7 +34,7 @@ function UserEdit() {
         if (!user) {
             dispatch(detailsUser(userId));
         } else {
-            console.log('wwref', user);
+            // console.log('wwref', user);
             setName(user.name);
             setEmail(user.email);
             setIsSeller(user.isSeller);
@@ -43,6 +44,9 @@ function UserEdit() {
     const submitHandler = (e) => {
         e.preventDefault();
         // dispatch update user
+        if (isSeller && isAdmin) {
+            return showErrorMessage('User Can Only Be Admin Or Seller Role', 'topRight');
+        }
         dispatch(updateUser({ _id: userId, name, email, isSeller, isAdmin }));
     };
     return (

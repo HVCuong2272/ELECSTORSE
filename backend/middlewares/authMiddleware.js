@@ -31,7 +31,7 @@ const isAuth = (req, res, next) => {
       next();
     });
   } catch (err) {
-    console.log("weed", err);
+    // console.log("weed", err);
     return res.status(500).json({ msg: err.message });
   }
 };
@@ -46,15 +46,22 @@ const isAdmin = async (req, res, next) => {
     res.status(401).send({ message: "Invalid Admin Token" });
   }
 };
-const isSeller = (req, res, next) => {
-  if (req.user && req.user.isSeller) {
+const isSeller = async (req, res, next) => {
+  const user = await Users.findById(req.user.id);
+  // if (req.user && req.user.isSeller) {
+  if (req.user && user.isSeller === true) {
+    // req.user = user;
     next();
   } else {
     res.status(401).send({ message: "Invalid Seller Token" });
   }
 };
-const isSellerOrAdmin = (req, res, next) => {
-  if (req.user && (req.user.isSeller || req.user.isAdmin)) {
+const isSellerOrAdmin = async (req, res, next) => {
+  const user = await Users.findById(req.user.id);
+
+  // if (req.user && (req.user.isSeller || req.user.isAdmin)) {
+  if (req.user && (user.isSeller || user.isAdmin)) {
+    req.user = user;
     next();
   } else {
     res.status(401).send({ message: "Invalid Admin/Seller Token" });

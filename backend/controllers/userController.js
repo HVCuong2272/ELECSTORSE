@@ -25,6 +25,14 @@ const userProfileUpdate = expressAsyncHandler(async (req, res) => {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     user.avatar = req.body.avatar || user.avatar;
+    if (user.isSeller) {
+      user.seller.name = req.body.sellerName || user.seller.name;
+      user.seller.logo = req.body.sellerLogo || user.seller.logo;
+      user.seller.paymentSalaryMethod =
+        req.body.sellerPayment || user.seller.paymentSalaryMethod;
+      user.seller.description =
+        req.body.sellerDescription || user.seller.description;
+    }
     if (req.body.password) {
       user.password = await bcrypt.hash(req.body.password, 12);
     }
@@ -35,6 +43,7 @@ const userProfileUpdate = expressAsyncHandler(async (req, res) => {
       email: updateUser.email,
       avatar: updateUser.avatar,
       isAdmin: updateUser.isAdmin,
+      isSeller: updateUser.isSeller,
       // token: generateToken(updateUser),
     });
   } else {
@@ -43,8 +52,27 @@ const userProfileUpdate = expressAsyncHandler(async (req, res) => {
 });
 
 const getUsers = expressAsyncHandler(async (req, res) => {
+  const searchValue = req.query.searchValue || "";
+  const searchValueRegex = new RegExp(searchValue, "i");
+
+  // console.log("regex", regex);
+  // const searchValueFilter = searchValue
+  //   ? {
+  //       $or: [
+  //         { name: { $regex: searchValueRegex } },
+  //         { email: { $regex: searchValueRegex } },
+  //       ],
+  //     }
+  //   : {};
+  // const users = await User.find({ ...searchValueFilter });
   const users = await User.find({});
-  res.send(users);
+  const resultFilter = users.filter(
+    (user) =>
+      searchValueRegex.test(user._id) ||
+      searchValueRegex.test(user.name) ||
+      searchValueRegex.test(user.email)
+  );
+  res.send(resultFilter);
 });
 
 const editUser = expressAsyncHandler(async (req, res) => {

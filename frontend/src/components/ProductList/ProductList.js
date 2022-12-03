@@ -10,16 +10,16 @@ import { listProducts } from '~/redux/actions/productActions';
 const cx = classNames.bind(styles);
 
 const Product = () => {
-    console.log('render');
+    // console.log('render');
     const dispatch = useDispatch();
     const productList = useSelector((state) => state.productList);
     const { loading, error, products } = productList;
     // console.log(loading);
 
     useEffect(() => {
-        console.log('ef1');
-        dispatch(listProducts());
-        console.log('ef1-1');
+        // console.log('ef1');
+        dispatch(listProducts({}));
+        // console.log('ef1-1');
     }, [dispatch]);
 
     useEffect(() => {
@@ -98,14 +98,26 @@ const Product = () => {
                         <Alert message="Error" description={error} type="error" showIcon />
                     ) : (
                         <>
+                            {products.length === 0 && (
+                                <Alert
+                                    style={{ width: '100%' }}
+                                    message=""
+                                    description="No Product Found"
+                                    type="info"
+                                    showIcon
+                                />
+                            )}
                             <section>
-                                {products
+                                {/* products
                                     .slice(-9)
-                                    .reverse()
-                                    .map((product) => {
-                                        // console.log('wwww', product);
+                                    .reverse() */}
+                                {products.reverse().map((product) => {
+                                    // console.log('wwww', product);
+                                    if (product.countInStock > 0) {
                                         return <ProductItem key={product._id} product={product}></ProductItem>;
-                                    })}
+                                    }
+                                    return;
+                                })}
                             </section>
                             <Link to="/" className={cx('view-more-btn')}>
                                 View More

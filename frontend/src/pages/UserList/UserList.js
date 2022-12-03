@@ -1,4 +1,4 @@
-import { Alert, Spin } from 'antd';
+import { Alert, Spin, Input } from 'antd';
 import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './UserList.module.scss';
@@ -10,7 +10,7 @@ import { USER_DETAILS_RESET } from '~/redux/constants/userConstants';
 import { USER_DELETE_RESET } from '~/redux/constants/userConstants';
 
 const cx = classNames.bind(styles);
-
+const { Search } = Input;
 function UserList() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -28,7 +28,7 @@ function UserList() {
     // }, []);
     useEffect(() => {
         if (userSignin.userInfo) {
-            dispatch(listUsers());
+            dispatch(listUsers({}));
             dispatch({ type: USER_DETAILS_RESET });
         }
     }, [dispatch, userSignin.userInfo, successDelete]);
@@ -39,10 +39,23 @@ function UserList() {
         }
     };
 
+    const onSearch = (searchValue) => {
+        dispatch(listUsers({ searchValue }));
+    };
+
     return (
         <div className={cx('user-management-container')}>
-            <h1>Users</h1>
-
+            <div className={cx('user-management__heading')}>
+                <h1>Users</h1>
+                <div className={cx('user-management-search')}>
+                    <Search
+                        placeholder="Input sellerId or seller name"
+                        onSearch={onSearch}
+                        // onChange={(e) => setSearchValue(e.target.value)}
+                        enterButton
+                    />
+                </div>
+            </div>
             {loadingDelete && <Spin size="large" />}
             {/* {errorDelete && (
                 <Alert

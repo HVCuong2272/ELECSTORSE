@@ -6,7 +6,7 @@ const authMiddle = require("../middlewares/authMiddleware");
 productRouter.get("/", productController.getAllProducts);
 productRouter.post(
   "/",
-  [authMiddle.isAuth, authMiddle.isAdmin],
+  [authMiddle.isAuth, authMiddle.isSellerOrAdmin],
   productController.productElement
 );
 
@@ -15,13 +15,13 @@ productRouter.get("/:id", productController.getProductById);
 
 productRouter.put(
   "/:id",
-  [authMiddle.isAuth, authMiddle.isAdmin],
+  [authMiddle.isAuth, authMiddle.isSellerOrAdmin],
   productController.editProduct
 );
 
 productRouter.delete(
   "/:id",
-  [authMiddle.isAuth, authMiddle.isAdmin],
+  [authMiddle.isAuth, authMiddle.isSellerOrAdmin],
   productController.deleteProduct
 );
 

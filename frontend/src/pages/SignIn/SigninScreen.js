@@ -29,7 +29,11 @@ const SigninScreen = () => {
     const navigate = useNavigate();
     useEffect(() => {
         if (userInfo) {
-            navigate(redirect);
+            if (userInfo.isAdmin || userInfo.isSeller) {
+                navigate('/');
+            } else {
+                navigate(redirect);
+            }
         }
     }, [navigate, redirect, userInfo]);
 

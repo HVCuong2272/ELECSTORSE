@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { showSuccessMessage } from '~/utils/notifyService';
+import { showErrorMessage, showSuccessMessage } from '~/utils/notifyService';
 import {
     PRODUCT_CREATE_FAIL,
     PRODUCT_CREATE_REQUEST,
@@ -18,26 +18,28 @@ import {
     PRODUCT_UPDATE_SUCCESS,
 } from '../constants/productConstants';
 
-export const listProducts = () => async (dispatch) => {
-    // console.log('act1');
-    dispatch({
-        type: PRODUCT_LIST_REQUEST,
-    });
-    // console.log('act2');
-    try {
-        // console.log('act3');
-        const { data } = await Axios.get(`/api/products`);
-        // console.log(data);
-        // console.log('act4');
-        dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
-        // console.log('act5');
-    } catch (error) {
-        // console.log(error);
-        // console.log('act6');
-        dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });
-        // console.log('act7');
-    }
-};
+export const listProducts =
+    ({ seller = '' }) =>
+    async (dispatch) => {
+        // console.log('act1');
+        dispatch({
+            type: PRODUCT_LIST_REQUEST,
+        });
+        // console.log('act2');
+        try {
+            // console.log('act3');
+            const { data } = await Axios.get(`/api/products?seller=${seller}`);
+            // console.log(data);
+            // console.log('act4');
+            dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
+            // console.log('act5');
+        } catch (error) {
+            // console.log(error);
+            // console.log('act6');
+            dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });
+            // console.log('act7');
+        }
+    };
 
 export const detailsProduct = (productId) => async (dispatch) => {
     // console.log('acc1');
@@ -94,6 +96,10 @@ export const updateProduct = (product) => async (dispatch, getState) => {
         showSuccessMessage('Product Updated Successfully', 'topRight');
         dispatch({ type: PRODUCT_UPDATE_SUCCESS, payload: data });
     } catch (error) {
+        showErrorMessage(
+            error.response && error.response.data.message ? error.response.data.message : error.message,
+            'topRight',
+        );
         dispatch({
             type: PRODUCT_UPDATE_FAIL,
             payload: error.response && error.response.data.message ? error.response.data.message : error.message,
