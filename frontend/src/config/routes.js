@@ -23,6 +23,7 @@ const privateRoutes = {
     userList: '/userlist',
     userEdit: '/user/:id/edit',
     paySellerSalary: '/paySellerSalary',
+    rollBackOrderManagement: '/rollback-order-management',
 };
 
 export { publicRoutes, privateRoutes };

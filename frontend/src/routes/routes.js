@@ -27,6 +27,7 @@ import UserEdit from '~/pages/UserEdit';
 import SellerRoute from '~/components/SellerRoute';
 import SellerScreen from '~/pages/SellerScreen';
 import PaySellerSalary from '~/pages/PaySellerSalary';
+import OrderRollback from '~/pages/OrderRollback';
 
 // Public routes
 const publicRoutes = [
@@ -60,6 +61,7 @@ const privateRoutes = [
     { path: config.privateRoutes.productManagementSeller, component: ProductManagement, isSellerPrivate: SellerRoute },
     { path: config.privateRoutes.orderListSeller, component: OrderList, isSellerPrivate: SellerRoute },
     { path: config.privateRoutes.paySellerSalary, component: PaySellerSalary, isAdminPrivate: AdminRoute },
+    { path: config.privateRoutes.rollBackOrderManagement, component: OrderRollback, isAdminPrivate: AdminRoute },
 ];
 
 export { publicRoutes, privateRoutes };

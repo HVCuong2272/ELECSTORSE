@@ -167,6 +167,7 @@ const getOrderList = expressAsyncHandler(async (req, res) => {
     path: "user",
     select: "name",
   });
+  // console.log("sdwewe", orders);
 
   // use to filter after populate
   const orderReturn = orders.filter(
@@ -272,12 +273,15 @@ const paySummary1 = expressAsyncHandler(async (req, res) => {
         _id: "$sellerId",
         totalFromMonth: { $sum: "$totalSellerPrice" },
         orderId: { $addToSet: "$orderId" },
+        adminPayId: { $first: "$adminPayId" },
+        // sellerId: { $first: "$sellerId" },
       },
     },
     {
       $sort: { totalFromMonth: 1 },
     },
   ]);
+  // console.log("sdwewewe", sellerPayListByMonth);
   for (sellerDetail of sellerPayListByMonth) {
     const checkAdminPayCondition = {
       ...condition,
@@ -312,13 +316,14 @@ const paySummary1 = expressAsyncHandler(async (req, res) => {
 
 const paySellerSalary = expressAsyncHandler(async (req, res) => {
   // console.log(req.params.id, req.query.payMonth, req.query.payYear);
+  // console.log("sdsd", req.user);
   const updatesellerPayListByMonth = await SellerPay.updateMany(
     {
       sellerId: req.params.id,
       payMonth: req.query.payMonth,
       payYear: req.query.payYear,
     },
-    { isAdminPay: true }
+    { adminPayId: req.user._id, isAdminPay: true }
   );
   res.send("Update Successfully");
 });

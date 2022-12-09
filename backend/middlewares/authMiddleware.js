@@ -21,6 +21,7 @@ const Users = require("../models/userModel");
 const isAuth = (req, res, next) => {
   try {
     const token = req.header("Authorization");
+    // console.log("xcxc", token);
     if (!token) return res.status(400).json({ msg: "Invalid Authentication." });
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
@@ -41,6 +42,7 @@ const isAdmin = async (req, res, next) => {
 
   //   if (req.user && req.user.isAdmin) {
   if (req.user && user.isAdmin === true) {
+    req.user = user;
     next();
   } else {
     res.status(401).send({ message: "Invalid Admin Token" });

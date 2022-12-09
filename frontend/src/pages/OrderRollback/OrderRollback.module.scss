@@ -1,0 +1,28 @@
+.order-rollback-table-container {
+    margin-top: var(--header-height);
+    min-height: 58vh;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.order-rollback-table {
+    width: 100%;
+    border-collapse: collapse;
+    padding: 0 10px 0 10px;
+    margin-top: 10px;
+}
+
+.order-rollback-table tbody tr:nth-of-type(odd) {
+    background-color: #f4f4f4;
+}
+.order-rollback-table td,
+.order-rollback-table th {
+    white-space: pre-wrap;
+    text-align: left;
+    border: 0.1rem solid #e4e4e4;
+    padding: 0.5rem;
+    text-align: center;
+}
+.order-rollback-table button {
+    margin: 0 0.2rem;
+}

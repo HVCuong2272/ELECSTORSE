@@ -157,6 +157,7 @@ function PaySellerSalary() {
                             <th>TOTAL FROM ORDERS</th>
                             <th>SELLER PAYMENT METHOD</th>
                             <th>IS PAID THIS MONTH</th>
+                            <th>ADMIN ID PAY</th>
                             <th>ACTION</th>
                         </tr>
                     </thead>
@@ -181,6 +182,7 @@ function PaySellerSalary() {
                                     <td>{sellerItem.totalFromMonth}$</td>
                                     <td>{sellerItem.paymentSalaryMethod}</td>
                                     <td>{sellerItem.isAdminPay === true ? 'Yes' : 'No'}</td>
+                                    <td>{sellerItem.adminPayId ? sellerItem.adminPayId : 'Not Pay'}</td>
                                     <td>
                                         {!sellerItem.isAdminPay && (
                                             <button

@@ -1,5 +1,6 @@
 const { VNPay } = require("vn-payments");
 const Order = require("../models/orderModel");
+const SellerPay = require("../models/sellerPayModel");
 /* eslint-disable no-param-reassign */
 const TEST_CONFIG = VNPay.TEST_CONFIG;
 const vnpay = new VNPay({
@@ -35,6 +36,21 @@ const updatedOrder = async (req, res, par) => {
       email_address: req.email,
     };
     const updatedOrder = await order.save();
+    for (product of updatedOrder.orderItems) {
+      const newSellerPayOrder = new SellerPay({
+        sellerId: product.seller._id,
+        userBuyId: updatedOrder.user,
+        orderId: updatedOrder._id,
+        productId: product.product,
+        productName: product.name,
+        productPrice: product.price,
+        userBuyQuantity: product.qty,
+        totalSellerPrice: product.price * product.qty,
+        payMonth: new Date().getMonth() + 1,
+        payYear: new Date().getFullYear(),
+      });
+      const createdSellerPayOrder = await newSellerPayOrder.save();
+    }
     // res.send({message:'Order Paid',order:updatedOrder});
   }
   // console.log("LOG ORDER: ", order);

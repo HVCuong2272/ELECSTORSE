@@ -220,6 +220,7 @@ export const paySellerSalary =
             const { token } = getState();
             const { data } = await Axios.put(
                 `/api/orders/paySellerSalary/${sellerId}?payMonth=${payMonth}&payYear=${payYear}`,
+                {},
                 {
                     headers: {
                         Authorization: `${token}`,

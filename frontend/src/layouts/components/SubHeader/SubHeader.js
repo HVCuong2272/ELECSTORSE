@@ -124,7 +124,7 @@ function SubHeader({ isHomePage }) {
     );
     const handleClickAdminMenuProfile = ({ key }) => {
         // message.info(`Click on item ${key}`);
-        if (key === '6') {
+        if (key === '7') {
             dispatch(signout());
         } else if (key === '1') {
             navigate('/profile');
@@ -136,6 +136,8 @@ function SubHeader({ isHomePage }) {
             navigate('/userlist');
         } else if (key === '5') {
             navigate('/paySellerSalary');
+        } else if (key === '6') {
+            navigate('/rollback-order-management');
         }
     };
     const menuAdminProfile = (
@@ -162,6 +164,10 @@ function SubHeader({ isHomePage }) {
                     label: 'Pay Salary Seller Management',
                     key: '5',
                 },
+                {
+                    label: 'Roll Back Order Management',
+                    key: '6',
+                },
                 // {
                 //     key: '5',
                 //     label: 'disabled sub menu',
@@ -182,7 +188,7 @@ function SubHeader({ isHomePage }) {
                 },
                 {
                     label: 'Logout',
-                    key: '6',
+                    key: '7',
                 },
             ]}
         />

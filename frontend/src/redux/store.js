@@ -31,6 +31,7 @@ import {
     orderPayReducer,
     paySellerSalaryReducer,
 } from './reducers/orderReducers';
+import { orderRollbackCreateReducer } from './reducers/orderRollbackReducer';
 
 const initialState = {
     cart: {
@@ -70,6 +71,7 @@ const reducer = combineReducers({
     listSellerSalary: listSellerSalaryReducer,
     listSellerSalary1: listSellerSalaryReducer1,
     paySellerSalary: paySellerSalaryReducer,
+    OrderRollbackCreate: orderRollbackCreateReducer,
 });
 // const reducer = (state, action) => {
 //     // console.log('reducer123');

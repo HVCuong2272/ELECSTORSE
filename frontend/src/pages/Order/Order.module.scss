@@ -135,6 +135,34 @@
     margin-bottom: auto;
 }
 
+.vnpay-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    width: 200px;
+    border-radius: 2px;
+    border: 2px solid transparent;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    padding: 8px 0px 8px 4px;
+    font-weight: 400;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all linear 0.18s;
+}
+
+.vnpay-button:hover {
+    border-color: var(--primary-color);
+    background-color: var(--white-color);
+    color: var(--primary-color);
+}
+
+.vnpay-button-text {
+    margin-left: 6px;
+}
+
 .rollback-btn {
     margin-top: 10px;
     width: 200px;

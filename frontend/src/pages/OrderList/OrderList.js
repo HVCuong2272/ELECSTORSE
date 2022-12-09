@@ -139,15 +139,23 @@ function OrderList() {
                                     <tr key={order._id}>
                                         <td>{order._id}</td>
                                         <td>{order.user.name}</td>
-                                        <td>{order.createdAt.substring(0, 10)}</td>
-                                        <td>
+                                        {/* <td>{order.createdAt.substring(0, 10)}</td> */}
+                                        <td>{new Date(order.createdAt).toLocaleDateString('en-GB')}</td>
+                                        <td
+                                            style={{
+                                                color:
+                                                    JSON.parse(localStorage.getItem('userInfo')).isAdmin &&
+                                                    order.isPaid &&
+                                                    'var(--primary-color)',
+                                            }}
+                                        >
                                             {order.totalPrice}$
                                             {JSON.parse(localStorage.getItem('userInfo')).isAdmin && order.isPaid && (
                                                 <span style={{ display: 'none' }}>{(total += order.totalPrice)}</span>
                                             )}
                                         </td>
                                         {JSON.parse(localStorage.getItem('userInfo')).isSeller && (
-                                            <td>
+                                            <td style={{ color: order.isPaid && 'var(--primary-color)' }}>
                                                 {order.isPaid
                                                     ? order.orderItems.reduce((acc, currentItem) => {
                                                           if (
@@ -205,7 +213,9 @@ function OrderList() {
                         </tbody>
                     </table>
                     <div>
-                        Revenue From {month}/{year} Page 1: {total}$
+                        Revenue From {month}/{year} Page 1:{' '}
+                        <span style={{ color: 'var(--primary-color)' }}>{total}$</span>{' '}
+                        {`(count By Order Already Paid)`}
                     </div>
                 </>
             )}

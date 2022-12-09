@@ -22,7 +22,11 @@ orderRouter.get(
   [authMiddle.isAuth, authMiddle.isAdmin],
   orderController.paySummary1
 );
-orderRouter.put("/paySellerSalary/:id", orderController.paySellerSalary);
+orderRouter.put(
+  "/paySellerSalary/:id",
+  [authMiddle.isAuth, authMiddle.isAdmin],
+  orderController.paySellerSalary
+);
 
 orderRouter.get("/:id", authMiddle.isAuth, orderController.getOrderByID);
 

@@ -22,6 +22,10 @@ const sellerPaySchema = new mongoose.Schema(
       ref: "Product",
       required: true,
     },
+    adminPayId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     productName: {
       type: String,
     },
