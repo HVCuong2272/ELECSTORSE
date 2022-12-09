@@ -11,6 +11,9 @@ import { ORDER_CREATE_RESET, ORDER_DELIVER_RESET, ORDER_PAY_RESET } from '~/redu
 import Axios from 'axios';
 import { PayPalButton } from 'react-paypal-button-v2';
 import { CART_EMPTY } from '~/redux/constants/cartConstants';
+import { ethers } from "ethers";
+import ErrorMessage from "~/pages/Bitcoin/ErrorMessage";
+import TxList from "~/pages/Bitcoin/TxList";
 import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import styles from './Order.module.scss';
 import { createOrderRollback } from '~/redux/actions/orderRollbackAction';
@@ -295,6 +298,58 @@ function Order() {
     const [errorVNPay, setErrorVNPay] = useState('');
     const [successVNPay, setSuccessVNPay] = useState('');
     const [loadingVNPay, setLoadingVNPay] = useState(false);
+
+    //bitcoin
+
+const [errorBitcoin, setError] = useState();
+const [txs, setTxs] = useState([]);
+// const [check, setCheck]=useState(false);
+const startPayment = async ({ setError, setTxs, ether, addr, chainRequest }) => {
+  try {
+    if (!window.ethereum)
+      throw new Error("No crypto wallet found. Please install it.");
+
+    await window.ethereum.send("eth_requestAccounts");
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const { chainId } = await provider.getNetwork();
+    console.log(typeof(chainId));
+    if(chainId===chainRequest){
+    ethers.utils.getAddress(addr);
+    const tx = await signer.sendTransaction({
+      to: addr,
+      value: ethers.utils.parseEther(ether),
+    });
+    console.log({ ether, addr });
+    console.log("tx", tx);
+    // setCheck(true);
+    successPaymentHandler();
+    setTxs([tx]);
+}
+    else{
+        setError('You are using different coin');
+        console.log(errorBitcoin)
+    }
+  } catch (err) {
+    setError(err.message);
+  }
+};
+
+const handleBitcoin = async (e, coin, amount) => {
+    e.preventDefault();
+    // const data = new FormData(e.target);
+    setError();
+    console.log("tsx: ", txs);
+    console.log("coin: ", coin);
+    await startPayment({
+      setError,
+      setTxs,
+      ether: '0.01',
+      addr: '0xf88B78460E9251c2F2FB5AC91FCe3e6ECa928659',
+      chainRequest: coin
+    });
+}
+//endbitcoin
 
     useEffect(() => {
         if (errorDeliver) {
@@ -767,6 +822,80 @@ function Order() {
                                                             </div>
                                                         </div>
                                                     )}
+
+                                                            {/* Coin */}
+
+                                                            {!order.isPaid && order.paymentMethod === 'Coin' && (
+                                                                <li>
+                                                                    {!sdkReady ? (
+                                                                        <div style={{ marginTop: '200px' }}>
+                                                                            <Spin size="large" />
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div>
+                                                                            <div className={cx('paypal-button')}>
+                                                                                <>
+                                                                                    {errorPay && (
+                                                                                        <Alert
+                                                                                            message="Error"
+                                                                                            description={errorPay}
+                                                                                            type="error"
+                                                                                            showIcon
+                                                                                        />
+                                                                                    )}
+                                                                                    {loadingPay && (
+                                                                                        <div
+                                                                                            style={{
+                                                                                                marginTop: '200px',
+                                                                                            }}
+                                                                                        >
+                                                                                            <Spin size="large" />
+                                                                                        </div>
+                                                                                    )}
+                                                                                    {/* <PayPalButton
+                                                                                        amount={order.totalPrice}
+                                                                                        onSuccess={
+                                                                                            successPaymentHandler
+                                                                                        }
+                                                                                    ></PayPalButton> */}
+                                                                                    <div style={{display: 'flex', flexDirection:'column', justifyContent:'center',width: '100%', height:'50%'}}>
+                                                                                    <button
+                                                                                        className={cx(
+                                                                                            'btn',
+                                                                                            'btn-fill-out',
+                                                                                            'btn-block',
+                                                                                        )}
+                                                                                        style={{
+                                                                                            width: '100%',
+                                                                                            height: '50%',
+                                                                                        }}
+                                                                                        onClick={(e)=>handleBitcoin(e,97,'0.01')}
+                                                                                    >
+                                                                                        Binance
+                                                                                    </button>
+                                                                                    <button
+                                                                                        className={cx(
+                                                                                            'btn',
+                                                                                            'btn-fill-out',
+                                                                                            'btn-block',
+                                                                                        )}
+                                                                                        style={{
+                                                                                            width: '100%',
+                                                                                            height: '50%',
+                                                                                        }}
+                                                                                    >
+                                                                                        Polygon MATIC
+                                                                                    </button>
+                                                                                    </div>
+                                                                                    {/* <ErrorMessage message={error} />
+                                                                                    <TxList txs={txs} /> */}
+                                                                                    <ErrorMessage message={error} />
+                                                                                </>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </li>
+                                                            )}
 
                                                     {order.isPaid ? (
                                                         <>

@@ -502,6 +502,18 @@ function ShippingAddress() {
                                                                     card/VNPay if you don't have a PayPal account.
                                                                 </p>
                                                             </Radio>
+                                                            <Radio value={'Coin'}>
+                                                                <h3>
+                                                                    {' '}
+                                                                    <span>
+                                                                        <PaypalIcon />
+                                                                    </span>
+                                                                    Coin
+                                                                </h3>
+                                                                <p>
+                                                                    Using virtual coin that we support to purchase your bill
+                                                                </p>
+                                                            </Radio>
                                                         </Space>
                                                     </Radio.Group>
                                                 </div>
