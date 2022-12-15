@@ -4,12 +4,26 @@ const Product = require("../models/productModel");
 const User = require("../models/userModel");
 
 const getAllProducts = expressAsyncHandler(async (req, res) => {
+  const pageSize = Number(req.query.itemsPerPage) || 9;
+  const page = Number(req.query.pageNumber) || 1;
+
   const seller = req.query.seller || "";
   const sellerFilter = seller ? { seller } : {};
+  const count = await Product.count({
+    ...sellerFilter,
+  });
   const products = await Product.find({
     ...sellerFilter,
-  }).populate("seller", "seller.name seller.logo email");
-  res.send(products);
+  })
+    .populate("seller", "seller.name seller.logo email")
+    .skip(pageSize * (page - 1))
+    .limit(pageSize);
+  res.send({
+    products,
+    page,
+    pages: Math.ceil(count / pageSize),
+    totalProductsCount: count,
+  });
 });
 
 const createProductSeed = expressAsyncHandler(async (req, res) => {
@@ -100,6 +114,46 @@ const deleteProduct = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const createProductReview = expressAsyncHandler(async (req, res) => {
+  const productId = req.params.id;
+  const product = await Product.findById(productId);
+  if (product) {
+    if (product.reviews.find((x) => x.userId.equals(req.body.userId))) {
+      return res
+        .status(400)
+        .send({ message: "You already submitted a review" });
+    }
+    const review = {
+      userId: req.body.userId,
+      avatar: req.body.avatar,
+      name: req.body.name,
+      rating: Number(req.body.rating),
+      comment: req.body.comment,
+    };
+    product.reviews.push(review);
+    product.numReviews = product.reviews.length;
+    product.rating = Math.round(
+      product.reviews.reduce((a, c) => c.rating + a, 0) / product.reviews.length
+    );
+    const updatedProduct = await product.save();
+
+    const sellerInfo = await User.findById(product.seller);
+    sellerInfo.seller.numReviews = sellerInfo.seller.numReviews + 1;
+    // product.seller.rating = (Number(product.seller.numReviews) + 1).toFixed(1);
+    sellerInfo.seller.rating = Math.round(
+      (Number(sellerInfo.seller.rating) + Number(req.body.rating)) / 2
+    );
+    const updatedSeller = await sellerInfo.save();
+
+    res.status(201).send({
+      message: "Review Created",
+      review: updatedProduct.reviews[updatedProduct.reviews.length - 1],
+    });
+  } else {
+    res.status(404).send({ message: "Product not Found" });
+  }
+});
+
 module.exports = {
   createProductSeed,
   getAllProducts,
@@ -107,4 +161,5 @@ module.exports = {
   productElement,
   editProduct,
   deleteProduct,
+  createProductReview,
 };

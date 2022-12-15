@@ -6,8 +6,9 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { detailsUser } from '~/redux/actions/userActions';
 import { listProducts } from '~/redux/actions/productActions';
-import { Alert, Rate, Spin } from 'antd';
+import { Alert, Pagination, Rate, Spin } from 'antd';
 import ProductItem from '~/components/ProductItem';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -22,11 +23,20 @@ function SellerScreen() {
     const { loading, error, user } = userDetails;
 
     const productList = useSelector((state) => state.productList);
-    const { loading: loadingProducts, error: errorProducts, products } = productList;
+    const { loading: loadingProducts, error: errorProducts, products, page, pages, totalProductsCount } = productList;
+
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(6);
     useEffect(() => {
         dispatch(detailsUser(sellerId));
-        dispatch(listProducts({ seller: sellerId }));
-    }, [dispatch, sellerId]);
+        dispatch(listProducts({ seller: sellerId, currentPage, itemsPerPage }));
+    }, [dispatch, sellerId, currentPage]);
+
+    const handleChangePage = (page) => {
+        // console.log('page', page);
+        setCurrentPage(page);
+    };
     return (
         <div style={{ marginTop: 'var(--subHeader-height)' }}>
             <div className={cx('grid wide')}>
@@ -99,6 +109,14 @@ function SellerScreen() {
                                             </div>
                                         );
                                     })}
+                                <div className={'container-pagination'}>
+                                    <Pagination
+                                        current={currentPage}
+                                        onChange={handleChangePage}
+                                        pageSize={itemsPerPage}
+                                        total={totalProductsCount}
+                                    />
+                                </div>
                             </div>
                         )}
                     </div>

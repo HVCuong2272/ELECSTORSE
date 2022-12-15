@@ -25,4 +25,9 @@ productRouter.delete(
   productController.deleteProduct
 );
 
+productRouter.post(
+  "/:id/reviews",
+  authMiddle.isAuth,
+  productController.createProductReview
+);
 module.exports = productRouter;

@@ -24,6 +24,9 @@ import {
     ORDER_PAY_FAIL,
     ORDER_PAY_REQUEST,
     ORDER_PAY_SUCCESS,
+    ORDER_WATCH_FAIL,
+    ORDER_WATCH_REQUEST,
+    ORDER_WATCH_SUCCESS,
     PAY_SELLER_SALARY_FAIL,
     PAY_SELLER_SALARY_REQUEST,
     PAY_SELLER_SALARY_SUCCESS,
@@ -235,3 +238,25 @@ export const paySellerSalary =
             dispatch({ type: PAY_SELLER_SALARY_FAIL, payload: message });
         }
     };
+
+export const updateWatchOrder = (orderId) => async (dispatch, getState) => {
+    dispatch({ type: ORDER_WATCH_REQUEST });
+    try {
+        const { token } = getState();
+        const { data } = await Axios.put(
+            `/api/orders/watch/${orderId}`,
+            {},
+            {
+                headers: {
+                    Authorization: `${token}`,
+                },
+            },
+        );
+        // console.log(data);
+        // showSuccessMessage(`Pay Salary ${payMonth}/${payYear} for ${sellerName} successfully!`, 'topRight');
+        dispatch({ type: ORDER_WATCH_SUCCESS, payload: data });
+    } catch (error) {
+        const message = error.response && error.response.data.message ? error.response.data.message : error.message;
+        dispatch({ type: ORDER_WATCH_FAIL, payload: message });
+    }
+};

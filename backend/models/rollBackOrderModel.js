@@ -12,10 +12,9 @@ const rollBackOrderSchema = new mongoose.Schema(
       ref: "Order",
       required: true,
     },
-    adminAcceptId: {
+    adminHandleId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
     totalOrderPrice: { type: Number, required: true },
     userPaymentRollBack: { type: String },
@@ -25,6 +24,7 @@ const rollBackOrderSchema = new mongoose.Schema(
     adminResponseAcceptCancel: {
       type: String,
     },
+    isAdminHandle: { type: Boolean, default: false, required: true },
     isAdminAccept: { type: Boolean, default: false, required: true },
     isAdminWatch: { type: Boolean, default: false },
   },

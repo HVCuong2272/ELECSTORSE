@@ -123,6 +123,21 @@ const deliverOrder = expressAsyncHandler(async (req, res) => {
     if (order.paymentMethod === "Card") {
       order.isPaid = true;
       order.paidAt = Date.now();
+      for (product of order.orderItems) {
+        const newSellerPayOrder = new SellerPay({
+          sellerId: product.seller._id,
+          userBuyId: order.user,
+          orderId: order._id,
+          productId: product.product,
+          productName: product.name,
+          productPrice: product.price,
+          userBuyQuantity: product.qty,
+          totalSellerPrice: product.price * product.qty,
+          payMonth: new Date().getMonth() + 1,
+          payYear: new Date().getFullYear(),
+        });
+        const createdSellerPayOrder = await newSellerPayOrder.save();
+      }
     }
 
     const updatedOrder = await order.save();
@@ -163,10 +178,12 @@ const getOrderList = expressAsyncHandler(async (req, res) => {
   const orders = await Order.find({
     ...sellerFilter, // use to filter before populate
     createdAt: { $gte: fromDate, $lt: toDate },
-  }).populate({
-    path: "user",
-    select: "name",
-  });
+  })
+    .populate({
+      path: "user",
+      select: "name",
+    })
+    .sort({ createdAt: -1 });
   // console.log("sdwewe", orders);
 
   // use to filter after populate
@@ -328,6 +345,15 @@ const paySellerSalary = expressAsyncHandler(async (req, res) => {
   res.send("Update Successfully");
 });
 
+const updateWatchOrder = expressAsyncHandler(async (req, res) => {
+  // console.log("aduu", req.user);
+  const updateOrderStatus = await Order.updateOne(
+    { _id: req.params.orderId },
+    { isWatch: true }
+  );
+  res.send({ message: "Update Order Rollback Successfully!" });
+});
+
 module.exports = {
   createOrder,
   getOrderByID,
@@ -339,4 +365,5 @@ module.exports = {
   paySummary,
   paySummary1,
   paySellerSalary,
+  updateWatchOrder,
 };

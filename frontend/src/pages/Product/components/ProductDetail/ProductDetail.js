@@ -49,7 +49,8 @@ function ProductDetail(props) {
                     </div>
                 </div>
                 <div className={cx('product-detail__subtitle-rating')}>
-                    <Rate disabled allowHalf defaultValue={product.rating} />({product.rating})
+                    <Rate disabled allowHalf defaultValue={Math.round(Number(product.rating))} />(
+                    {Math.round(product.rating)})
                 </div>
             </div>
             <div className={cx('product-detail__description')}>{product.description}</div>

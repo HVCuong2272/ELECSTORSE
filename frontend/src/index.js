@@ -5,13 +5,19 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import GlobalStyles from '~/components/GlobalStyles';
 import store from './redux/store';
+import { SocketProvider } from './config/socketContext';
+import { NotifyProvider } from './config/notificationContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
         {/* <React.StrictMode> */}
         <GlobalStyles>
-            <App />
+            <SocketProvider>
+                <NotifyProvider>
+                    <App />
+                </NotifyProvider>
+            </SocketProvider>
         </GlobalStyles>
         {/* </React.StrictMode>, */}
     </Provider>,

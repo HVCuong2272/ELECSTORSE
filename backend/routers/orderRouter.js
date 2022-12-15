@@ -23,6 +23,12 @@ orderRouter.get(
   orderController.paySummary1
 );
 orderRouter.put(
+  "/watch/:orderId",
+  [authMiddle.isAuth, authMiddle.isSellerOrAdmin],
+  orderController.updateWatchOrder
+);
+
+orderRouter.put(
   "/paySellerSalary/:id",
   [authMiddle.isAuth, authMiddle.isAdmin],
   orderController.paySellerSalary

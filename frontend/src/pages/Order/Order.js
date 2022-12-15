@@ -17,6 +17,9 @@ import TxList from "~/pages/Bitcoin/TxList";
 import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import styles from './Order.module.scss';
 import { createOrderRollback } from '~/redux/actions/orderRollbackAction';
+import { SocketContext } from '~/config/socketContext';
+import { useContext } from 'react';
+import { ORDER_ROLLBACK_CREATE_RESET } from '~/redux/constants/orderRollbackConstants';
 
 const cx = classNames.bind(styles);
 const { TextArea } = Input;
@@ -273,6 +276,7 @@ const { TextArea } = Input;
 //     AX: 'Åland Islands',
 // };
 function Order() {
+    const socket = useContext(SocketContext);
     const [sdkReady, setSdkReady] = useState(false);
     const token = useSelector((state) => state.token);
     const userSignin = useSelector((state) => state.userSignin);
@@ -355,7 +359,16 @@ const handleBitcoin = async (e, coin, amount) => {
         if (errorDeliver) {
             dispatch({ type: ORDER_DELIVER_RESET });
         }
+        // if (successRollBack) {
+        //     dispatch({ type: ORDER_ROLLBACK_CREATE_RESET });
+        // }
     }, []);
+    useEffect(() => {
+        if (successRollBack) {
+            socket.emit('sendNotify', {});
+            dispatch({ type: ORDER_ROLLBACK_CREATE_RESET });
+        }
+    }, [successRollBack]);
 
     useEffect(() => {
         if (userSignin.userInfo) {
@@ -461,6 +474,8 @@ const handleBitcoin = async (e, coin, amount) => {
                                 orderId,
                             ),
                         );
+
+                        dispatch(detailsOrder(orderId));
                     },
                     onCancel() {
                         // console.log('Cancel');
@@ -911,7 +926,8 @@ const handleBitcoin = async (e, coin, amount) => {
                                                                     type="success"
                                                                 />
                                                             </div>
-                                                            {!JSON.parse(localStorage.getItem('userInfo')).isAdmin &&
+                                                            {!order.isRollback ? (
+                                                                !JSON.parse(localStorage.getItem('userInfo')).isAdmin &&
                                                                 !JSON.parse(localStorage.getItem('userInfo'))
                                                                     .isSeller &&
                                                                 calcDate(order.paidAt) &&
@@ -925,7 +941,39 @@ const handleBitcoin = async (e, coin, amount) => {
                                                                         </div>
                                                                         {loadingRollBack && <Spin size="large" />}
                                                                     </>
-                                                                )}
+                                                                )
+                                                            ) : order.isFinishHandleRollback === 'Waiting' ? (
+                                                                <div
+                                                                    style={{
+                                                                        color: 'var(--primary-color)',
+                                                                        fontSize: '2.4rem',
+                                                                        marginTop: '4px',
+                                                                    }}
+                                                                >
+                                                                    Please Wait For The Admin To Handle Rollback Request
+                                                                    Order For You
+                                                                </div>
+                                                            ) : order.isFinishHandleRollback === 'Success' ? (
+                                                                <div
+                                                                    style={{
+                                                                        color: 'var(--blue-color)',
+                                                                        fontSize: '2.4rem',
+                                                                        marginTop: '4px',
+                                                                    }}
+                                                                >
+                                                                    Your Rollback Request Order Has Been Accepted
+                                                                </div>
+                                                            ) : (
+                                                                <div
+                                                                    style={{
+                                                                        color: 'var(--primary-color)',
+                                                                        fontSize: '2.4rem',
+                                                                        marginTop: '4px',
+                                                                    }}
+                                                                >
+                                                                    Your Rollback Request Order Has Been Failed
+                                                                </div>
+                                                            )}
                                                         </>
                                                     ) : (
                                                         <Alert

@@ -194,3 +194,11 @@ textarea:focus {
 .ant-input-focused {
     box-shadow: none;
 }
+
+// pagination
+.container-pagination {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 18px;
+}

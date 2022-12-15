@@ -7,14 +7,21 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { Input, Space } from 'antd';
 import styles from './OrderList.module.scss';
-import { deleteOrder, listOrders } from '~/redux/actions/orderActions';
+import { deleteOrder, listOrders, updateWatchOrder } from '~/redux/actions/orderActions';
 import { ORDER_DELETE_RESET } from '~/redux/constants/orderConstants';
 import { useState } from 'react';
+import { useContext } from 'react';
+import { SocketContext } from '~/config/socketContext';
+import { NotifyContext } from '~/config/notificationContext';
 
 const cx = classNames.bind(styles);
 const { Search } = Input;
 
 function OrderList() {
+    const socket = useContext(SocketContext);
+    const { orderNotify } = useContext(NotifyContext);
+    const [orderNotifySubHeader, setOrderNotifySubHeader] = orderNotify;
+
     const { pathname } = useLocation();
     const sellerMode = pathname.indexOf('/seller') >= 0;
     const navigate = useNavigate();
@@ -79,6 +86,18 @@ function OrderList() {
             }),
         );
     };
+
+    const handleWatch = (e, orderId, isWatch) => {
+        // console.log('click', orderId);
+        // console.log('click', e.target.closest('#table-row'));
+        e.target.closest('#table-row1').style.fontWeight = 'normal';
+        dispatch(updateWatchOrder(orderId));
+        setOrderNotifySubHeader((prev) => {
+            if (prev > 0 && !isWatch) return prev - 1;
+            else return prev;
+        });
+        // socket.emit('sendAdminWatchNotifyRollback', {});
+    };
     return (
         <div className={cx('order-list__container')}>
             <div className={cx('order-list__heading')}>
@@ -130,33 +149,56 @@ function OrderList() {
                                 <th>IS USER PAID</th>
                                 <th>DELIVERED</th>
                                 <th>PAYMENT METHOD</th>
+                                <th>IS ROLLBACK</th>
+                                <th>ROLLBACK STATUS</th>
                                 <th>ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
                             {orders &&
                                 orders.map((order) => (
-                                    <tr key={order._id}>
+                                    <tr
+                                        key={order._id}
+                                        style={{ fontWeight: !order.isWatch && '600' }}
+                                        onClick={(e) => handleWatch(e, order._id, order.isWatch)}
+                                        id="table-row1"
+                                    >
                                         <td>{order._id}</td>
                                         <td>{order.user.name}</td>
                                         {/* <td>{order.createdAt.substring(0, 10)}</td> */}
-                                        <td>{new Date(order.createdAt).toLocaleDateString('en-GB')}</td>
+                                        {/* <td>{new Date(order.createdAt).toLocaleDateString('en-GB')}</td> */}
+                                        <td>{`${new Date(order.createdAt).toLocaleDateString('en-GB')} ${new Date(
+                                            order.createdAt,
+                                        ).toLocaleTimeString()}`}</td>
                                         <td
                                             style={{
                                                 color:
                                                     JSON.parse(localStorage.getItem('userInfo')).isAdmin &&
                                                     order.isPaid &&
+                                                    order.isFinishHandleRollback !== 'Success' &&
                                                     'var(--primary-color)',
                                             }}
                                         >
                                             {order.totalPrice}$
-                                            {JSON.parse(localStorage.getItem('userInfo')).isAdmin && order.isPaid && (
-                                                <span style={{ display: 'none' }}>{(total += order.totalPrice)}</span>
-                                            )}
+                                            {/* {console.log('sdsd', typeof order.isFinishHandleRollback)} */}
+                                            {JSON.parse(localStorage.getItem('userInfo')).isAdmin &&
+                                                order.isPaid &&
+                                                order.isFinishHandleRollback !== 'Success' && (
+                                                    <span style={{ display: 'none' }}>
+                                                        {(total += order.totalPrice)}
+                                                    </span>
+                                                )}
                                         </td>
                                         {JSON.parse(localStorage.getItem('userInfo')).isSeller && (
-                                            <td style={{ color: order.isPaid && 'var(--primary-color)' }}>
-                                                {order.isPaid
+                                            <td
+                                                style={{
+                                                    color:
+                                                        order.isPaid &&
+                                                        order.isFinishHandleRollback !== 'Success' &&
+                                                        'var(--primary-color)',
+                                                }}
+                                            >
+                                                {order.isPaid && order.isFinishHandleRollback !== 'Success'
                                                     ? order.orderItems.reduce((acc, currentItem) => {
                                                           if (
                                                               currentItem.seller._id ===
@@ -190,6 +232,8 @@ function OrderList() {
                                         </td>
                                         {/* <td>{order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}</td> */}
                                         <td>{order.paymentMethod === 'Card' ? 'Direct Buy' : order.paymentMethod}</td>
+                                        <td>{order.isRollback ? 'Yes' : 'No'}</td>
+                                        <td>{order.isFinishHandleRollback}</td>
                                         <td>
                                             <button
                                                 className={cx('btn', 'btn-fill-out', 'btn-block')}

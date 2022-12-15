@@ -1,4 +1,5 @@
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useRef, createContext } from 'react';
+import { io } from 'socket.io-client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes, privateRoutes } from '~/routes';
 import DefaultLayout from '~/layouts';
@@ -6,10 +7,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { USER_SIGNIN_SUCCESS } from './redux/constants/userConstants';
 import { fetchUser } from './redux/actions/userActions';
+import { useContext } from 'react';
+import { SocketContext } from './config/socketContext';
+
+// export const socketContext = createContext();
 function App() {
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token);
     const userSignin = useSelector((state) => state.userSignin);
+    const socket = useContext(SocketContext);
+    // const socket = useRef();
+
+    // useEffect(() => {
+    //     socket.current = io('ws://localhost:8900/');
+    //     // socket.current.on("getMessage", (data) => {
+    //     //   console.log("io arrival message", data);
+    //     // //   setArrivalMessage({
+    //     // //     sender: data.senderId,
+    //     // //     text: data.text,
+    //     // //     createdAt: Date.now(),
+    //     // //   });
+    //     // });
+    // }, []);
 
     useEffect(() => {
         // console.log('thangadvldf');
@@ -30,6 +49,13 @@ function App() {
                 return fetchUser(token).then((res) => {
                     dispatch({ type: USER_SIGNIN_SUCCESS, payload: { userInfo: res.data, isLogged: true } });
                     localStorage.setItem('userInfo', JSON.stringify(res.data));
+                    socket.emit('addUser', res.data._id);
+                    socket.on('getUsers', (users) => {
+                        console.log('adu', users);
+                        // setOnlineUsers(
+                        //   user.followings.filter((f) => users.some((u) => u.userId === f))
+                        // );
+                    });
                 });
             };
             getUser();

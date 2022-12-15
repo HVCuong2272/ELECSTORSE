@@ -13,13 +13,16 @@ import {
     PRODUCT_LIST_FAIL,
     PRODUCT_LIST_REQUEST,
     PRODUCT_LIST_SUCCESS,
+    PRODUCT_REVIEW_CREATE_FAIL,
+    PRODUCT_REVIEW_CREATE_REQUEST,
+    PRODUCT_REVIEW_CREATE_SUCCESS,
     PRODUCT_UPDATE_FAIL,
     PRODUCT_UPDATE_REQUEST,
     PRODUCT_UPDATE_SUCCESS,
 } from '../constants/productConstants';
 
 export const listProducts =
-    ({ seller = '' }) =>
+    ({ seller = '', currentPage = '', itemsPerPage = 9 }) =>
     async (dispatch) => {
         // console.log('act1');
         dispatch({
@@ -28,7 +31,9 @@ export const listProducts =
         // console.log('act2');
         try {
             // console.log('act3');
-            const { data } = await Axios.get(`/api/products?seller=${seller}`);
+            const { data } = await Axios.get(
+                `/api/products?pageNumber=${currentPage}&itemsPerPage=${itemsPerPage}&seller=${seller}`,
+            );
             // console.log(data);
             // console.log('act4');
             dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
@@ -121,5 +126,23 @@ export const deleteProduct = (productId) => async (dispatch, getState) => {
     } catch (error) {
         const message = error.response && error.response.data.message ? error.response.data.message : error.message;
         dispatch({ type: PRODUCT_DELETE_FAIL, payload: message });
+    }
+};
+
+export const createReview = (productId, review) => async (dispatch, getState) => {
+    dispatch({ type: PRODUCT_REVIEW_CREATE_REQUEST });
+    try {
+        const { token } = getState();
+        const { data } = await Axios.post(`/api/products/${productId}/reviews`, review, {
+            headers: {
+                Authorization: `${token}`,
+            },
+        });
+        dispatch({ type: PRODUCT_REVIEW_CREATE_SUCCESS, payload: data.review });
+    } catch (error) {
+        dispatch({
+            type: PRODUCT_REVIEW_CREATE_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+        });
     }
 };

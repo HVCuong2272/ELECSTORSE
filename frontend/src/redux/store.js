@@ -8,6 +8,7 @@ import {
     productDeleteReducer,
     productDetailsReducer,
     productListReducer,
+    productReviewCreateReducer,
     productUpdateReducer,
 } from './reducers/productReducers';
 import {
@@ -30,8 +31,14 @@ import {
     orderMineListReducer,
     orderPayReducer,
     paySellerSalaryReducer,
+    updateWatchOrderReducer,
 } from './reducers/orderReducers';
-import { orderRollbackCreateReducer } from './reducers/orderRollbackReducer';
+import {
+    handleRollbackOrderReducer,
+    listOrderRollbackReducer,
+    orderRollbackCreateReducer,
+    updateAdminWatchOrderRollbackReducer,
+} from './reducers/orderRollbackReducer';
 
 const initialState = {
     cart: {
@@ -72,6 +79,11 @@ const reducer = combineReducers({
     listSellerSalary1: listSellerSalaryReducer1,
     paySellerSalary: paySellerSalaryReducer,
     OrderRollbackCreate: orderRollbackCreateReducer,
+    listOrderRollback: listOrderRollbackReducer,
+    handleRollbackOrder: handleRollbackOrderReducer,
+    adminWatchOrderRollbackUpdate: updateAdminWatchOrderRollbackReducer,
+    watchOrderUpdate: updateWatchOrderReducer,
+    productReviewCreate: productReviewCreateReducer,
 });
 // const reducer = (state, action) => {
 //     // console.log('reducer123');

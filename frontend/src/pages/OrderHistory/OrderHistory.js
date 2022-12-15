@@ -43,6 +43,8 @@ export default function OrderHistory() {
                             <th>PAID</th>
                             <th>DELIVERED</th>
                             <th>PAYMENT METHOD</th>
+                            <th>IS ROLLBACK</th>
+                            <th>ROLLBACK STATUS</th>
                             <th>ACTIONS</th>
                         </tr>
                     </thead>
@@ -51,11 +53,30 @@ export default function OrderHistory() {
                             orders.map((order) => (
                                 <tr key={order._id}>
                                     <td>{order._id}</td>
-                                    <td>{order.createdAt.substring(0, 10)}</td>
-                                    <td>{order.totalPrice}</td>
-                                    <td>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</td>
-                                    <td>{order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}</td>
+                                    {/* <td>{order.createdAt.substring(0, 10)}</td> */}
+                                    <td>{`${new Date(order.createdAt).toLocaleDateString('en-GB')} ${new Date(
+                                        order.createdAt,
+                                    ).toLocaleTimeString()}`}</td>
+                                    <td>{order.totalPrice}$</td>
+                                    {/* <td>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</td> */}
+                                    <td>
+                                        {order.isPaid
+                                            ? `${new Date(order.paidAt).toLocaleDateString('en-GB')} ${new Date(
+                                                  order.paidAt,
+                                              ).toLocaleTimeString()}`
+                                            : 'No'}
+                                    </td>
+                                    {/* <td>{order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}</td> */}
+                                    <td>
+                                        {order.isDelivered
+                                            ? `${new Date(order.deliveredAt).toLocaleDateString('en-GB')} ${new Date(
+                                                  order.deliveredAt,
+                                              ).toLocaleTimeString()}`
+                                            : 'No'}
+                                    </td>
                                     <td>{order.paymentMethod === 'Card' ? 'Direct Buy' : order.paymentMethod}</td>
+                                    <td>{order.isRollback ? 'Yes' : 'No'}</td>
+                                    <td>{order.isFinishHandleRollback}</td>
                                     <td>
                                         <button
                                             className={cx('btn', 'btn-fill-out', 'btn-block')}

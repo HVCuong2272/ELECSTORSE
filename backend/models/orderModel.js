@@ -60,6 +60,9 @@ const orderSchema = new mongoose.Schema(
     paidAt: { type: Date },
     isDelivered: { type: Boolean, default: false },
     deliveredAt: { type: Date },
+    isRollback: { type: Boolean, default: false },
+    isFinishHandleRollback: { type: String, default: "No" }, // Success, Fail
+    isWatch: { type: Boolean, default: false },
   },
   {
     timestamps: true,

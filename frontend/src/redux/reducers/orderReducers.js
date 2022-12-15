@@ -24,6 +24,10 @@ import {
     ORDER_PAY_REQUEST,
     ORDER_PAY_RESET,
     ORDER_PAY_SUCCESS,
+    ORDER_WATCH_FAIL,
+    ORDER_WATCH_REQUEST,
+    ORDER_WATCH_RESET,
+    ORDER_WATCH_SUCCESS,
     PAY_SELLER_SALARY_FAIL,
     PAY_SELLER_SALARY_REQUEST,
     PAY_SELLER_SALARY_RESET,
@@ -173,6 +177,21 @@ export const paySellerSalaryReducer = (state = {}, action) => {
         case PAY_SELLER_SALARY_FAIL:
             return { loading: false, error: action.payload };
         case PAY_SELLER_SALARY_RESET:
+            return {};
+        default:
+            return state;
+    }
+};
+
+export const updateWatchOrderReducer = (state = {}, action) => {
+    switch (action.type) {
+        case ORDER_WATCH_REQUEST:
+            return { loading: true };
+        case ORDER_WATCH_SUCCESS:
+            return { loading: false, success: true };
+        case ORDER_WATCH_FAIL:
+            return { loading: false, error: action.payload };
+        case ORDER_WATCH_RESET:
             return {};
         default:
             return state;

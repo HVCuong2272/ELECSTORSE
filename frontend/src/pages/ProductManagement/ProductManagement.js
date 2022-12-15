@@ -1,9 +1,9 @@
 import { createProduct, deleteProduct, listProducts } from '~/redux/actions/productActions';
-import { Alert, Radio, Space, Spin } from 'antd';
-import { useEffect } from 'react';
+import { Alert, Radio, Space, Spin, Pagination } from 'antd';
+import { useEffect, useState } from 'react';
 import Product from '../Product/Product';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PRODUCT_CREATE_RESET, PRODUCT_DELETE_RESET } from '~/redux/constants/productConstants';
 import styles from './ProductManagement.module.scss';
 import classNames from 'classnames/bind';
@@ -11,10 +11,11 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
 export default function ProductManagement() {
+    // const { pageNumber = 1 } = useParams();
     const { pathname } = useLocation();
     const sellerMode = pathname.indexOf('/seller') >= 0;
     const productList = useSelector((state) => state.productList);
-    const { loading, error, products } = productList;
+    const { loading, error, products, page, pages, totalProductsCount } = productList;
     const productCreate = useSelector((state) => state.productCreate);
     const {
         loading: loadingCreate,
@@ -28,6 +29,10 @@ export default function ProductManagement() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(4);
+
     useEffect(() => {
         if (successCreate) {
             dispatch({ type: PRODUCT_CREATE_RESET });
@@ -37,8 +42,26 @@ export default function ProductManagement() {
         } else if (successDelete) {
             dispatch({ type: PRODUCT_DELETE_RESET });
         }
-        dispatch(listProducts({ seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '' }));
-    }, [createdProduct, dispatch, navigate, successCreate, successDelete]);
+        dispatch(
+            listProducts({
+                seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+                currentPage,
+                itemsPerPage,
+            }),
+        );
+    }, [createdProduct, dispatch, navigate, successCreate, successDelete, currentPage]);
+
+    // useEffect(() => {
+    //     if (currentPage) {
+    //         dispatch(
+    //             listProducts({
+    //                 seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+    //                 currentPage,
+    //                 itemsPerPage,
+    //             }),
+    //         );
+    //     }
+    // }, [currentPage]);
     const deleteHandler = (product) => {
         if (window.confirm('Are you sure to delete?')) {
             dispatch(deleteProduct(product._id));
@@ -47,6 +70,12 @@ export default function ProductManagement() {
     const createHandler = () => {
         dispatch(createProduct());
     };
+
+    const handleChangePage = (page) => {
+        // console.log('page', page);
+        setCurrentPage(page);
+    };
+
     return (
         <div className={cx('product-management-container')}>
             <div className={cx('product-management-heading')}>
@@ -159,6 +188,14 @@ export default function ProductManagement() {
                                 ))}
                             </tbody>
                         </table>
+                        <div className={'container-pagination'}>
+                            <Pagination
+                                current={currentPage}
+                                onChange={handleChangePage}
+                                pageSize={itemsPerPage}
+                                total={totalProductsCount}
+                            />
+                        </div>
                     </>
                 )}
             </div>

@@ -36,6 +36,7 @@ function PaySellerSalary() {
         }
     }, [dispatch, userSignin.userInfo, successPay]);
 
+    //handle search datepicker value
     const handleMonthChange = (date, dateString) => {
         const monthAndYearArray = dateString.split('/');
         // console.log(monthAndYearArray);
@@ -46,6 +47,7 @@ function PaySellerSalary() {
         );
     };
 
+    //handle search value
     const onSearch = (value) => {
         dispatch(listSellerSalary1({ searchValue: value, month: month, year: year }));
     };

@@ -8,7 +8,24 @@ orderRollbackRouter.post(
   authMiddle.isAuth,
   orderRollbackController.createOrderRollBack
 );
-orderRollbackRouter.get("/", orderRollbackController.getAllRollbackOrders);
+orderRollbackRouter.get(
+  "/",
+  authMiddle.isAuth,
+  orderRollbackController.getAllRollbackOrders
+);
+
+orderRollbackRouter.put(
+  "/:orderId",
+  authMiddle.isAuth,
+  orderRollbackController.updateAdminWatchOrderRollback
+);
+
+orderRollbackRouter.put(
+  "/",
+  authMiddle.isAuth,
+  orderRollbackController.updateRollbackOrderByOrderId
+);
+
 // productRouter.post(
 //   "/",
 //   [authMiddle.isAuth, authMiddle.isSellerOrAdmin],
@@ -17,12 +34,6 @@ orderRollbackRouter.get("/", orderRollbackController.getAllRollbackOrders);
 
 // productRouter.get("/seed", productController.createProductSeed);
 // productRouter.get("/:id", productController.getProductById);
-
-// productRouter.put(
-//   "/:id",
-//   [authMiddle.isAuth, authMiddle.isSellerOrAdmin],
-//   productController.editProduct
-// );
 
 // productRouter.delete(
 //   "/:id",

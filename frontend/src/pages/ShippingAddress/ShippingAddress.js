@@ -3,7 +3,7 @@ import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import MapGL from 'react-map-gl';
 import Geocoder from 'react-map-gl-geocoder';
 import classNames from 'classnames/bind';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import CheckoutStep from '~/components/CheckoutStep';
 import styles from './ShippingAddress.module.scss';
 import { Modal, Radio, Space } from 'antd';
@@ -16,12 +16,14 @@ import { createOrder } from '~/redux/actions/orderActions';
 import { ORDER_CREATE_RESET } from '~/redux/constants/orderConstants';
 import { CART_EMPTY } from '~/redux/constants/cartConstants';
 import { showErrorMessage } from '~/utils/notifyService';
+import { SocketContext } from '~/config/socketContext';
 
 const cx = classNames.bind(styles);
 
-const MAPBOX_TOKEN = 'pk.eyJ1Ijoiam9ubGVlb24iLCJhIjoiY2xhamxqcHF5MGFiNTNvcXkwdnU1Nnk3YiJ9.ODPvgRy0EYyIZ5Tmg7PDDw';
+const MAPBOX_TOKEN = 'pk.eyJ1IjoiZmFtb3BhMjQ4MSIsImEiOiJjbGJwODE1NG0wN3g1M3ZudnNnOXR2cXU3In0.GgenYnbHX2t9Klm2ZkAyiQ';
 
 function ShippingAddress() {
+    const socket = useContext(SocketContext);
     // Mapbox
     const [viewport, setViewport] = useState({
         latitude: 37.7577,
@@ -231,6 +233,7 @@ function ShippingAddress() {
     useEffect(() => {
         if (success) {
             // console.log('success', success);
+            socket.emit('sendNotifyNewOrder', {});
             navigate(`/order/${order._id}`);
             dispatch({ type: ORDER_CREATE_RESET });
         }
