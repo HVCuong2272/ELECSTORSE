@@ -52,6 +52,9 @@ const userProfileUpdate = expressAsyncHandler(async (req, res) => {
 });
 
 const getUsers = expressAsyncHandler(async (req, res) => {
+  const pageSize = Number(req.query.itemsPerPage) || 6;
+  const page = Number(req.query.pageNumber) || 1;
+
   const searchValue = req.query.searchValue || "";
   const searchValueRegex = new RegExp(searchValue, "i");
 
@@ -65,14 +68,31 @@ const getUsers = expressAsyncHandler(async (req, res) => {
   //     }
   //   : {};
   // const users = await User.find({ ...searchValueFilter });
+  // const count = await User.count({});
   const users = await User.find({});
-  const resultFilter = users.filter(
+  // .skip(pageSize * (page - 1))
+  // .limit(pageSize);
+  const count = users.filter(
     (user) =>
       searchValueRegex.test(user._id) ||
       searchValueRegex.test(user.name) ||
       searchValueRegex.test(user.email)
-  );
-  res.send(resultFilter);
+  ).length;
+  const resultFilter = users
+    .filter(
+      (user) =>
+        searchValueRegex.test(user._id) ||
+        searchValueRegex.test(user.name) ||
+        searchValueRegex.test(user.email)
+    )
+    .slice(pageSize * (page - 1), pageSize * (page - 1) + pageSize); // can replace skip and limit (dòng 71,73,74)
+  // console.log("ress", count);
+  res.send({
+    resultFilter,
+    page,
+    pages: Math.ceil(count / pageSize),
+    totalUsersCount: count,
+  });
 });
 
 const editUser = expressAsyncHandler(async (req, res) => {

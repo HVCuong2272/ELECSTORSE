@@ -9,11 +9,19 @@ const getAllProducts = expressAsyncHandler(async (req, res) => {
 
   const seller = req.query.seller || "";
   const sellerFilter = seller ? { seller } : {};
+
+  const searchValue = req.query.searchValue || "";
+  const searchValueRegex = new RegExp(searchValue, "i");
+  const searchValueFilter = searchValue
+    ? { name: { $regex: searchValueRegex } }
+    : {};
   const count = await Product.count({
     ...sellerFilter,
+    ...searchValueFilter,
   });
   const products = await Product.find({
     ...sellerFilter,
+    ...searchValueFilter,
   })
     .populate("seller", "seller.name seller.logo email")
     .skip(pageSize * (page - 1))

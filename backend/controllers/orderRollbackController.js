@@ -35,6 +35,8 @@ const getAllRollbackOrders = expressAsyncHandler(async (req, res) => {
   // const seller = req.query.seller || "";
   // const sellerFilter = seller ? { seller } : {};
   // console.log("wwwwqe", sellerFilter);
+  const pageSize = Number(req.query.itemsPerPage) || 4;
+  const page = Number(req.query.pageNumber) || 1;
   const searchValue = req.query.searchValue || "";
   const searchValueRegex = new RegExp(searchValue, "i");
 
@@ -59,17 +61,32 @@ const getAllRollbackOrders = expressAsyncHandler(async (req, res) => {
     .sort({ createdAt: -1 });
 
   // use to filter after populate
-  const orderRollbackReturn = orders.filter(
+  const count = orders.filter(
     // similar to order.user.name.includes(searchValue) ||order.paymentMethod.includes(searchValue)
     // but use regex here can check also uppercase and lower case
     (order) =>
       searchValueRegex.test(order.userBuyId) ||
       searchValueRegex.test(order.orderId) ||
       searchValueRegex.test(order._id)
-  );
-
+  ).length;
+  const orderRollbackReturn = orders
+    .filter(
+      // similar to order.user.name.includes(searchValue) ||order.paymentMethod.includes(searchValue)
+      // but use regex here can check also uppercase and lower case
+      (order) =>
+        searchValueRegex.test(order.userBuyId) ||
+        searchValueRegex.test(order.orderId) ||
+        searchValueRegex.test(order._id)
+    )
+    .slice(pageSize * (page - 1), pageSize * (page - 1) + pageSize);
   // console.log("asas", orderRollbackReturn);
-  res.send(orderRollbackReturn);
+  res.send({
+    result: orderRollbackReturn,
+    page,
+    pages: Math.ceil(count / pageSize),
+    totalOrderRollbacksCount: count,
+  });
+  // res.send(orderRollbackReturn);
 });
 
 // api for admin update (params orderId)

@@ -1,7 +1,7 @@
 import { React, useContext } from 'react';
 import classNames from 'classnames/bind';
 import { SocketContext } from '~/config/socketContext';
-import { Alert, Spin, Input, DatePicker, Modal } from 'antd';
+import { Alert, Spin, Input, DatePicker, Modal, Pagination } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,7 +28,7 @@ function OrderRollback() {
     const { userInfo } = userSignin;
 
     const OrderRollbackList = useSelector((state) => state.listOrderRollback);
-    const { loading, error, orderRollbackTable } = OrderRollbackList;
+    const { loading, error, orderRollbackTable, page, pages, totalOrderRollbacksCount } = OrderRollbackList;
 
     const rollbackOrderHandle = useSelector((state) => state.handleRollbackOrder);
     const { loading: loadingHandle, error: errorHandle, success: successHandle } = rollbackOrderHandle;
@@ -45,6 +45,11 @@ function OrderRollback() {
     const [year, setYear] = useState(new Date().getFullYear());
     const [searchValue, setSearchValue] = useState('');
     // const [newNotify, setNewNotify] = useState(null);
+
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(4);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -69,23 +74,37 @@ function OrderRollback() {
     useEffect(() => {
         if (userSignin.userInfo) {
             // let day = date.getDate();
-            dispatch(listOrderRollback({ month: month, year: year }));
+            dispatch(listOrderRollback({ month: month, year: year, searchValue, currentPage, itemsPerPage }));
         }
-    }, [dispatch, userSignin.userInfo, successHandle]);
+    }, [dispatch, userSignin.userInfo, successHandle, currentPage]);
     // }, [dispatch, userSignin.userInfo, successPay]);
 
     const onSearch = (value) => {
-        dispatch(listOrderRollback({ searchValue: value, month: month, year: year }));
+        setSearchValue(value);
+        setCurrentPage(1);
+        dispatch(listOrderRollback({ searchValue: value, month: month, year: year, currentPage, itemsPerPage }));
     };
 
     const handleMonthChange = (date, dateString) => {
         const monthAndYearArray = dateString.split('/');
         // console.log(monthAndYearArray);
+        setCurrentPage(1);
         setMonth(monthAndYearArray[0]);
         setYear(monthAndYearArray[1]);
         dispatch(
-            listOrderRollback({ month: monthAndYearArray[0], year: monthAndYearArray[1], searchValue: searchValue }),
+            listOrderRollback({
+                month: monthAndYearArray[0],
+                year: monthAndYearArray[1],
+                searchValue: searchValue,
+                currentPage,
+                itemsPerPage,
+            }),
         );
+    };
+
+    const handleChangePage = (page) => {
+        // console.log('page', page);
+        setCurrentPage(page);
     };
 
     const handleUserCancelReason = (e) => {
@@ -163,82 +182,95 @@ function OrderRollback() {
             ) : error ? (
                 <Alert message="Error" description={error} type="error" showIcon />
             ) : (
-                <table className={cx('order-rollback-table')}>
-                    <thead>
-                        <tr>
-                            <th>ORDER ID</th>
-                            <th>USER BUY ID</th>
-                            <th>TOTAL PRICE</th>
-                            <th>USER REASON</th>
-                            <th>USER ROLLBACK PAYMENT</th>
-                            <th>DATE REQUEST</th>
-                            <th>IS HANDLE</th>
-                            <th>IS ACCEPT</th>
-                            <th>ADMIN HANDLE ID</th>
-                            <th>ACTION</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {orderRollbackTable &&
-                            orderRollbackTable.map((order, index) => (
-                                <tr
-                                    key={index}
-                                    style={{ fontWeight: !order.isAdminWatch && '600' }}
-                                    onClick={(e) => handleAdminWatch(e, order.orderId._id, order.isAdminWatch)}
-                                    id="table-row"
-                                >
-                                    <td>{order.orderId._id}</td>
-                                    <td>{order.userBuyId}</td>
-                                    <td>{order.totalOrderPrice}$</td>
-                                    <td onClick={handleUserCancelReason}>
-                                        <div className={cx('user-reason-table')}>{order.reasonCancel}</div>
-                                    </td>
-                                    <td>{order.userPaymentRollBack}</td>
-                                    <td>{`${new Date(order.orderId.createdAt).toLocaleDateString('en-GB')} ${new Date(
-                                        order.createdAt,
-                                    ).toLocaleTimeString()}`}</td>
-                                    <td>{order.isAdminHandle ? 'Yes' : 'No'}</td>
-                                    <td>{order.isAdminAccept ? 'Yes' : 'No'}</td>
-                                    <td>{order.adminHandleId ? order.adminHandleId : 'No'}</td>
-                                    <td>
-                                        <div
-                                            style={{
-                                                display: order.isAdminHandle ? 'none' : 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }}
-                                        >
-                                            <div style={{ flex: 1 }}>
-                                                <button
-                                                    className={cx('btn', 'btn-fill-out', 'btn-block')}
-                                                    style={{}}
-                                                    onClick={() =>
-                                                        handleRollBack({
-                                                            action: 'Success',
-                                                            orderId: order.orderId._id,
-                                                        })
-                                                    }
-                                                >
-                                                    Accept
-                                                </button>
+                <>
+                    <table className={cx('order-rollback-table')}>
+                        <thead>
+                            <tr>
+                                <th>ORDER ID</th>
+                                <th>USER BUY ID</th>
+                                <th>TOTAL PRICE</th>
+                                <th>USER REASON</th>
+                                <th>USER ROLLBACK PAYMENT</th>
+                                <th>DATE REQUEST</th>
+                                <th>IS HANDLE</th>
+                                <th>IS ACCEPT</th>
+                                <th>ADMIN HANDLE ID</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orderRollbackTable &&
+                                orderRollbackTable.map((order, index) => (
+                                    <tr
+                                        key={index}
+                                        style={{ fontWeight: !order.isAdminWatch && '600' }}
+                                        onClick={(e) => handleAdminWatch(e, order.orderId._id, order.isAdminWatch)}
+                                        id="table-row"
+                                    >
+                                        <td>{order.orderId._id}</td>
+                                        <td>{order.userBuyId}</td>
+                                        <td>{order.totalOrderPrice}$</td>
+                                        <td onClick={handleUserCancelReason}>
+                                            <div className={cx('user-reason-table')}>{order.reasonCancel}</div>
+                                        </td>
+                                        <td>{order.userPaymentRollBack}</td>
+                                        <td>{`${new Date(order.orderId.createdAt).toLocaleDateString(
+                                            'en-GB',
+                                        )} ${new Date(order.createdAt).toLocaleTimeString()}`}</td>
+                                        <td>{order.isAdminHandle ? 'Yes' : 'No'}</td>
+                                        <td>{order.isAdminAccept ? 'Yes' : 'No'}</td>
+                                        <td>{order.adminHandleId ? order.adminHandleId : 'No'}</td>
+                                        <td>
+                                            <div
+                                                style={{
+                                                    display: order.isAdminHandle ? 'none' : 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                }}
+                                            >
+                                                <div style={{ flex: 1 }}>
+                                                    <button
+                                                        className={cx('btn', 'btn-fill-out', 'btn-block')}
+                                                        style={{}}
+                                                        onClick={() =>
+                                                            handleRollBack({
+                                                                action: 'Success',
+                                                                orderId: order.orderId._id,
+                                                            })
+                                                        }
+                                                    >
+                                                        Accept
+                                                    </button>
+                                                </div>
+                                                <div style={{ flex: 1 }}>
+                                                    <button
+                                                        className={cx('btn', 'btn-fill-out', 'btn-block')}
+                                                        style={{}}
+                                                        onClick={() =>
+                                                            handleRollBack({
+                                                                action: 'Fail',
+                                                                orderId: order.orderId._id,
+                                                            })
+                                                        }
+                                                    >
+                                                        Deny
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div style={{ flex: 1 }}>
-                                                <button
-                                                    className={cx('btn', 'btn-fill-out', 'btn-block')}
-                                                    style={{}}
-                                                    onClick={() =>
-                                                        handleRollBack({ action: 'Fail', orderId: order.orderId._id })
-                                                    }
-                                                >
-                                                    Deny
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </table>
+                                        </td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
+                    <div className={'container-pagination'}>
+                        <Pagination
+                            current={currentPage}
+                            onChange={handleChangePage}
+                            pageSize={itemsPerPage}
+                            total={totalOrderRollbacksCount}
+                        />
+                    </div>
+                </>
             )}
         </div>
     );

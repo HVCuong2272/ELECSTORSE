@@ -1,4 +1,4 @@
-import { Alert, DatePicker, Input, Space, Spin, Modal } from 'antd';
+import { Alert, DatePicker, Input, Space, Spin, Modal, Pagination } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import React from 'react';
@@ -18,7 +18,7 @@ function PaySellerSalary() {
     const { userInfo } = userSignin;
 
     const sellerSalaryList = useSelector((state) => state.listSellerSalary1);
-    const { loading, error, sellerSalaryTable } = sellerSalaryList;
+    const { loading, error, sellerSalaryTable, page, pages, totalSellerPaysCount } = sellerSalaryList;
 
     const paySalary = useSelector((state) => state.paySellerSalary);
     const { loading: loadingPay, error: errorPay, success: successPay } = paySalary;
@@ -27,29 +27,47 @@ function PaySellerSalary() {
     const [year, setYear] = useState(new Date().getFullYear());
     const [searchValue, setSearchValue] = useState('');
 
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(4);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
         if (userSignin.userInfo) {
             // let day = date.getDate();
-            dispatch(listSellerSalary1({ month: month, year: year }));
+            dispatch(listSellerSalary1({ month: month, year: year, searchValue, currentPage, itemsPerPage }));
         }
-    }, [dispatch, userSignin.userInfo, successPay]);
+    }, [dispatch, userSignin.userInfo, successPay, currentPage]);
 
     //handle search datepicker value
     const handleMonthChange = (date, dateString) => {
         const monthAndYearArray = dateString.split('/');
         // console.log(monthAndYearArray);
+        setCurrentPage(1);
         setMonth(monthAndYearArray[0]);
         setYear(monthAndYearArray[1]);
         dispatch(
-            listSellerSalary1({ month: monthAndYearArray[0], year: monthAndYearArray[1], searchValue: searchValue }),
+            listSellerSalary1({
+                month: monthAndYearArray[0],
+                year: monthAndYearArray[1],
+                searchValue: searchValue,
+                currentPage,
+                itemsPerPage,
+            }),
         );
     };
 
     //handle search value
     const onSearch = (value) => {
-        dispatch(listSellerSalary1({ searchValue: value, month: month, year: year }));
+        setSearchValue(value);
+        setCurrentPage(1);
+        dispatch(listSellerSalary1({ searchValue: value, month: month, year: year, currentPage, itemsPerPage }));
+    };
+
+    const handleChangePage = (page) => {
+        // console.log('page', page);
+        setCurrentPage(page);
     };
 
     const { confirm } = Modal;
@@ -124,7 +142,7 @@ function PaySellerSalary() {
                         <Search
                             placeholder="Input sellerId or seller name"
                             onSearch={onSearch}
-                            onChange={(e) => setSearchValue(e.target.value)}
+                            // onChange={(e) => setSearchValue(e.target.value)}
                             enterButton
                         />
                     </div>
@@ -149,62 +167,74 @@ function PaySellerSalary() {
             ) : error ? (
                 <Alert message="Error" description={error} type="error" showIcon />
             ) : (
-                <table className={cx('seller-salary-table')}>
-                    <thead>
-                        <tr>
-                            <th>SELLER ID</th>
-                            <th>SELLER NAME</th>
-                            <th>SELLER SHOP NAME</th>
-                            <th>SELLER IN ORDERS</th>
-                            <th>TOTAL FROM ORDERS</th>
-                            <th>SELLER PAYMENT METHOD</th>
-                            <th>IS PAID THIS MONTH</th>
-                            <th>ADMIN ID PAY</th>
-                            <th>ACTION</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {sellerSalaryTable &&
-                            sellerSalaryTable.result &&
-                            sellerSalaryTable.result.map((sellerItem) => (
-                                <tr key={sellerItem._id}>
-                                    {/* {console.log('ưewe', sellerItem)} */}
-                                    <td>{sellerItem._id}</td>
-                                    <td>{sellerItem.sellerName}</td>
-                                    <td>{sellerItem.sellerShopName}</td>
-                                    <td onClick={handleOrderTableinfo}>
-                                        <div className={cx('orderId-table')}>
-                                            {sellerItem.orderId
-                                                ? Array.isArray(sellerItem.orderId)
-                                                    ? sellerItem.orderId.map((orderItem) => `${orderItem}`).join('\n')
-                                                    : sellerItem.orderId
-                                                : ''}
-                                        </div>
-                                    </td>
-                                    <td>{sellerItem.totalFromMonth}$</td>
-                                    <td>{sellerItem.paymentSalaryMethod}</td>
-                                    <td>{sellerItem.isAdminPay === true ? 'Yes' : 'No'}</td>
-                                    <td>{sellerItem.adminPayId ? sellerItem.adminPayId : 'Not Pay'}</td>
-                                    <td>
-                                        {!sellerItem.isAdminPay && (
-                                            <button
-                                                className={cx('btn', 'btn-fill-out', 'btn-block')}
-                                                style={{ width: '100%', height: '50%' }}
-                                                onClick={() => {
-                                                    handlePaySellerSalary({
-                                                        sellerName: sellerItem.sellerName,
-                                                        sellerId: sellerItem._id,
-                                                    });
-                                                }}
-                                            >
-                                                Pay
-                                            </button>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </table>
+                <>
+                    <table className={cx('seller-salary-table')}>
+                        <thead>
+                            <tr>
+                                <th>SELLER ID</th>
+                                <th>SELLER NAME</th>
+                                <th>SELLER SHOP NAME</th>
+                                <th>SELLER IN ORDERS</th>
+                                <th>TOTAL FROM ORDERS</th>
+                                <th>SELLER PAYMENT METHOD</th>
+                                <th>IS PAID THIS MONTH</th>
+                                <th>ADMIN ID PAY</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {sellerSalaryTable &&
+                                sellerSalaryTable &&
+                                sellerSalaryTable.map((sellerItem) => (
+                                    <tr key={sellerItem._id}>
+                                        {/* {console.log('ưewe', sellerItem)} */}
+                                        <td>{sellerItem._id}</td>
+                                        <td>{sellerItem.sellerName}</td>
+                                        <td>{sellerItem.sellerShopName}</td>
+                                        <td onClick={handleOrderTableinfo}>
+                                            <div className={cx('orderId-table')}>
+                                                {sellerItem.orderId
+                                                    ? Array.isArray(sellerItem.orderId)
+                                                        ? sellerItem.orderId
+                                                              .map((orderItem) => `${orderItem}`)
+                                                              .join('\n')
+                                                        : sellerItem.orderId
+                                                    : ''}
+                                            </div>
+                                        </td>
+                                        <td>{sellerItem.totalFromMonth}$</td>
+                                        <td>{sellerItem.paymentSalaryMethod}</td>
+                                        <td>{sellerItem.isAdminPay === true ? 'Yes' : 'No'}</td>
+                                        <td>{sellerItem.adminPayId ? sellerItem.adminPayId : 'Not Pay'}</td>
+                                        <td>
+                                            {!sellerItem.isAdminPay && (
+                                                <button
+                                                    className={cx('btn', 'btn-fill-out', 'btn-block')}
+                                                    style={{ width: '100%', height: '50%' }}
+                                                    onClick={() => {
+                                                        handlePaySellerSalary({
+                                                            sellerName: sellerItem.sellerName,
+                                                            sellerId: sellerItem._id,
+                                                        });
+                                                    }}
+                                                >
+                                                    Pay
+                                                </button>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
+                    <div className={'container-pagination'}>
+                        <Pagination
+                            current={currentPage}
+                            onChange={handleChangePage}
+                            pageSize={itemsPerPage}
+                            total={totalSellerPaysCount}
+                        />
+                    </div>
+                </>
             )}
         </div>
     );

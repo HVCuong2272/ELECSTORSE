@@ -256,7 +256,7 @@ function SubHeader({ isHomePage }) {
     const handleClickAdminMenuProfile = ({ key }) => {
         // message.info(`Click on item ${key}`);
         if (key === '7') {
-            console.log('sdsd', socket);
+            // console.log('sdsd', socket);
             socket.emit('removeUser', JSON.parse(localStorage.getItem('userInfo'))._id);
             dispatch(signout());
         } else if (key === '1') {
@@ -272,6 +272,11 @@ function SubHeader({ isHomePage }) {
         } else if (key === '6') {
             navigate('/rollback-order-management');
         }
+        // else if (key === '8-1') {
+        //     navigate('/orderlist');
+        // } else if (key === '8-2') {
+        //     navigate('/rollback-order-management');
+        // }
     };
     const menuAdminProfile = (
         <Menu
@@ -318,17 +323,33 @@ function SubHeader({ isHomePage }) {
                     ),
                 },
                 // {
-                //     key: '5',
+                //     key: '8',
                 //     label: 'disabled sub menu',
-                //     disabled: true,
+                //     // disabled: true,
                 //     children: [
                 //         {
-                //             key: '5-1',
-                //             label: '5d menu item',
+                //             key: '8-1',
+                //             label: 'Order Management',
+                //             icon: (
+                //                 <span
+                //                     style={{ display: orderNotifySubHeader === 0 && 'none' }}
+                //                     className={cx(`${orderNotifySubHeader > 0 && 'counter'}`)}
+                //                 >
+                //                     {orderNotifySubHeader}
+                //                 </span>
+                //             ),
                 //         },
                 //         {
-                //             key: '5-2',
-                //             label: '6th menu item',
+                //             key: '8-2',
+                //             label: 'Roll Back Order Management',
+                //             icon: (
+                //                 <span
+                //                     style={{ display: rollbackNotifySubHeader === 0 && 'none' }}
+                //                     className={cx(`${rollbackNotifySubHeader > 0 && 'counter'}`)}
+                //                 >
+                //                     {rollbackNotifySubHeader}
+                //                 </span>
+                //             ),
                 //         },
                 //     ],
                 // },

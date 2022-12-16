@@ -1,5 +1,5 @@
 import { createProduct, deleteProduct, listProducts } from '~/redux/actions/productActions';
-import { Alert, Radio, Space, Spin, Pagination } from 'antd';
+import { Alert, Radio, Space, Spin, Pagination, Input } from 'antd';
 import { useEffect, useState } from 'react';
 import Product from '../Product/Product';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import styles from './ProductManagement.module.scss';
 import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
-
+const { Search } = Input;
 export default function ProductManagement() {
     // const { pageNumber = 1 } = useParams();
     const { pathname } = useLocation();
@@ -32,6 +32,7 @@ export default function ProductManagement() {
     // pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(4);
+    const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
         if (successCreate) {
@@ -47,6 +48,7 @@ export default function ProductManagement() {
                 seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
                 currentPage,
                 itemsPerPage,
+                searchValue,
             }),
         );
     }, [createdProduct, dispatch, navigate, successCreate, successDelete, currentPage]);
@@ -71,6 +73,19 @@ export default function ProductManagement() {
         dispatch(createProduct());
     };
 
+    const onSearch = (searchValue) => {
+        setCurrentPage(1);
+        setSearchValue(searchValue);
+        dispatch(
+            listProducts({
+                seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+                currentPage,
+                itemsPerPage,
+                searchValue,
+            }),
+        );
+    };
+
     const handleChangePage = (page) => {
         // console.log('page', page);
         setCurrentPage(page);
@@ -85,6 +100,14 @@ export default function ProductManagement() {
                         Create Product
                     </button>
                 )}
+            </div>
+            <div style={{ margin: '0 20px 20px', width: '24%' }}>
+                <Search
+                    placeholder="Input product name"
+                    onSearch={onSearch}
+                    // onChange={(e) => setSearchValue(e.target.value)}
+                    enterButton
+                />
             </div>
             {localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).isSeller === true && (
                 <div style={{ margin: '0 0 10px 20px', fontStyle: 'italic', color: `var(--product-text-color)` }}>

@@ -36,7 +36,13 @@ export const listOrderRollbackReducer = (state = { orderRollbackTable: [] }, act
         case ORDER_ROLLBACK_LIST_REQUEST:
             return { loading: true };
         case ORDER_ROLLBACK_LIST_SUCCESS:
-            return { loading: false, orderRollbackTable: action.payload };
+            return {
+                loading: false,
+                orderRollbackTable: action.payload.result,
+                pages: action.payload.pages,
+                page: action.payload.page,
+                totalOrderRollbacksCount: action.payload.totalOrderRollbacksCount,
+            };
         case ORDER_ROLLBACK_LIST_FAIL:
             return { loading: false, error: action.payload };
         default:

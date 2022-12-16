@@ -22,6 +22,11 @@ orderRouter.get(
   [authMiddle.isAuth, authMiddle.isAdmin],
   orderController.paySummary1
 );
+orderRouter.get(
+  "/monthRevenue",
+  [authMiddle.isAuth, authMiddle.isSellerOrAdmin],
+  orderController.calculateMonthRevenue
+);
 orderRouter.put(
   "/watch/:orderId",
   [authMiddle.isAuth, authMiddle.isSellerOrAdmin],

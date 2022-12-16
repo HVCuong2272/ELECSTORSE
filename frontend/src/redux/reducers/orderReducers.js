@@ -1,4 +1,8 @@
 import {
+    MONTH_REVENUE_FAIL,
+    MONTH_REVENUE_REQUEST,
+    MONTH_REVENUE_RESET,
+    MONTH_REVENUE_SUCCESS,
     ORDER_CREATE_FAIL,
     ORDER_CREATE_REQUEST,
     ORDER_CREATE_RESET,
@@ -92,7 +96,13 @@ export const orderMineListReducer = (state = { orders: [] }, action) => {
         case ORDER_MINE_LIST_REQUEST:
             return { loading: true };
         case ORDER_MINE_LIST_SUCCESS:
-            return { loading: false, orders: action.payload };
+            return {
+                loading: false,
+                orders: action.payload.resultFilter,
+                pages: action.payload.pages,
+                page: action.payload.page,
+                totalOrdersCount: action.payload.totalOrdersCount,
+            };
         case ORDER_MINE_LIST_FAIL:
             return { loading: false, error: action.payload };
         default:
@@ -105,7 +115,13 @@ export const orderListReducer = (state = { orders: [] }, action) => {
         case ORDER_LIST_REQUEST:
             return { loading: true };
         case ORDER_LIST_SUCCESS:
-            return { loading: false, orders: action.payload };
+            return {
+                loading: false,
+                orders: action.payload.resultFilter,
+                pages: action.payload.pages,
+                page: action.payload.page,
+                totalOrdersCount: action.payload.totalOrdersCount,
+            };
         case ORDER_LIST_FAIL:
             return { loading: false, error: action.payload };
         default:
@@ -160,7 +176,13 @@ export const listSellerSalaryReducer1 = (state = { sellerSalaryTable: [] }, acti
         case SELLER_SALARY_LIST_REQUEST1:
             return { loading: true };
         case SELLER_SALARY_LIST_SUCCESS1:
-            return { loading: false, sellerSalaryTable: action.payload };
+            return {
+                loading: false,
+                sellerSalaryTable: action.payload.result,
+                pages: action.payload.pages,
+                page: action.payload.page,
+                totalSellerPaysCount: action.payload.totalSellerPaysCount,
+            };
         case SELLER_SALARY_LIST_FAIL1:
             return { loading: false, error: action.payload };
         default:
@@ -192,6 +214,21 @@ export const updateWatchOrderReducer = (state = {}, action) => {
         case ORDER_WATCH_FAIL:
             return { loading: false, error: action.payload };
         case ORDER_WATCH_RESET:
+            return {};
+        default:
+            return state;
+    }
+};
+
+export const calculateMonthRevenueReducer = (state = { monthRevenue: 0 }, action) => {
+    switch (action.type) {
+        case MONTH_REVENUE_REQUEST:
+            return { loading: true };
+        case MONTH_REVENUE_SUCCESS:
+            return { loading: false, monthRevenue: action.payload };
+        case MONTH_REVENUE_FAIL:
+            return { loading: false, error: action.payload };
+        case MONTH_REVENUE_RESET:
             return {};
         default:
             return state;

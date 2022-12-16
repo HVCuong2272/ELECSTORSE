@@ -36,14 +36,20 @@ export const createOrderRollback = (orderRollback, orderId) => async (dispatch, 
 };
 
 export const listOrderRollback =
-    ({ month = new Date().getMonth() + 1, year = new Date().getFullYear(), searchValue = '' }) =>
+    ({
+        month = new Date().getMonth() + 1,
+        year = new Date().getFullYear(),
+        searchValue = '',
+        currentPage = '',
+        itemsPerPage = 4,
+    }) =>
     async (dispatch, getState) => {
         // console.log('mmm', month, year);
         dispatch({ type: ORDER_ROLLBACK_LIST_REQUEST });
         try {
             const { token } = getState();
             const { data } = await Axios.get(
-                `/api/orderRollback?month=${month}&year=${year}&searchValue=${searchValue}`,
+                `/api/orderRollback?month=${month}&year=${year}&searchValue=${searchValue}&pageNumber=${currentPage}&itemsPerPage=${itemsPerPage}`,
                 {
                     headers: {
                         Authorization: `${token}`,

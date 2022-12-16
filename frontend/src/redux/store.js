@@ -21,6 +21,7 @@ import {
 } from './reducers/userReducers';
 import tokenReducer from './reducers/tokenReducers';
 import {
+    calculateMonthRevenueReducer,
     listSellerSalaryReducer,
     listSellerSalaryReducer1,
     orderCreateReducer,
@@ -84,6 +85,7 @@ const reducer = combineReducers({
     adminWatchOrderRollbackUpdate: updateAdminWatchOrderRollbackReducer,
     watchOrderUpdate: updateWatchOrderReducer,
     productReviewCreate: productReviewCreateReducer,
+    calculateMonthRevenue: calculateMonthRevenueReducer,
 });
 // const reducer = (state, action) => {
 //     // console.log('reducer123');

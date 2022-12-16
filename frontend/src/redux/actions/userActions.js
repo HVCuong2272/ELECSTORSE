@@ -103,14 +103,17 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 };
 
 export const listUsers =
-    ({ searchValue = '' }) =>
+    ({ searchValue = '', currentPage = '', itemsPerPage = 6 }) =>
     async (dispatch, getState) => {
         dispatch({ type: USER_LIST_REQUEST });
         try {
             const { token } = getState();
-            const { data } = await Axios.get(`/api/users?searchValue=${searchValue}`, {
-                headers: { Authorization: token },
-            });
+            const { data } = await Axios.get(
+                `/api/users?searchValue=${searchValue}&pageNumber=${currentPage}&itemsPerPage=${itemsPerPage}`,
+                {
+                    headers: { Authorization: token },
+                },
+            );
             dispatch({ type: USER_LIST_SUCCESS, payload: data });
         } catch (error) {
             // console.log(error); //(Axios error)

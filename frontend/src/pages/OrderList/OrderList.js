@@ -2,13 +2,12 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { Alert, Spin, DatePicker } from 'antd';
+import { Alert, Spin, DatePicker, Input, Pagination } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
-import { Input, Space } from 'antd';
 import styles from './OrderList.module.scss';
-import { deleteOrder, listOrders, updateWatchOrder } from '~/redux/actions/orderActions';
-import { ORDER_DELETE_RESET } from '~/redux/constants/orderConstants';
+import { calculateMonthRevenue, deleteOrder, listOrders, updateWatchOrder } from '~/redux/actions/orderActions';
+import { MONTH_REVENUE_RESET, ORDER_DELETE_RESET } from '~/redux/constants/orderConstants';
 import { useState } from 'react';
 import { useContext } from 'react';
 import { SocketContext } from '~/config/socketContext';
@@ -29,30 +28,56 @@ function OrderList() {
     const { userInfo } = userSignin;
 
     const orderList = useSelector((state) => state.orderList);
-    const { loading, error, orders } = orderList;
+    const { loading, error, orders, page, pages, totalOrdersCount } = orderList;
 
     const orderDelete = useSelector((state) => state.orderDelete);
     const { loading: loadingDelete, error: errorDelete, success: successDelete } = orderDelete;
+
+    const monthRevenueCalculate = useSelector((state) => state.calculateMonthRevenue);
+    const {
+        loading: loadingCalculate,
+        error: errorCalculate,
+        success: successCalculate,
+        monthRevenue,
+    } = monthRevenueCalculate;
+
+    // console.log('monthRevenue', monthRevenue);
 
     const [month, setMonth] = useState(new Date().getMonth() + 1);
     const [year, setYear] = useState(new Date().getFullYear());
     const [searchValue, setSearchValue] = useState('');
     const monthFormat = 'MM/YYYY';
+
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(4);
+    // const [totalMonth, setTotalMonth] = useState(0);
     let total = 0;
 
     const dispatch = useDispatch();
     useEffect(() => {
         if (userSignin.userInfo) {
             dispatch({ type: ORDER_DELETE_RESET });
+            // dispatch({ type: MONTH_REVENUE_RESET });
             dispatch(
-                listOrders({
+                calculateMonthRevenue({
                     seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
                     month: month,
                     year: year,
                 }),
             );
+            dispatch(
+                listOrders({
+                    seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+                    month: month,
+                    year: year,
+                    searchValue,
+                    currentPage,
+                    itemsPerPage,
+                }),
+            );
         }
-    }, [dispatch, userSignin.userInfo, successDelete, sellerMode]);
+    }, [dispatch, userSignin.userInfo, successDelete, sellerMode, currentPage, month, year, searchValue]);
 
     const deleteHandler = (order) => {
         //TODO: delete handler
@@ -66,25 +91,52 @@ function OrderList() {
         // console.log(monthAndYearArray);
         setMonth(monthAndYearArray[0]);
         setYear(monthAndYearArray[1]);
-        dispatch(
-            listOrders({
-                month: monthAndYearArray[0],
-                year: monthAndYearArray[1],
-                seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
-                searchValue: searchValue,
-            }),
-        );
+        setCurrentPage(1);
+        // dispatch(
+        //     listOrders({
+        //         month: monthAndYearArray[0],
+        //         year: monthAndYearArray[1],
+        //         seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+        //         searchValue: searchValue,
+        //         currentPage,
+        //         itemsPerPage,
+        //     }),
+        // );
+        // dispatch(
+        //     calculateMonthRevenue({
+        //         seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+        //         month: monthAndYearArray[0],
+        //         year: monthAndYearArray[1],
+        //     }),
+        // );
     };
 
     const onSearch = (value) => {
-        dispatch(
-            listOrders({
-                seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
-                searchValue: value,
-                month: month,
-                year: year,
-            }),
-        );
+        setSearchValue(value);
+        setCurrentPage(1);
+        // dispatch(
+        //     listOrders({
+        //         seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+        //         searchValue: value,
+        //         month: month,
+        //         year: year,
+        //         currentPage,
+        //         itemsPerPage,
+        //     }),
+        // );
+        // dispatch(
+        //     calculateMonthRevenue({
+        //         seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+        //         month: month,
+        //         year: year,
+        //     }),
+        // );
+    };
+
+    const handleChangePage = (page) => {
+        // console.log('page', page);
+        total = 0;
+        setCurrentPage(page);
     };
 
     const handleWatch = (e, orderId, isWatch) => {
@@ -107,7 +159,7 @@ function OrderList() {
                         <Search
                             placeholder="Input order id or user order name"
                             onSearch={onSearch}
-                            onChange={(e) => setSearchValue(e.target.value)}
+                            // onChange={(e) => setSearchValue(e.target.value)}
                             enterButton
                         />
                     </div>
@@ -256,10 +308,21 @@ function OrderList() {
                                 ))}
                         </tbody>
                     </table>
+                    <div className={'container-pagination'}>
+                        <Pagination
+                            current={currentPage}
+                            onChange={handleChangePage}
+                            pageSize={itemsPerPage}
+                            total={totalOrdersCount}
+                        />
+                    </div>
                     <div>
-                        Revenue From {month}/{year} Page 1:{' '}
+                        Revenue From {month}/{year} Page {currentPage}:{' '}
                         <span style={{ color: 'var(--primary-color)' }}>{total}$</span>{' '}
                         {`(count By Order Already Paid)`}
+                        <br />
+                        Total {JSON.parse(localStorage.getItem('userInfo')).isAdmin ? 'Admin' : 'Seller'} Revenue From{' '}
+                        {month}/{year}: <span style={{ color: 'var(--primary-color)' }}>{monthRevenue}$</span>
                     </div>
                 </>
             )}

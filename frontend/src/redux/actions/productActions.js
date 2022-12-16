@@ -22,7 +22,7 @@ import {
 } from '../constants/productConstants';
 
 export const listProducts =
-    ({ seller = '', currentPage = '', itemsPerPage = 9 }) =>
+    ({ seller = '', currentPage = '', itemsPerPage = 9, searchValue = '' }) =>
     async (dispatch) => {
         // console.log('act1');
         dispatch({
@@ -32,7 +32,7 @@ export const listProducts =
         try {
             // console.log('act3');
             const { data } = await Axios.get(
-                `/api/products?pageNumber=${currentPage}&itemsPerPage=${itemsPerPage}&seller=${seller}`,
+                `/api/products?searchValue=${searchValue}&pageNumber=${currentPage}&itemsPerPage=${itemsPerPage}&seller=${seller}`,
             );
             // console.log(data);
             // console.log('act4');

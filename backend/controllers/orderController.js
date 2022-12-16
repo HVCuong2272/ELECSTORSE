@@ -148,6 +148,13 @@ const deliverOrder = expressAsyncHandler(async (req, res) => {
 });
 
 const getOrderHistory = expressAsyncHandler(async (req, res) => {
+  const pageSize = Number(req.query.itemsPerPage) || 6;
+  const page = Number(req.query.pageNumber) || 1;
+
+  let searchValue = req.query.searchValue || "";
+  if (searchValue.includes("di")) searchValue = "Card";
+  const searchValueRegex = new RegExp(searchValue, "i");
+
   const orders = await Order.find({ user: req.user.id });
   // const orders = await Order.find({
   //   $or: [
@@ -155,10 +162,30 @@ const getOrderHistory = expressAsyncHandler(async (req, res) => {
   //     { user: req.user.id, paymentMethod: "Card" },
   //   ],
   // });
-  res.send(orders);
+
+  const count = orders.filter(
+    (order) =>
+      searchValueRegex.test(order._id) ||
+      searchValueRegex.test(order.paymentMethod)
+  ).length;
+  const resultFilter = orders
+    .filter(
+      (order) =>
+        searchValueRegex.test(order._id) ||
+        searchValueRegex.test(order.paymentMethod)
+    )
+    .slice(pageSize * (page - 1), pageSize * (page - 1) + pageSize);
+  res.send({
+    resultFilter,
+    page,
+    pages: Math.ceil(count / pageSize),
+    totalOrdersCount: count,
+  });
 });
 
 const getOrderList = expressAsyncHandler(async (req, res) => {
+  const pageSize = Number(req.query.itemsPerPage) || 4;
+  const page = Number(req.query.pageNumber) || 1;
   const seller = req.query.seller || "";
   const sellerFilter = seller ? { seller } : {};
   // console.log("wwwwqe", sellerFilter);
@@ -186,16 +213,30 @@ const getOrderList = expressAsyncHandler(async (req, res) => {
     .sort({ createdAt: -1 });
   // console.log("sdwewe", orders);
 
-  // use to filter after populate
-  const orderReturn = orders.filter(
-    // similar to order.user.name.includes(searchValue) ||order.paymentMethod.includes(searchValue)
-    // but use regex here can check also uppercase and lower case
+  const count = orders.filter(
     (order) =>
       searchValueRegex.test(order.user.name) ||
       // searchValueRegex.test(order.paymentMethod) ||
       searchValueRegex.test(order._id)
-  );
-  res.send(orderReturn);
+  ).length;
+  // use to filter after populate
+  const resultFilter = orders
+    .filter(
+      // similar to order.user.name.includes(searchValue) ||order.paymentMethod.includes(searchValue)
+      // but use regex here can check also uppercase and lower case
+      (order) =>
+        searchValueRegex.test(order.user.name) ||
+        // searchValueRegex.test(order.paymentMethod) ||
+        searchValueRegex.test(order._id)
+    )
+    .slice(pageSize * (page - 1), pageSize * (page - 1) + pageSize);
+  res.send({
+    resultFilter,
+    page,
+    pages: Math.ceil(count / pageSize),
+    totalOrdersCount: count,
+  });
+  // res.send(orderReturn);
 });
 
 const deleteOrder = expressAsyncHandler(async (req, res) => {
@@ -268,6 +309,8 @@ const paySummary = expressAsyncHandler(async (req, res) => {
 });
 
 const paySummary1 = expressAsyncHandler(async (req, res) => {
+  const pageSize = Number(req.query.itemsPerPage) || 4;
+  const page = Number(req.query.pageNumber) || 1;
   const month = parseInt(req.query.month) - 1;
   // const month = 11;
   const year = parseInt(req.query.year);
@@ -322,13 +365,27 @@ const paySummary1 = expressAsyncHandler(async (req, res) => {
     sellerDetail.paymentSalaryMethod = userName.seller.paymentSalaryMethod;
   }
   // console.log("sdsdsd", sellerPayListByMonth);
-  const resultFilter = sellerPayListByMonth.filter(
+  const count = sellerPayListByMonth.filter(
     (item) =>
       searchValueRegex.test(item.sellerName) ||
       searchValueRegex.test(item.sellerShopName) ||
       searchValueRegex.test(item._id)
-  );
-  res.send({ result: resultFilter });
+  ).length;
+  const resultFilter = sellerPayListByMonth
+    .filter(
+      (item) =>
+        searchValueRegex.test(item.sellerName) ||
+        searchValueRegex.test(item.sellerShopName) ||
+        searchValueRegex.test(item._id)
+    )
+    .slice(pageSize * (page - 1), pageSize * (page - 1) + pageSize);
+  res.send({
+    result: resultFilter,
+    page,
+    pages: Math.ceil(count / pageSize),
+    totalSellerPaysCount: count,
+  });
+  // res.send({ result: resultFilter });
 });
 
 const paySellerSalary = expressAsyncHandler(async (req, res) => {
@@ -354,6 +411,40 @@ const updateWatchOrder = expressAsyncHandler(async (req, res) => {
   res.send({ message: "Update Order Rollback Successfully!" });
 });
 
+const calculateMonthRevenue = expressAsyncHandler(async (req, res) => {
+  const seller = req.query.seller || "";
+  const sellerFilter = seller ? { sellerId: seller } : {};
+
+  let totalMonthRevenue = 0;
+  if (seller) {
+    const monthRevenue = await SellerPay.find({
+      ...sellerFilter,
+      payMonth: req.query.month,
+      payYear: req.query.year,
+    });
+
+    totalMonthRevenue = monthRevenue.reduce(
+      (acc, sellerPay) => acc + sellerPay.totalSellerPrice,
+      0
+    );
+    return res.status(200).json(totalMonthRevenue);
+  }
+  const month = parseInt(req.query.month) - 1;
+  const year = parseInt(req.query.year);
+  const fromDate = new Date(year, month, 1);
+  const toDate = new Date(year, month + 1, 1);
+  const monthRevenue = await Order.find({
+    isPaid: true,
+    paidAt: { $gte: fromDate, $lt: toDate },
+  });
+  totalMonthRevenue = monthRevenue.reduce(
+    (acc, sellerPay) => acc + sellerPay.totalPrice,
+    0
+  );
+  // console.log("total revenue", totalMonthRevenue);
+  return res.status(200).json(totalMonthRevenue);
+});
+
 module.exports = {
   createOrder,
   getOrderByID,
@@ -366,4 +457,5 @@ module.exports = {
   paySummary1,
   paySellerSalary,
   updateWatchOrder,
+  calculateMonthRevenue,
 };
