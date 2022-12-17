@@ -54,6 +54,11 @@ function OrderList() {
     // const [totalMonth, setTotalMonth] = useState(0);
     let total = 0;
 
+    // socket
+    const [newNotifySuccessPay, setNewNotifySuccessPay] = useState(null);
+    const [newNotifySuccessDeliver, setNewNotifySuccessDeliver] = useState(null);
+    const [newNotifyHandleRollback, setNewNotifyHandleRollback] = useState(null);
+
     const dispatch = useDispatch();
     useEffect(() => {
         if (userSignin.userInfo) {
@@ -79,6 +84,77 @@ function OrderList() {
         }
     }, [dispatch, userSignin.userInfo, successDelete, sellerMode, currentPage, month, year, searchValue]);
 
+    // socket
+    useEffect(() => {
+        socket.on('getSuccessPay', () => {
+            // console.log('adu notify SuccessPay');
+            // console.log('sub3-1');
+            setNewNotifySuccessPay('yes');
+        });
+        socket.on('getSuccessDeliver', () => {
+            // console.log('adu order notify subheader');
+            // console.log('sub3-1');
+            setNewNotifySuccessDeliver('yes');
+        });
+        socket.on('getNotifyHandleRollback', () => {
+            // console.log('adu notify');
+            setNewNotifyHandleRollback('yes');
+        });
+    }, []);
+
+    useEffect(() => {
+        // console.log('sub4');
+        if (newNotifySuccessPay) {
+            // console.log('subSuccessPay');
+            // setTimeout(() => {
+            dispatch(
+                listOrders({
+                    seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+                    month: month,
+                    year: year,
+                    searchValue,
+                    currentPage,
+                    itemsPerPage,
+                }),
+            );
+            setNewNotifySuccessPay(null);
+            // }, 500);
+        }
+        if (newNotifyHandleRollback) {
+            dispatch(
+                listOrders({
+                    seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+                    month: month,
+                    year: year,
+                    searchValue,
+                    currentPage,
+                    itemsPerPage,
+                }),
+            );
+            setNewNotifyHandleRollback(null);
+        }
+    }, [dispatch, newNotifySuccessPay, newNotifyHandleRollback]);
+    useEffect(() => {
+        // console.log('sub4');
+        if (newNotifySuccessDeliver) {
+            // console.log('sub4-1');
+            // setTimeout(() => {
+            dispatch(
+                listOrders({
+                    seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+                    month: month,
+                    year: year,
+                    searchValue,
+                    currentPage,
+                    itemsPerPage,
+                }),
+            );
+            setNewNotifySuccessDeliver(null);
+            // }, 500);
+        }
+    }, [dispatch, newNotifySuccessDeliver]);
+
+    // delete order
     const deleteHandler = (order) => {
         //TODO: delete handler
         if (window.confirm('Are you sure to delete?')) {

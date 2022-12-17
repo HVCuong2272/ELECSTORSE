@@ -9,6 +9,7 @@ import {
     ORDER_ROLLBACK_HANDLE_SUCCESS,
     ORDER_ROLLBACK_LIST_FAIL,
     ORDER_ROLLBACK_LIST_REQUEST,
+    ORDER_ROLLBACK_LIST_RESET,
     ORDER_ROLLBACK_LIST_SUCCESS,
     ORDER_ROLLBACK_UPDATE_ADMIN_WATCH_FAIL,
     ORDER_ROLLBACK_UPDATE_ADMIN_WATCH_REQUEST,
@@ -45,6 +46,8 @@ export const listOrderRollbackReducer = (state = { orderRollbackTable: [] }, act
             };
         case ORDER_ROLLBACK_LIST_FAIL:
             return { loading: false, error: action.payload };
+        case ORDER_ROLLBACK_LIST_RESET:
+            return {};
         default:
             return state;
     }

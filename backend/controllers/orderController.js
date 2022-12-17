@@ -155,7 +155,9 @@ const getOrderHistory = expressAsyncHandler(async (req, res) => {
   if (searchValue.includes("di")) searchValue = "Card";
   const searchValueRegex = new RegExp(searchValue, "i");
 
-  const orders = await Order.find({ user: req.user.id });
+  const orders = await Order.find({ user: req.user.id }).sort({
+    createdAt: -1,
+  });
   // const orders = await Order.find({
   //   $or: [
   //     { user: req.user.id, isPaid: true },

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Radio, Space, Spin, Input, Pagination } from 'antd';
 import { useNavigate } from 'react-router-dom';
@@ -6,10 +6,12 @@ import classNames from 'classnames/bind';
 import styles from './OrderHistory.module.scss';
 import { listOrderMine } from '~/redux/actions/orderActions';
 import { useState } from 'react';
+import { SocketContext } from '~/config/socketContext';
 
 const cx = classNames.bind(styles);
 const { Search } = Input;
 export default function OrderHistory() {
+    const socket = useContext(SocketContext);
     const userSignin = useSelector((state) => state.userSignin);
     const orderMineList = useSelector((state) => state.orderMineList);
     const { loading, error, orders, page, pages, totalOrdersCount } = orderMineList;
@@ -21,6 +23,10 @@ export default function OrderHistory() {
     const [itemsPerPage, setItemsPerPage] = useState(4);
     const [searchValue, setSearchValue] = useState('');
 
+    // socket
+    const [newNotifySuccessDeliver, setNewNotifySuccessDeliver] = useState(null);
+    const [newNotifyHandleRollback, setNewNotifyHandleRollback] = useState(null);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -30,6 +36,35 @@ export default function OrderHistory() {
         }
     }, [dispatch, userSignin.userInfo, currentPage]);
 
+    // socket useEffect
+    useEffect(() => {
+        socket.on('getSuccessDeliver', () => {
+            // console.log('adu order notify subheader');
+            // console.log('sub3-1');
+            setNewNotifySuccessDeliver('yes');
+        });
+        socket.on('getNotifyHandleRollback', () => {
+            // console.log('adu notify');
+            setNewNotifyHandleRollback('yes');
+        });
+    }, []);
+    useEffect(() => {
+        // console.log('sub4');
+        if (newNotifySuccessDeliver) {
+            // console.log('sub4-1');
+            // setTimeout(() => {
+            dispatch(listOrderMine({ searchValue, currentPage, itemsPerPage }));
+            setNewNotifySuccessDeliver(null);
+            // }, 500);
+        }
+        if (newNotifyHandleRollback) {
+            // setTimeout(() => {
+            setCurrentPage(1);
+            dispatch(listOrderMine({ searchValue, currentPage: 1, itemsPerPage }));
+            setNewNotifyHandleRollback(null);
+            // }, 500);
+        }
+    }, [dispatch, newNotifySuccessDeliver, newNotifyHandleRollback]);
     const onSearch = (searchValue) => {
         setCurrentPage(1);
         setSearchValue(searchValue);
@@ -40,6 +75,7 @@ export default function OrderHistory() {
         // console.log('page', page);
         setCurrentPage(page);
     };
+
     return (
         <div className={cx('order-history__container')}>
             <div className={cx('user-management__heading')}>

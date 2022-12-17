@@ -10,7 +10,7 @@ function NotifyProvider({ children }) {
     const [rollbackNotify, setRollbackNotify] = useState(0);
     const [orderNotify, setOrderNotify] = useState(0);
 
-    console.log('aaaa', rollbackNotify);
+    // console.log('aaaa', rollbackNotify);
 
     return (
         <NotifyContext.Provider

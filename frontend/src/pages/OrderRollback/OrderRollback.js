@@ -14,6 +14,7 @@ import {
 } from '~/redux/actions/orderRollbackAction';
 import styles from './OrderRollback.module.scss';
 import { NotifyContext } from '~/config/notificationContext';
+import { ORDER_ROLLBACK_HANDLE_RESET } from '~/redux/constants/orderRollbackConstants';
 
 const cx = classNames.bind(styles);
 const { Search } = Input;
@@ -78,6 +79,14 @@ function OrderRollback() {
         }
     }, [dispatch, userSignin.userInfo, successHandle, currentPage]);
     // }, [dispatch, userSignin.userInfo, successPay]);
+
+    useEffect(() => {
+        if (successHandle) {
+            console.log('handle rollback');
+            socket.emit('sendNotifyHandleRollback', {});
+            dispatch({ type: ORDER_ROLLBACK_HANDLE_RESET });
+        }
+    }, [successHandle]);
 
     const onSearch = (value) => {
         setSearchValue(value);

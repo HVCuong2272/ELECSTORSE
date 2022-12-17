@@ -71,6 +71,21 @@ io.on("connection", (socket) => {
     io.emit("getProductComment", {});
   });
 
+  // send and get success pay order
+  socket.on("sendSuccessPay", () => {
+    io.emit("getSuccessPay", {});
+  });
+
+  // send and get success deliver
+  socket.on("sendSuccessDeliver", () => {
+    io.emit("getSuccessDeliver", {});
+  });
+
+  // send and get success deliver
+  socket.on("sendNotifyHandleRollback", () => {
+    io.emit("getNotifyHandleRollback", {});
+  });
+
   // When disconnect
   socket.on("disconnect", () => {
     console.log("someone has left");
