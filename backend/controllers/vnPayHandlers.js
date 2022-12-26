@@ -12,7 +12,8 @@ const vnpay = new VNPay({
 function checkoutVNPay(req, res) {
   const checkoutData = res.locals.checkoutData;
 
-  checkoutData.returnUrl = `http://${req.headers.host}/paymentvnp/vnpay/callback`;
+  // checkoutData.returnUrl = `http://${req.headers.host}/paymentvnp/vnpay/callback`;
+  checkoutData.returnUrl = `https://${req.headers.host}/paymentvnp/vnpay/callback`;
   checkoutData.orderInfo = "Paid For Order";
   checkoutData.orderType = "fashion";
 

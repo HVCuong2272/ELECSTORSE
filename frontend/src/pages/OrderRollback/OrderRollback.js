@@ -125,6 +125,14 @@ function OrderRollback() {
         });
     };
 
+    const handleUserCancelPayment = (e) => {
+        Modal.info({
+            title: 'User Cancel Payment',
+            content: <div>{e.target.innerText}</div>,
+            onOk() {},
+        });
+    };
+
     const { confirm } = Modal;
     const handleRollBack = (rollbackData) => {
         confirm({
@@ -222,7 +230,9 @@ function OrderRollback() {
                                         <td onClick={handleUserCancelReason}>
                                             <div className={cx('user-reason-table')}>{order.reasonCancel}</div>
                                         </td>
-                                        <td>{order.userPaymentRollBack}</td>
+                                        <td onClick={handleUserCancelPayment}>
+                                            <div className={cx('user-payment-detail')}>{order.userPaymentRollBack}</div>
+                                        </td>
                                         <td>{`${new Date(order.orderId.createdAt).toLocaleDateString(
                                             'en-GB',
                                         )} ${new Date(order.createdAt).toLocaleTimeString()}`}</td>
@@ -232,12 +242,12 @@ function OrderRollback() {
                                         <td>
                                             <div
                                                 style={{
-                                                    display: order.isAdminHandle ? 'none' : 'flex',
+                                                    display: order.isAdminHandle ? 'none' : 'block',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
                                                 }}
                                             >
-                                                <div style={{ flex: 1 }}>
+                                                <div style={{ flex: 1, marginBottom: '2px' }}>
                                                     <button
                                                         className={cx('btn', 'btn-fill-out', 'btn-block')}
                                                         style={{}}

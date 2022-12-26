@@ -136,7 +136,7 @@ const callbackPaymentVNP = (req, res) => {
           // res.status(200).send({ success: true });
           res.send("<script>window.close();</script > ");
           return;
-        } else res.redirect("http://localhost:3000/shipping");
+        } else res.redirect("https://webshop-app.onrender.com/shipping");
         return;
       })
       .catch((err) => {

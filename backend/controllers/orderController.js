@@ -438,6 +438,7 @@ const calculateMonthRevenue = expressAsyncHandler(async (req, res) => {
   const monthRevenue = await Order.find({
     isPaid: true,
     paidAt: { $gte: fromDate, $lt: toDate },
+    isFinishHandleRollback: { $ne: "Success" },
   });
   totalMonthRevenue = monthRevenue.reduce(
     (acc, sellerPay) => acc + sellerPay.totalPrice,

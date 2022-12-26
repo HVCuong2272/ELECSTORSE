@@ -1,8 +1,8 @@
 .order-rollback-table-container {
     margin-top: var(--header-height);
     min-height: 58vh;
-    margin-left: 30px;
-    margin-right: 30px;
+    margin-left: 14px;
+    margin-right: 14px;
 }
 
 .order-rollback-table {
@@ -41,7 +41,8 @@
     margin: 0 0.2rem;
 }
 
-.user-reason-table {
+.user-reason-table,
+.user-payment-detail {
     display: block;
     width: 200px;
     // display: -webkit-box;
@@ -51,7 +52,8 @@
     cursor: pointer;
     text-overflow: ellipsis;
 }
-.user-reason-table:hover {
+.user-reason-table:hover,
+.user-payment-detail:hover {
     color: var(--primary-color);
 }
 

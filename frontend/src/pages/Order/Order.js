@@ -534,11 +534,13 @@ function Order() {
                         'width=' + window.screen.availWidth + ',height=' + window.screen.availHeight,
                     );
                     var timer = setInterval(function () {
+                        // console.log("newW", vnpayWindow.location.href);
                         if (vnpayWindow.closed) {
                             clearInterval(timer);
                             dispatch(detailsOrder(orderId));
                             setSuccessVNPay('yes');
                         }
+                        console.log('newW', vnpayWindow.location.href);
                     }, 1000);
 
                     // console.log("SUCCESS PAY", res);

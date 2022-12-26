@@ -107,6 +107,15 @@ function OrderList() {
         if (newNotifySuccessPay) {
             // console.log('subSuccessPay');
             // setTimeout(() => {
+            dispatch({ type: ORDER_DELETE_RESET });
+            // dispatch({ type: MONTH_REVENUE_RESET });
+            dispatch(
+                calculateMonthRevenue({
+                    seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+                    month: month,
+                    year: year,
+                }),
+            );
             dispatch(
                 listOrders({
                     seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
@@ -121,6 +130,15 @@ function OrderList() {
             // }, 500);
         }
         if (newNotifyHandleRollback) {
+            dispatch({ type: ORDER_DELETE_RESET });
+            // dispatch({ type: MONTH_REVENUE_RESET });
+            dispatch(
+                calculateMonthRevenue({
+                    seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
+                    month: month,
+                    year: year,
+                }),
+            );
             dispatch(
                 listOrders({
                     seller: sellerMode ? JSON.parse(localStorage.getItem('userInfo'))._id : '',
