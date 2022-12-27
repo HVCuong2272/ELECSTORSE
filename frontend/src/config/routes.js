@@ -9,6 +9,7 @@ const publicRoutes = {
     forgetPass: '/forgot_password',
     resetPass: '/user/reset/:token',
     sellerPage: '/seller/:id',
+    search: '/search',
 };
 const privateRoutes = {
     shipping: '/shipping',

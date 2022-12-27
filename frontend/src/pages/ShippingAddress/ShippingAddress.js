@@ -209,7 +209,7 @@ function ShippingAddress() {
     cart.shippingPrice = toPrice(
         calculatePrice(distance(sViewport.latitude, sViewport.longitude, viewport.latitude, viewport.longitude, 'K')),
     );
-    cart.taxPrice = toPrice(0.15 * cart.itemsPrice);
+    cart.taxPrice = toPrice(0.1 * cart.itemsPrice);
     cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
     const placeOrderHandler = () => {
         // TODO: dispatch place order action
@@ -514,7 +514,8 @@ function ShippingAddress() {
                                                                     Coin
                                                                 </h3>
                                                                 <p>
-                                                                    Using virtual coin that we support to purchase your bill
+                                                                    Using virtual coin that we support to purchase your
+                                                                    bill
                                                                 </p>
                                                             </Radio>
                                                         </Space>

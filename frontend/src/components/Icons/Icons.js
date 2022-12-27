@@ -1334,3 +1334,19 @@ dEVYdGRhdGU6bW9kaWZ5ADIwMjItMTEtMTZUMTU6NTE6MzArMDE6MDAdpfvoAAAAAElFTkSuQmCC"
         />
     </svg>
 );
+export const StarIcon = ({ width = '5rem', height = '5rem', className = 'star-icon' }) => (
+    <svg xmlns="http: //www.w3.org/2000/svg" width={width} height={height} className={className} viewBox="0 0 12 12">
+        <g fill="none" fillRule="evenodd">
+            <path
+                fill="#fdd835"
+                transform="matrix(-1 0 0 1 11 1)"
+                d="M5 0v8.476L1.91 10l.424-3.562L0 3.821l3.353-.678L5 0z"
+            ></path>
+            <path
+                fill="#fdd835"
+                transform="translate(1 1)"
+                d="M5 0v8.476L1.91 10l.424-3.562L0 3.821l3.353-.678L5 0z"
+            ></path>
+        </g>
+    </svg>
+);

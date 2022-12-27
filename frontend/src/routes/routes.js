@@ -28,6 +28,9 @@ import SellerRoute from '~/components/SellerRoute';
 import SellerScreen from '~/pages/SellerScreen';
 import PaySellerSalary from '~/pages/PaySellerSalary';
 import OrderRollback from '~/pages/OrderRollback';
+import SearchScreen from '~/pages/SearchScreen';
+import SearchScreen1 from '~/pages/SearchScreen1';
+import SearchProductLayout from '~/layouts/SearchProductLayout';
 
 // Public routes
 const publicRoutes = [
@@ -45,7 +48,7 @@ const publicRoutes = [
     // { path: config.publicRoutes.following, component: Following },
     // { path: config.publicRoutes.profile, component: Profile },
     // { path: config.publicRoutes.upload, component: Upload, layout: HeaderOnly },
-    // { path: config.publicRoutes.search, component: Search, layout: null },
+    { path: config.publicRoutes.search, component: SearchScreen1, layout: SearchProductLayout },
 ];
 
 const privateRoutes = [

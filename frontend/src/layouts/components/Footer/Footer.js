@@ -2,9 +2,9 @@ import { FacebookOutlined, InstagramOutlined, LinkedinOutlined } from '@ant-desi
 import styles from './Footer.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
-function Footer() {
+function Footer({ isSearchProductPage }) {
     return (
-        <div className={cx('footer')}>
+        <div className={cx('footer')} style={{ marginTop: isSearchProductPage && '0px' }}>
             <div className={cx('grid wide footer__content')}>
                 <div className={cx('row')}>
                     <div className={cx('col l-2-4 m-4 c-6')}>
