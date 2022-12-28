@@ -290,6 +290,7 @@ export default function SearchScreen() {
                                         <div className={cx('thumbnail')}>
                                             <img
                                                 src="https://i.kym-cdn.com/entries/icons/original/000/028/692/cat.jpg"
+                                                alt="404"
                                                 className={cx('styles__StyledDynamicIconBadge-sc-cxexs7-0 hdozRK')}
                                                 style={{ width: '68px', height: '14px', top: '0px', left: '0px' }}
                                             ></img>

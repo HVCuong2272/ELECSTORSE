@@ -119,7 +119,7 @@ const Product = () => {
                                     return;
                                 })}
                             </section>
-                            <Link to="/search" className={cx('view-more-btn')}>
+                            <Link to="/search/name" className={cx('view-more-btn')}>
                                 View More
                             </Link>
                         </>

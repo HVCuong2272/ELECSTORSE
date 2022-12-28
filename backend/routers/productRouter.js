@@ -11,6 +11,7 @@ productRouter.post(
 );
 
 productRouter.get("/seed", productController.createProductSeed);
+productRouter.get("/categories", productController.getProductListCategories);
 productRouter.get("/:id", productController.getProductById);
 
 productRouter.put(

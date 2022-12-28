@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import data from '~/data';
 import { cartReducer } from './reducers/cartReducers';
 import {
+    productCategoryListReducer,
     productCreateReducer,
     productDeleteReducer,
     productDetailsReducer,
@@ -86,6 +87,7 @@ const reducer = combineReducers({
     watchOrderUpdate: updateWatchOrderReducer,
     productReviewCreate: productReviewCreateReducer,
     calculateMonthRevenue: calculateMonthRevenueReducer,
+    productCategoryList: productCategoryListReducer,
 });
 // const reducer = (state, action) => {
 //     // console.log('reducer123');

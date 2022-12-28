@@ -9,6 +9,7 @@ import { USER_SIGNIN_SUCCESS } from './redux/constants/userConstants';
 import { fetchUser } from './redux/actions/userActions';
 import { useContext } from 'react';
 import { SocketContext } from './config/socketContext';
+import { listProductCategories } from './redux/actions/productActions';
 
 // export const socketContext = createContext();
 function App() {
@@ -74,6 +75,9 @@ function App() {
             }, 2000);
         }
     }, []);
+    useEffect(() => {
+        dispatch(listProductCategories());
+    }, [dispatch]);
     return (
         <Router>
             <div className="App">

@@ -1,4 +1,8 @@
 import {
+    PRODUCT_CATEGORY_LIST_FAIL,
+    PRODUCT_CATEGORY_LIST_REQUEST,
+    PRODUCT_CATEGORY_LIST_RESET,
+    PRODUCT_CATEGORY_LIST_SUCCESS,
     PRODUCT_CREATE_FAIL,
     PRODUCT_CREATE_REQUEST,
     PRODUCT_CREATE_RESET,
@@ -73,6 +77,20 @@ export const productCreateReducer = (state = {}, action) => {
         case PRODUCT_CREATE_FAIL:
             return { loading: false, error: action.payload };
         case PRODUCT_CREATE_RESET:
+            return {};
+        default:
+            return state;
+    }
+};
+export const productCategoryListReducer = (state = { loading: true, categories: [] }, action) => {
+    switch (action.type) {
+        case PRODUCT_CATEGORY_LIST_REQUEST:
+            return { loading: true };
+        case PRODUCT_CATEGORY_LIST_SUCCESS:
+            return { loading: false, categories: action.payload };
+        case PRODUCT_CATEGORY_LIST_FAIL:
+            return { loading: false, error: action.payload };
+        case PRODUCT_CATEGORY_LIST_RESET:
             return {};
         default:
             return state;

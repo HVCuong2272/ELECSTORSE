@@ -9,7 +9,15 @@ const publicRoutes = {
     forgetPass: '/forgot_password',
     resetPass: '/user/reset/:token',
     sellerPage: '/seller/:id',
-    search: '/search',
+    search: '/search/name/',
+    searchWParamName: '/search/name/:name',
+    searchWParamCategory: '/search/category/:category',
+    searchWParamCategoryAndName: '/search/category/:category/name/:name',
+    searchWParamCategoryAndNameAndMinAndMax: '/search/category/:category/name/:name/min/:min/max/:max',
+    searchWParamCategoryAndNameAndMinAndMaxAndRating:
+        '/search/category/:category/name/:name/min/:min/max/:max/rating/:rating',
+    searchWParamCategoryAndNameAndMinAndMaxAndRatingAndOrder:
+        '/search/category/:category/name/:name/min/:min/max/:max/rating/:rating/order/:order',
 };
 const privateRoutes = {
     shipping: '/shipping',

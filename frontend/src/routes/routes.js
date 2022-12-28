@@ -44,11 +44,28 @@ const publicRoutes = [
     { path: config.publicRoutes.forgetPass, component: ForgetPassword },
     { path: config.publicRoutes.resetPass, component: ResetPassword },
     { path: config.publicRoutes.sellerPage, component: SellerScreen },
-
     // { path: config.publicRoutes.following, component: Following },
     // { path: config.publicRoutes.profile, component: Profile },
     // { path: config.publicRoutes.upload, component: Upload, layout: HeaderOnly },
     { path: config.publicRoutes.search, component: SearchScreen1, layout: SearchProductLayout },
+    { path: config.publicRoutes.searchWParamName, component: SearchScreen1, layout: SearchProductLayout },
+    { path: config.publicRoutes.searchWParamCategory, component: SearchScreen1, layout: SearchProductLayout },
+    { path: config.publicRoutes.searchWParamCategoryAndName, component: SearchScreen1, layout: SearchProductLayout },
+    {
+        path: config.publicRoutes.searchWParamCategoryAndNameAndMinAndMax,
+        component: SearchScreen1,
+        layout: SearchProductLayout,
+    },
+    {
+        path: config.publicRoutes.searchWParamCategoryAndNameAndMinAndMaxAndRating,
+        component: SearchScreen1,
+        layout: SearchProductLayout,
+    },
+    {
+        path: config.publicRoutes.searchWParamCategoryAndNameAndMinAndMaxAndRatingAndOrder,
+        component: SearchScreen1,
+        layout: SearchProductLayout,
+    },
 ];
 
 const privateRoutes = [

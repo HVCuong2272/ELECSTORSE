@@ -39,6 +39,9 @@ function SubHeader({ isHomePage }) {
 
     const orderList = useSelector((state) => state.orderList);
     const { loading: loadingOrder, error: errorOrder, orders } = orderList;
+
+    const productCategoryList = useSelector((state) => state.productCategoryList);
+    const { loading: loadingCategories, error: errorCategories, categories } = productCategoryList;
     // console.log('new Sub', newNotifyRollback);
     // console.log('orderRollbackTable Subheader', orderRollbackTable);
 
@@ -193,30 +196,26 @@ function SubHeader({ isHomePage }) {
     }, []);
 
     const handleMenuClick = (e) => {
-        message.info('Click on menu item.');
-        // console.log('click', e);
+        // message.info('Click on menu item.', e);
+        console.log('click', e);
+        navigate(`/search/category/${categories[e.key]}`);
     };
 
     const menu = (
         <Menu
+            // style={{ height: '46px', overflow: 'hidden' }}
             onClick={handleMenuClick}
-            items={[
-                {
-                    label: '1st menu item',
-                    key: '1',
-                    icon: <CaretRightOutlined />,
-                },
-                {
-                    label: '2nd menu item',
-                    key: '2',
-                    icon: <CaretRightOutlined />,
-                },
-                {
-                    label: '3rd menu item',
-                    key: '3',
-                    icon: <CaretRightOutlined />,
-                },
-            ]}
+            items={
+                categories &&
+                categories.length > 0 &&
+                categories.map((c, index) => {
+                    return {
+                        label: c,
+                        key: index,
+                        icon: <CaretRightOutlined />,
+                    };
+                })
+            }
         />
     );
 

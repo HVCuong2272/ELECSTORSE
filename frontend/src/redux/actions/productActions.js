@@ -1,6 +1,9 @@
 import Axios from 'axios';
 import { showErrorMessage, showSuccessMessage } from '~/utils/notifyService';
 import {
+    PRODUCT_CATEGORY_LIST_FAIL,
+    PRODUCT_CATEGORY_LIST_REQUEST,
+    PRODUCT_CATEGORY_LIST_SUCCESS,
     PRODUCT_CREATE_FAIL,
     PRODUCT_CREATE_REQUEST,
     PRODUCT_CREATE_SUCCESS,
@@ -22,7 +25,18 @@ import {
 } from '../constants/productConstants';
 
 export const listProducts =
-    ({ seller = '', currentPage = '', itemsPerPage = 9, searchValue = '' }) =>
+    ({
+        seller = '',
+        name = '',
+        category = '',
+        currentPage = '',
+        itemsPerPage = 9,
+        searchValue = '',
+        min = 0,
+        max = 0,
+        rating = 0,
+        order = '',
+    }) =>
     async (dispatch) => {
         // console.log('act1');
         dispatch({
@@ -32,7 +46,7 @@ export const listProducts =
         try {
             // console.log('act3');
             const { data } = await Axios.get(
-                `/api/products?searchValue=${searchValue}&pageNumber=${currentPage}&itemsPerPage=${itemsPerPage}&seller=${seller}`,
+                `/api/products?searchValue=${searchValue}&name=${name}&category=${category}&pageNumber=${currentPage}&itemsPerPage=${itemsPerPage}&seller=${seller}&min=${min}&max=${max}&rating=${rating}&order=${order}`,
             );
             // console.log(data);
             // console.log('act4');
@@ -45,6 +59,20 @@ export const listProducts =
             // console.log('act7');
         }
     };
+export const listProductCategories = () => async (dispatch) => {
+    dispatch({
+        type: PRODUCT_CATEGORY_LIST_REQUEST,
+    });
+    try {
+        const { data } = await Axios.get(`/api/products/categories`);
+        dispatch({ type: PRODUCT_CATEGORY_LIST_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({
+            type: PRODUCT_CATEGORY_LIST_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+        });
+    }
+};
 
 export const detailsProduct = (productId) => async (dispatch) => {
     // console.log('acc1');
