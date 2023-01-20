@@ -13,7 +13,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { listProducts } from '~/redux/actions/productActions';
 import { useState } from 'react';
-
+import useAlan from "../../components/hooks/useAlan";
 const cx = classNames.bind(styles);
 
 export default function SearchScreen1() {
@@ -28,7 +28,7 @@ export default function SearchScreen1() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(15);
 
-    const [selectOption, setSelectOption] = useState('Choose Options');
+    const [selectOption, setSelectOption] = useState(order ? order : 'Choose Options');
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -61,6 +61,7 @@ export default function SearchScreen1() {
         const sortOrder = filter.order || order;
         return `/search/category/${filterCategory}/name/${filterName}/min/${filterMin}/max/${filterMax}/rating/${filterRating}/order/${sortOrder}`;
     };
+    useAlan();
     return (
         <div style={{ backgroundColor: '#f5f5fa', marginTop: 'var(--subHeader-height)' }}>
             <SearchProductBreadcrumb />
@@ -70,50 +71,52 @@ export default function SearchScreen1() {
                 <Alert message="Error" description={error} type="error" showIcon />
             ) : (
                 <>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginRight: '75px' }}>
-                        <div style={{ marginLeft: '74.5px' }}>{products.length} Result</div>
-                        <div>
-                            Filter by {''}
-                            {/* <select value={order} onChange={(e) => navigate(getFilterUrl({ order: e.target.value }))}>
+                    <div className={cx('grid wide')}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <div>
+                                {products.length} {products.length > 1 ? `Results` : `Result`}
+                            </div>
+                            <div>
+                                Filter by {''}
+                                {/* <select value={order} onChange={(e) => navigate(getFilterUrl({ order: e.target.value }))}>
                                 <option value="newest">Newest Arrivals</option>
                                 <option value="lowest">Price: Low to High</option>
                                 <option value="highest">Price: High to Low</option>
                                 <option value="toprated">Avg. Customer Reviews</option>
                             </select> */}
-                            <Select
-                                defaultValue={selectOption}
-                                style={{ width: '180px' }}
-                                onChange={(value) => {
-                                    setSelectOption(value);
-                                    navigate(getFilterUrl({ order: value }));
-                                }}
-                                options={[
-                                    {
-                                        value: 'newest',
-                                        label: 'Newest',
-                                    },
-                                    {
-                                        value: 'lowest',
-                                        label: 'Lowest',
-                                    },
-                                    {
-                                        value: 'highest',
-                                        label: 'Highest',
-                                    },
-                                    {
-                                        value: 'toprated',
-                                        label: 'Top-rated',
-                                    },
-                                ]}
-                            />
+                                <Select
+                                    defaultValue={selectOption}
+                                    style={{ width: '180px' }}
+                                    onChange={(value) => {
+                                        setSelectOption(value);
+                                        navigate(getFilterUrl({ order: value }));
+                                    }}
+                                    options={[
+                                        {
+                                            value: 'newest',
+                                            label: 'Newest',
+                                        },
+                                        {
+                                            value: 'lowest',
+                                            label: 'Lowest',
+                                        },
+                                        {
+                                            value: 'highest',
+                                            label: 'Highest',
+                                        },
+                                        {
+                                            value: 'toprated',
+                                            label: 'Top-rated',
+                                        },
+                                    ]}
+                                />
+                            </div>
                         </div>
-                    </div>
-                    {loading ? (
-                        <Spin size="large" />
-                    ) : error ? (
-                        <Alert message="Error" description={error} type="error" showIcon />
-                    ) : (
-                        <div className={cx('grid wide')}>
+                        {loading ? (
+                            <Spin size="large" />
+                        ) : error ? (
+                            <Alert message="Error" description={error} type="error" showIcon />
+                        ) : (
                             <div className="row">
                                 <div
                                     className="col l-2"
@@ -449,18 +452,22 @@ export default function SearchScreen1() {
                                                                 }}
                                                             ></img>
                                                             <div className={cx('product-image-container')}>
+                                                            <Link to={`/product/${product._id}`}>
                                                                 <picture className={cx('product-image')}>
                                                                     <img
                                                                         src={product.image1}
-                                                                        alt="Laptop Asus TUF Gaming F15 FX507ZC-HN124W (Core i7-12700H/8GB/512GB/RTX 3050 4GB/15.6-inch FHD/Win 11/Jaeger Gray)-Hàng chính hãng"
+                                                                        alt="Product Item"
                                                                         className={cx('WebImg')}
                                                                     ></img>
                                                                 </picture>
+                                                                </Link>
                                                             </div>
                                                         </div>
                                                         <div className={cx('info')}>
                                                             <div className={cx('name')} style={{ marginTop: '10px' }}>
-                                                                <h3>{product.name}</h3>
+                                                        <Link to={`/product/${product._id}`}>
+                                                                <h3 className={cx('picture-product')}>{product.name}</h3>
+                                                                </Link>
                                                             </div>
 
                                                             <div className={cx('price-discount')}>
@@ -512,8 +519,8 @@ export default function SearchScreen1() {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </>
             )}
         </div>

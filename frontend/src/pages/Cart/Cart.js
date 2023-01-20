@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Alert } from 'antd';
 import { addToCart } from '~/redux/actions/cartActions';
+import useAlan from "../../components/hooks/useAlan"
 
 const cx = classNames.bind(styles);
 
@@ -36,6 +37,7 @@ function Cart() {
         }
         // console.log('end effect summary1');
     }, [dispatch, productId, qty]);
+    useAlan();
     return (
         <div className={cx('grid wide')} style={{ marginTop: 'calc(var(--header-height) * 2)' }}>
             {error && <Alert message="Error" description={error} type="error" showIcon />}

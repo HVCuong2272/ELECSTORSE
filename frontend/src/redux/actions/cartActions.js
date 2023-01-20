@@ -1,4 +1,6 @@
 import Axios from 'axios';
+import { useSelector } from 'react-redux';
+import { showSuccessMessage } from '~/utils/notifyService';
 import {
     CART_ADD_ITEM,
     CART_REMOVE_ITEM,
@@ -31,12 +33,21 @@ export const addToCart = (productId, qty) => async (dispatch, getState) => {
     // console.log('action summary5');
 };
 
-export const removeFromCart = (productId) => (dispatch, getState) => {
+export const removeFromCart = (productId,productName) => (dispatch, getState) => {
     dispatch({ type: CART_REMOVE_ITEM, payload: productId });
 
+    showSuccessMessage(`Product  ${productName} delete successfully`, 'topRight');
     localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));
 };
 
+export const isCartEmpty = () => () => {
+    const cart = useSelector((state) => state.cart);
+    const { cartItems } = cart;
+    if(cartItems.length===0)
+    console.log('check Empty card'+cartItems.length);
+    return 0
+    
+};
 export const saveShippingAddress = (data) => (dispatch) => {
     dispatch({ type: CART_SAVE_SHIPPING_ADDRESS, payload: data });
     localStorage.setItem('shippingAddress', JSON.stringify(data));

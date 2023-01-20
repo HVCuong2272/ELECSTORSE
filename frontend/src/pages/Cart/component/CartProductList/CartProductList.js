@@ -19,17 +19,17 @@ function CartProductList() {
     const removeFromCartHandler = (productId) => {
         //delete action
         productDeleteId.current = cartItems.find((currentItem) => currentItem.product === productId).name;
-        dispatch(removeFromCart(productId));
+        dispatch(removeFromCart(productId, productDeleteId.current));
     };
 
-    useEffect(() => {
-        if (success) {
-            notification['success']({
-                message: 'Delete successfully',
-                description: `Product  ${productDeleteId.current} delete successfully`,
-            });
-        }
-    }, [cartItems]);
+    // useEffect(() => {
+    //     if (success) {
+    //         notification['success']({
+    //             message: 'Delete successfully',
+    //             description: `Product  ${productDeleteId.current} delete successfully`,
+    //         });
+    //     }
+    // }, [cartItems]);
 
     const data = cartItems.map((cartItem) => {
         return {
