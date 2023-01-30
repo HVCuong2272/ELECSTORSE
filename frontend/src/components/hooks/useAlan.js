@@ -14,6 +14,7 @@ const COMMANDS = {
   REMOVE_ITEM: "remove-item",
   PURCHASE_ITEMS: "purchase-items",
   HOMEPAGE_SHOP: "homepage-shop",
+  SEARCH_PRODUCT: "search-product",
 }
 
 
@@ -59,6 +60,12 @@ export default function useAlan() {
     console.log("Hoping you have a good time of shopping with us");
     alanInstance.playText("Hoping you have a good time of shopping with us")
     navigate('/')
+
+  }, [alanInstance,navigate])
+  const searchProduct = useCallback(({detail: { name }}) => {
+    console.log("Searching for"+ name);
+    alanInstance.playText("Searching for"+ name)
+    navigate(`/search/name/${name}`);
 
   }, [alanInstance,navigate])
   const additem = useCallback(({detail: { name, quantity }}) => {
@@ -115,6 +122,7 @@ export default function useAlan() {
     window.addEventListener(COMMANDS.OPEN_CART, openCart)
     window.addEventListener(COMMANDS.CLOSE_CART, closeCart)
     window.addEventListener(COMMANDS.HOMEPAGE_SHOP, goToHomePage)
+    window.addEventListener(COMMANDS.SEARCH_PRODUCT, searchProduct)
     // window.addEventListener(COMMANDS.ADD_ITEM, additem)
     // window.addEventListener(COMMANDS.REMOVE_ITEM, removeitem)
     // window.addEventListener(COMMANDS.PURCHASE_ITEMS, purchase)
@@ -124,6 +132,7 @@ export default function useAlan() {
       window.removeEventListener(COMMANDS.OPEN_CART, openCart)
       window.removeEventListener(COMMANDS.CLOSE_CART, closeCart)
       window.removeEventListener(COMMANDS.HOMEPAGE_SHOP, goToHomePage)
+      window.removeEventListener(COMMANDS.SEARCH_PRODUCT, searchProduct)
       // window.removeEventListener(COMMANDS.ADD_ITEM, additem)
       // window.removeEventListener(COMMANDS.REMOVE_ITEM, removeitem)
       // window.removeEventListener(COMMANDS.PURCHASE_ITEMS, purchase)
