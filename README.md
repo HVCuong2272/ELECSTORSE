@@ -16,7 +16,11 @@
 
 - This is the website for customer to buy products online and seller to sell their goods with some interesting features (listen to music when shopping like real store, buy product with voice or purchase product with virtual coin, map box, …).
 
-- Link to our website: https://webshop1-app.onrender.com (I’m still keep it but because I'm only used free hosting so it will hibernate after long time no one use the app and take time to load again in next time, please forgive us about that).
+- Link to our website: https://webshop1-app.onrender.com (I’m still keep it but because I'm only used free hosting so it will hibernate after a long time no one use the app and take time to load again in next time, please forgive us about that).
+- Demo account (to our website link above):<br />
+Admin: admin@example.com - pwd: 123456<br />
+Client: user@example.com - pwd: 123456<br />
+Seller: seller@example.com - pwd: 123456<br />
 
   ![home](./Docs/images/home.PNG)
   ![home detail](./Docs/images/homedetail.PNG)
