@@ -20,6 +20,7 @@
         "react-animated-slider": "^2.0.0",
         "react-dom": "^18.2.0",
         "react-google-login": "^5.2.2",
+        "react-icons": "^4.10.1",
         "react-map-gl": "^5.3.20",
         "react-map-gl-geocoder": "^2.2.0",
         "react-messenger-customer-chat": "^0.8.0",

@@ -10,7 +10,7 @@ import { Modal, Radio, Space } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { savePaymentMethod, saveShippingAddress } from '~/redux/actions/cartActions';
 import { Link, useNavigate } from 'react-router-dom';
-import { VisaIcon, MasterCardIcon, MomoIcon, PaypalIcon, VnPayIcon, CODIcon } from '~/components/Icons';
+import { VisaIcon, MasterCardIcon, MomoIcon, PaypalIcon, VnPayIcon, CODIcon, BitcoinIcon } from '~/components/Icons';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { createOrder } from '~/redux/actions/orderActions';
 import { ORDER_CREATE_RESET } from '~/redux/constants/orderConstants';
@@ -20,7 +20,8 @@ import { SocketContext } from '~/config/socketContext';
 
 const cx = classNames.bind(styles);
 
-const MAPBOX_TOKEN = 'pk.eyJ1IjoiZmFtb3BhMjQ4MSIsImEiOiJjbGJwODE1NG0wN3g1M3ZudnNnOXR2cXU3In0.GgenYnbHX2t9Klm2ZkAyiQ';
+const MAPBOX_TOKEN = 'pk.eyJ1IjoiZmF2b2RlODUxOSIsImEiOiJjbGRvM2dyN3IwcGl4M290NmtnY21rcnllIn0.g1WW-b9CS6Uf-SuvTT4imA';
+// const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN;
 
 function ShippingAddress() {
     const socket = useContext(SocketContext);
@@ -444,10 +445,6 @@ function ShippingAddress() {
                                                         ${cart.totalPrice.toFixed(2)}
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <th>Convert to Crypto</th>
-                                                    <td className={cx('product-subtotal')}>0000</td>
-                                                </tr>
                                             </tfoot>
                                         </table>
                                     </div>
@@ -505,19 +502,28 @@ function ShippingAddress() {
                                                                     card/VNPay if you don't have a PayPal account.
                                                                 </p>
                                                             </Radio>
-                                                            <Radio value={'Coin'}>
+                                                           {/* 
+                                                           <Radio value={'Coin'}>
                                                                 <h3>
                                                                     {' '}
-                                                                    <span>
-                                                                        <PaypalIcon />
+                                                                    <span
+                                                                        style={{
+                                                                            zoom: '50%',
+                                                                            position: 'relative',
+                                                                            top: '16px',
+                                                                            left: '2px',
+                                                                        }}
+                                                                    >
+                                                                        <BitcoinIcon />
                                                                     </span>
-                                                                    Coin
+                                                                    <span style={{ marginRight: '2px' }}>Coin</span>
                                                                 </h3>
                                                                 <p>
                                                                     Using virtual coin that we support to purchase your
                                                                     bill
                                                                 </p>
                                                             </Radio>
+                                                           */} 
                                                         </Space>
                                                     </Radio.Group>
                                                 </div>

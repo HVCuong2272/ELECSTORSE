@@ -20,9 +20,9 @@ function SearchProductBreadcrumb() {
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
                         <ShoppingOutlined />
-                        <span>
-                            <Link to="/search">All Products</Link>
-                        </span>
+                        <Link to="/search/name">
+                            <span className={cx('all-products-btn')}>All Products</span>
+                        </Link>
                     </Breadcrumb.Item>
                 </Breadcrumb>
             </div>
@@ -30,8 +30,6 @@ function SearchProductBreadcrumb() {
     );
 }
 
-// ProductBreadcrumb.propTypes = {
-//     children: PropTypes.node.isRequired,
-// };
+
 
 export default SearchProductBreadcrumb;

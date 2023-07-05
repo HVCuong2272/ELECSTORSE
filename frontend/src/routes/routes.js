@@ -66,6 +66,11 @@ const publicRoutes = [
         component: SearchScreen1,
         layout: SearchProductLayout,
     },
+    {
+        path: config.publicRoutes.test,
+        component: SearchScreen1,
+        layout:null,
+    }
 ];
 
 const privateRoutes = [

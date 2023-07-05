@@ -6,10 +6,10 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 const content = [
     {
-        title: 'LED 75 INCH F58',
-        description: 'Get up to 50% Off Today',
+        title: 'Apple Watch SE 2022',
+        description: 'Get up to 10% Off Today when bought with iphone 14',
         button: 'Shop Now',
-        image: 'https://oility.jamstacktemplates.dev/assets/images/hero-slider/six/1.jpg',
+        image: 'https://file.hstatic.net/200000097009/collection/cate_magsafe_bf188dbae3734bb981720b7a2c5d34fa.jpg',
         user: 'Luan Gjokaj',
         userProfile: 'https://i.imgur.com/JSW6mEk.png',
     },
@@ -17,17 +17,25 @@ const content = [
         title: 'Smart Phones',
         description: '40% Off in All Products',
         button: 'Discover',
-        image: 'https://oility.jamstacktemplates.dev/assets/images/hero-slider/six/2.jpg',
+        image: 'https://parliamenthouse-hotel.co.uk/wp-content/uploads/2022/05/Travel-Apps-1920x500.jpg',
         user: 'Erich Behrens',
         userProfile: 'https://i.imgur.com/0Clfnu7.png',
     },
     {
-        title: 'Jeat Headphone',
+        title: 'Headphone',
         description: 'Taking your Listening Experience to Next Level',
         button: 'Buy now',
-        image: 'https://oility.jamstacktemplates.dev/assets/images/hero-slider/six/3.jpg',
+        image: 'https://letstalk-tech.s3.amazonaws.com/wp-content/uploads/2014/07/HoM-Liberate-Headphones.jpg',
         user: 'Bruno Vizovskyy',
         userProfile: 'https://i.imgur.com/4KeKvtH.png',
+    },
+    {
+        title: 'Smart Phones',
+        description: '40% Off in All Products',
+        button: 'Discover',
+        image: 'https://s247.vn/web/dien-thoai-may-tinh/images/revolution-slider/slide1-bg.jpg',
+        user: 'Erich Behrens',
+        userProfile: 'https://i.imgur.com/0Clfnu7.png',
     },
 ];
 

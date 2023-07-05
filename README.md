@@ -8,9 +8,8 @@
 - FE: ReactJS, Redux, Ant Design
 
 **Team members**: 3
-- Bùi Thanh Ngọc - 18110034
-- Lê Minh Thắng - 18110048
-- Châu Kim Tỏa - 18110056
+- Hà Văn Cường
+- Mai Hồ An Thúy
 
 ## Description
 
@@ -28,11 +27,6 @@ Seller: seller@example.com - pwd: 123456<br />
 
 ## SETUP
 
-- Clone project
-
-```
-git clone https://github.com/ThangLe2209/kltn.git
-```
 
 # BE
 

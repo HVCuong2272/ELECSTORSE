@@ -361,7 +361,7 @@ export default function SearchScreen1() {
                                                 <div className={cx('banner-search__header-left')}>
                                                     <img
                                                         className={cx('banner-search__header-left-logo')}
-                                                        src="https://salt.tikicdn.com/ts/tka/bd/dc/18/67ae1da2a4b28846f0f154f3a48bef84.png"
+                                                        src="https://i.pinimg.com/564x/49/a7/24/49a7247bc0f530e1d427f6dab3c32cf0.jpg"
                                                         alt="LG Official Store"
                                                     ></img>
                                                     <div className={cx('banner-search__header-left-logo-detail')}>
@@ -370,7 +370,7 @@ export default function SearchScreen1() {
                                                                 'banner-search__header-left-logo-detail-text1',
                                                             )}
                                                         >
-                                                            Giá Sock Sập Sàn Cùng LG
+                                                            Giá Sock Sập Sàn Cùng LION
                                                         </div>
                                                         <div
                                                             className={cx(
@@ -384,9 +384,9 @@ export default function SearchScreen1() {
                                                             >
                                                                 Tài trợ bởi
                                                             </span>{' '}
-                                                            LG Official Store
+                                                            ELECSTORSE và LION
                                                             <img
-                                                                src="https://salt.tikicdn.com/ts/upload/5d/4c/f7/a947733a6dc83eca57abd15ec1560d8e.png"
+                                                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8i8DVP9RSP2w07uWKnPtMBkAS246PBQ1cHNMIu0bm2MCT7ZS5Jr-nKKFw3cP3SdI0h64&usqp=CAU"
                                                                 alt="official store"
                                                                 className={cx(
                                                                     'banner-search__header-left-logo-detail-text2-img',
@@ -398,23 +398,23 @@ export default function SearchScreen1() {
                                                                 )}
                                                             >
                                                                 {' '}
-                                                                4.7/5 stars
+                                                                4/5 Star
                                                             </span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className={cx('banner-search__header-right')}>
                                                     <img
-                                                        src="https://salt.tikicdn.com/cache/280x280/ts/product/9d/b2/de/735d17158fa27e9ab548d9c415a0c010.png"
+                                                        src="https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/44/301634/hp-15s-fq2716tu-i3-7c0x3pa-thumb-600x600.jpg"
                                                         alt="404"
                                                     ></img>
                                                     <img
-                                                        src="https://salt.tikicdn.com/cache/280x280/ts/product/9d/b2/de/735d17158fa27e9ab548d9c415a0c010.png"
+                                                        src="https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/42/235838/Galaxy-S22-Ultra-Burgundy-600x600.jpg"
                                                         alt="404"
                                                         style={{ marginLeft: '8px' }}
                                                     ></img>
                                                     <img
-                                                        src="https://salt.tikicdn.com/cache/280x280/ts/product/9d/b2/de/735d17158fa27e9ab548d9c415a0c010.png"
+                                                        src="https://cdn.tgdd.vn/Products/Images/54/225600/Slider/tai-nghe-chup-tai-mozard-ip-840-260820-0604380.jpg"
                                                         alt="404"
                                                         style={{ marginLeft: '8px' }}
                                                     ></img>
@@ -425,7 +425,14 @@ export default function SearchScreen1() {
                                             </div>
                                         </div>
                                     </div>
+
+                                    
+                                    
+
+
+
                                     <div className={cx('product-list-container')}>
+                                    
                                         <div className={cx('row')}>
                                             {products.length === 0 && (
                                                 <Alert

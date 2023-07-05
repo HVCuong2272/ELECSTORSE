@@ -1,4 +1,10 @@
 // Product Intro
+*main{
+    background-color: #efc435;
+    border-radius: 1%;
+    
+}
+
 .product-list-header {
     display: flex;
     flex-direction: column;
@@ -10,9 +16,14 @@
 }
 
 .product-list-header__sub-title {
-    margin: auto;
-    font-size: 1.6rem;
-    color: #687188;
+
+    display: block;
+    overflow: hidden;
+    padding: 15px 22px;
+    font-size: 22px;
+    line-height: 36px;
+    color: #333;
+    text-transform: uppercase;
 }
 
 .view-more-btn {
@@ -24,9 +35,39 @@
     text-decoration: none;
     padding: 12px 18px;
     font-size: 15px;
-    background-color: #6773ff;
-    color: white;
+    background-color: #ffffff;
+    color: #000000;
+    width: 9em;
+    height: 3em;
+    border-radius: 30em;
+    position: absolute;
+
+    
 }
+.view-more-btn::before {
+    content: '';
+    width: 0;
+    height: 3em;
+    border-radius: 30em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: linear-gradient(to right, #0fd850 0%, #f9f047 100%);
+    transition: .5s ease;
+    display: block;
+    z-index: -1;
+   }
+   
+   .view-more-btn:hover::before {
+    width: 9em;
+   }
+
+
+
+
+
+
+
 
 @media (max-width: 739px) {
     .product-list {

@@ -18,6 +18,7 @@ const publicRoutes = {
         '/search/category/:category/name/:name/min/:min/max/:max/rating/:rating',
     searchWParamCategoryAndNameAndMinAndMaxAndRatingAndOrder:
         '/search/category/:category/name/:name/min/:min/max/:max/rating/:rating/order/:order',
+    test:'/test'
 };
 const privateRoutes = {
     shipping: '/shipping',

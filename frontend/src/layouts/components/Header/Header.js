@@ -9,7 +9,7 @@ function Header() {
             <div className="grid wide" style={{ height: '100%' }}>
                 <div className={cx('header__container')}>
                     <div className={cx('header__brand')}>
-                        <Link to="/">TNT Shop</Link>
+                        <Link to="/">ELECSTORSE</Link>
                     </div>
                     <div className={cx('header__actions')}>
                         <div className={cx('header__actions-title')}>

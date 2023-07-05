@@ -7,15 +7,38 @@ const cx = classNames.bind(styles);
 function Banner() {
     return (
         <div className="banner">
+            
             <div className="grid wide" style={{ height: '100%' }}>
                 <div className={cx('banner-list')}>
+                <h1>GIỜ VÀNG DEAL SỐC</h1>
+
+
+
+
                     <div className="row ">
+                        
+                        
+
                         <div className={cx('col l-4 m-6 c-12', 'mobile-margin')}>
                             <div className={cx('banner-item')}>
-                                <Link to="/">
+                                <Link to="/search/name">
                                     <figure className={cx('effect-apollo')}>
                                         <img
-                                            src="/assets/images/banner/shop_banner_img7.jpg"
+                                            src="/assets/images/banner/10.jpg"
+                                            alt="shop_banner_img3"
+                                            className={cx('banner-item__img')}
+                                        />
+                                        <figcaption></figcaption>
+                                    </figure>
+                                </Link>
+                            </div>
+                        </div>
+                        <div className={cx('col l-4 m-6 c-12', 'mobile-margin')}>
+                            <div className={cx('banner-item')}>
+                                <Link to="/search/name/sony">
+                                    <figure className={cx('effect-apollo')}>
+                                        <img
+                                            src="/assets/images/banner/20.jpg"
                                             alt="shop_banner_img3"
                                             className={cx('banner-item__img')}
                                         />
@@ -29,7 +52,7 @@ function Banner() {
                                 <Link to="/">
                                     <figure className={cx('effect-apollo')}>
                                         <img
-                                            src="/assets/images/banner/shop_banner_img8.jpg"
+                                            src="/assets/images/banner/30.jpg"
                                             alt="shop_banner_img3"
                                             className={cx('banner-item__img')}
                                         />
@@ -38,20 +61,7 @@ function Banner() {
                                 </Link>
                             </div>
                         </div>
-                        <div className={cx('col l-4 m-6 c-12', 'mobile-margin')}>
-                            <div className={cx('banner-item')}>
-                                <Link to="/">
-                                    <figure className={cx('effect-apollo')}>
-                                        <img
-                                            src="/assets/images/banner/shop_banner_img9.jpg"
-                                            alt="shop_banner_img3"
-                                            className={cx('banner-item__img')}
-                                        />
-                                        <figcaption></figcaption>
-                                    </figure>
-                                </Link>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

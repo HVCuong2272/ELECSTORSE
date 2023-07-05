@@ -13,6 +13,7 @@ import Footer from '~/layouts/components/Footer';
 import GoToTop from '~/components/GoToTop';
 import useAlan from "../../components/hooks/useAlan"
 import ChatBot from '~/components/ChatBot';
+import Newsletter from '~/layouts/components/Newsletter/Newsletter';
 
 const cx = classNames.bind(styles);
 
@@ -29,8 +30,10 @@ function Home() {
             <Banner />
             <ProductList />
             <ProductOutroImage />
-            <ChatBot />
+             {/* <ChatBot /> */}
+             
             <GoToTop />
+            <Newsletter/>
             <Footer />
         </div>
     );

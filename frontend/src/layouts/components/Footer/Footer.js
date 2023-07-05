@@ -127,10 +127,12 @@ function Footer({ isSearchProductPage }) {
 
             <div className={cx('footer__bottom')}>
                 <div className={cx('grid wide')}>
-                    <p className={cx('footer__text')}>© 2022 - Copyright by TNT Shop All rights reserved</p>
+                    <p className={cx('footer__text')}>© 2023 - Copyright by ELECSTORSE All rights reserved</p>
                 </div>
             </div>
         </div>
     );
 }
 export default Footer;
+
+

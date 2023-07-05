@@ -10,6 +10,8 @@ import { fetchUser } from './redux/actions/userActions';
 import { useContext } from 'react';
 import { SocketContext } from './config/socketContext';
 import { listProductCategories } from './redux/actions/productActions';
+import ChatBot from './components/ChatBot';
+
 
 // export const socketContext = createContext();
 function App() {
@@ -32,9 +34,7 @@ function App() {
     // }, []);
 
     useEffect(() => {
-        // console.log('thangadvldf');
-        // const firstLogin = localStorage.getItem('firstLogin')
-        // if (firstLogin) {
+
         if (!userSignin.userInfo) {
             const getToken = async () => {
                 const res = await axios.post('/api/users/refresh_token', null);
@@ -79,6 +79,11 @@ function App() {
         dispatch(listProductCategories());
     }, [dispatch]);
     return (
+        <>
+      
+        <>
+            <ChatBot />
+        </>
         <Router>
             <div className="App">
                 <Routes>
@@ -131,9 +136,11 @@ function App() {
                             />
                         );
                     })}
+                    
                 </Routes>
             </div>
         </Router>
+        </>
     );
 }
 

@@ -1,6 +1,10 @@
+
+
 .user-profile {
+
     max-width: 60rem;
     margin: 0 auto;
+    //background-image: url("https://i.pinimg.com/564x/7b/b6/5a/7bb65a34a2db9d1db5c41654fd59c372.jpg");
 }
 
 .user-profile > div {
@@ -17,7 +21,7 @@
 .user-profile__button {
     padding: 1rem;
     border-radius: 0.5rem;
-    border: 0.1rem #a4a4a4 solid;
+    border: 0.1rem #4e54c8 solid;
     font-size: 1.6rem;
     font-family: Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

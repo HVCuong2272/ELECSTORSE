@@ -46,7 +46,7 @@ const sendEmail = (to, url, txt) => {
   const mailOptions = {
     from: SENDER_EMAIL_ADDRESS,
     to: to,
-    subject: "TNT Shop",
+    subject: "ELECSTORSE",
     html: `
             <div style="max-width: 700px; margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
             <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the Webshop Group.</h2>
@@ -82,7 +82,7 @@ const thankEmail = (to, url, txt, orderDetailHTML, orderTotalPrice) => {
   const mailOptions = {
     from: SENDER_EMAIL_ADDRESS,
     to: to,
-    subject: "TNT Shop",
+    subject: "ELECSTORSE",
     html: `<div style="padding:0;margin:0">
     <div>
         <div style="height: 280px; color: black !important;">
@@ -141,7 +141,7 @@ const thankEmail = (to, url, txt, orderDetailHTML, orderTotalPrice) => {
                     </tr>
                 </table>
                 <p>Kind regards,</p>
-                <p>TNT Shop</p>
+                <p>ELECSTORSE</p>
                 <p></p>
             </div>
         </div>

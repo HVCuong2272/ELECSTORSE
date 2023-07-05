@@ -2,6 +2,7 @@
     width: 500px;
     background-color: #fff;
     padding: 20px;
+    border: 11px inset #bd7f94;
 }
 
 .product-images-slider {
@@ -45,6 +46,9 @@
 
         &-thumb-active {
             border-color: #ff0000;
+            border: 6px double #f000c4;
+            background-color: #dddbb5;
+
         }
     }
 

@@ -77,21 +77,36 @@ const Product = () => {
     }, [products]);
 
     return (
+        
         <div className={cx('grid wide')}>
+            
             {console.log('bind')}
+            
             <div className={cx('product-list')}>
                 <div className={cx('product-list-header')}>
+                <img src="/assets/po.jpg"></img>
+               
                     <h1 className={cx('product-list-header__titile')}>Feature Product</h1>
-                    <p className={cx('product-list-header__sub-title')}>Some Of Our New Product</p>
+                    <p className={cx('product-list-header__sub-title')}>KHUYẾN MÃI CHỈ CÓ TRÊN ONLINE</p>
+                    
                 </div>
+
                 <main>
+                    
+                <img id='image' src="https://cdn.tgdd.vn/2023/07/banner/1200x150-tgdd-1200x150.png" ></img>
+                
+
                     <header>
+                 
                         <h1>Choose Your Product</h1>
+                        
                         <div className={cx('button-control-productlist')}>
+                            
                             <LeftOutlined className={cx('button-control-product-list')} />
                             <RightOutlined className={cx('button-control-product-list')} />
                         </div>
                     </header>
+                    
                     {loading ? (
                         <Spin size="large" />
                     ) : error ? (
@@ -123,7 +138,9 @@ const Product = () => {
                                 View More
                             </Link>
                         </>
+                        
                     )}
+                    
                 </main>
             </div>
         </div>

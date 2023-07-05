@@ -11,6 +11,7 @@ function ProductItem(props) {
 
     return (
         <div className={cx('product', 'product-item-container')}>
+            
             {!isSellerPage ? (
                 <Link to={`/product/${product._id}`} className={cx('picture-product')}>
                     <img src={product.image1} alt={product.name} />

@@ -130,7 +130,7 @@ export default function SearchScreen() {
                                             <div className={cx('Logo')}>
                                                 <div className={cx('PictureV2__StyledWrapImage')}>
                                                     <img
-                                                        src="https://salt.tikicdn.com/ts/tka/bd/dc/18/67ae1da2a4b28846f0f154f3a48bef84.png"
+                                                        src="https://i.pinimg.com/564x/49/a7/24/49a7247bc0f530e1d427f6dab3c32cf0.jpg"
                                                         alt="LG Official Store"
                                                         className={cx('PictureV2__StyledImage-sc-tfuu67-1 dcItBv')}
                                                         style={{ width: '280px', height: '280px' }}
@@ -138,10 +138,10 @@ export default function SearchScreen() {
                                                 </div>
                                             </div>
                                             <div className={cx('StoreTitleBox')}>
-                                                <h4 className={cx('Title')}>Giá Sock Sập Sàn Cùng LG</h4>
+                                                <h4 className={cx('Title')}>ƯU ĐẢI GIÁ SỐC ĐẦU THÁNG 7</h4>
                                                 <div className={cx('store-name')}>
                                                     <span className={cx('SponsorText')}>Tài trợ bởi</span>
-                                                    &nbsp; <span className={cx('StoreName')}>LG Official Store</span>
+                                                    &nbsp; <span className={cx('StoreName')}>ELECSTORSE hợp tác với LG Official Store</span>
                                                     <img
                                                         src="https://salt.tikicdn.com/ts/upload/5d/4c/f7/a947733a6dc83eca57abd15ec1560d8e.png"
                                                         alt="official store"

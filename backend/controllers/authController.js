@@ -22,12 +22,12 @@ const { CLIENT_URL } = process.env;
 
 // const mailOptions = {
 //     from: "techtechlms@gmail.com",
-//     to: 'thangle220909@gmail.com',
-//     subject: "TNT Shop",
+//     to: 'cuong2279@gmail.com',
+//     subject: "ELECSTORSE",
 //     html: `
 //             <div style="max-width: 700px; margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
-//             <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the TNT Shop.</h2>
-//             <p>Congratulations! You're almost set to start using TNT Shop✮.
+//             <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the ELECSTORSE.</h2>
+//             <p>Congratulations! You're almost set to start using ELECSTORSE✮.
 //                 Just click the button below to validate your email address.
 //             </p>
 
